@@ -35,7 +35,7 @@ function! todo#PrioritizeDecrease()
 endfunction
 
 function! todo#PrioritizeAdd (priority)
-    let oldpos=getcurpos()
+    let oldpos=getpos('.')
     let line=getline('.')
     if line !~ '^([A-F])'
         :call todo#PrioritizeAddAction(a:priority)
