@@ -182,6 +182,13 @@ For more information on the available flags see `help :sort`
 
 ## Mappings
 
+By default todo-txt.vim set all the mappings secribed in this section. To
+prevent this behavior, add the following line to your vimrc
+
+   let g:Todo_txt_do_not_map=1
+
+
+
 `<LocalLeader>` is \  by default, so ̀`<LocaLeader>-s` means you type \s
 
 ### Sort
