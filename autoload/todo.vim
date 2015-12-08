@@ -23,6 +23,14 @@ endif
 
 " Functions {{{1
 
+
+function! todo#GetCurpos()
+    if exists("*getcurpos")
+        return getcurpos()
+    endif
+        return getpos('.')
+endfunction
+
 " Increment and Decrement The Priority
 :set nf=octal,hex,alpha
 
@@ -35,7 +43,7 @@ function! todo#PrioritizeDecrease()
 endfunction
 
 function! todo#PrioritizeAdd (priority)
-    let oldpos=getcurpos()
+    let oldpos=todo#GetCurpos()
     let line=getline('.')
     if line !~ '^([A-F])'
         :call todo#PrioritizeAddAction(a:priority)
@@ -179,7 +187,7 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
     let l:sortmodefinal=Todo_txt_InsertSpaceIfNeeded(g:Todo_txt_third_level_sort_mode)
 
     " Count the number of lines
-    let l:position= getpos(".")
+    let l:position= todo#GetCurpos()
     execute "silent normal g\<c-g>"
     let l:linecount=str2nr(split(v:statusmsg)[7])
 
