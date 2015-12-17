@@ -190,9 +190,17 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
     let l:position= todo#GetCurpos()
     execute "silent normal g\<c-g>"
     let l:linecount=str2nr(split(v:statusmsg)[7])
+    if(exists("g:Todo_txt_debug"))
+        echo "Linescount: ".l:linecount
+    endif
 
     " Get all the groups names
     let l:groups=GetGroups(a:symbol,1,l:linecount)
+    if(exists("g:Todo_txt_debug"))
+        echo "Groups: "
+        echo l:groups
+        echo 'execute sort'.l:sortmode.' /.\{-}\ze'.a:symbol.'/'
+    endif
     " Sort by groups
     execute 'sort'.l:sortmode.' /.\{-}\ze'.a:symbol.'/'
     for l:g in l:groups
@@ -225,6 +233,9 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
                 endfor
             else
                 " Sort by priority
+                if(exists("g:Todo_txt_debug"))
+                    echo 'execute '.l:groupBegin.','.l:groupEnd.'sort'.l:sortmodefinal
+                endif
                 execute l:groupBegin.','.l:groupEnd.'sort'.l:sortmodefinal
             endif
         endif
@@ -239,7 +250,7 @@ function! GetGroups(symbol,begin, end)
     let l:curline=a:begin
     let l:groups=[]
     while l:curline <= a:end
-        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\a*'),1)
+        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\S*'),1)
         if l:curproj != "" && index(l:groups,l:curproj) == -1
             let l:groups=add(l:groups , l:curproj)
         endif
