@@ -205,7 +205,7 @@ prevent this behavior, add the following line to your vimrc
 
     `<LocalLeader>s@` : Sort the file on @Contexts
 
-    `<LocalLeader>s@` : Sort the file on due dates
+    `<LocalLeader>sd` : Sort the file on due dates
 
     `<LocalLeader>sc` : Sort the file by context then by priority
 

@@ -196,7 +196,7 @@ prevent this behavior, add the following line to your vimrc
 + `<LocalLeader>s` : Sort the file by priority
 + `<LocalLeader>s+` : Sort the file on `+Projects`
 + `<LocalLeader>s@` : Sort the file on `@Contexts`
-+ `<LocalLeader>s@` : Sort the file on due dates
++ `<LocalLeader>sd` : Sort the file on due dates
 + `<LocalLeader>sc` : Sort the file by context then by priority
 + `<LocalLeader>scp` : Sort the file by context, project then by priority
 + `<LocalLeader>sp` : Sort the file by project then by priority
