@@ -133,7 +133,7 @@ This plugin provides a nice complete function for project and context, to use
 it add the following lines to your vimrc:
 
     " Use todo#complete as the omni complete function for todo files
-    au filetype todo setlocal omnifunc=todo#complete
+    au filetype todo setlocal omnifunc=todo#Complete
 
 You can also start automatically the completion when entering '+' or '@' by
 adding the next lines to your vimrc:
