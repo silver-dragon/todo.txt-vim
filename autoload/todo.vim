@@ -188,11 +188,12 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
 
     " Count the number of lines
     let l:position= todo#GetCurpos()
-    execute "silent normal g\<c-g>"
-    let l:linecount=str2nr(split(v:statusmsg)[7])
+    execute "silent normal G"
+    let l:linecount=getpos(".")[1]
     if(exists("g:Todo_txt_debug"))
         echo "Linescount: ".l:linecount
     endif
+    execute "silent normal gg"
 
     " Get all the groups names
     let l:groups=GetGroups(a:symbol,1,l:linecount)
@@ -205,6 +206,9 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
     execute 'sort'.l:sortmode.' /.\{-}\ze'.a:symbol.'/'
     for l:g in l:groups
         let l:pat=a:symbol.l:g.'.*$'
+        if(exists("g:Todo_txt_debug"))
+            echo l:pat
+        endif
         normal gg
         " Find the beginning of the group
         let l:groupBegin=search(l:pat,'c')
