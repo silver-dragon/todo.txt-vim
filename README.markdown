@@ -132,7 +132,7 @@ like this behavior, you can set the default done.txt name:
 This plugin provides a nice complete function for project and context, to use
 it add the following lines to your vimrc:
 
-    " Use todo#complete as the omni complete function for todo files
+    " Use todo#Complete as the omni complete function for todo files
     au filetype todo setlocal omnifunc=todo#Complete
 
 You can also start automatically the completion when entering '+' or '@' by
@@ -145,7 +145,7 @@ adding the next lines to your vimrc:
     au filetype todo imap <buffer> @ @<C-X><C-O>
 
 
-The `todo#complete` function is designed to complete projects (starting by `+`)
+The `todo#Complete` function is designed to complete projects (starting by `+`)
 and context (starting by `@`). If you use it on a regular word, it will do a
 normal keyword completion (on all buffers).
 
