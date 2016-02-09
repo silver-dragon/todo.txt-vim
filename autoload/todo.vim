@@ -277,7 +277,7 @@ endfunction
 
 " Simple keyword completion on all buffers {{{2
 function! TodoKeywordComplete(base)
-    " Search for matchs
+    " Search for matches
     let res = []
     for bufnr in range(1,bufnr('$'))
         let lines=getbufline(bufnr,1,"$")
@@ -292,6 +292,25 @@ function! TodoKeywordComplete(base)
     endfor
     return res
 endfunction
+
+" Convert an item to the completion format and add it to the completion list
+fun! TodoAddToCompletionList(list,item,opp)
+    " Create the definitive item
+    let resitem={}
+    let resitem.word=a:item.word
+    let resitem.info=a:opp=='+'?"Projects":"Contexts"
+    let resitem.info.=": ".join(a:item.related, ", ")
+                \."\nBuffers: ".join(a:item.buffers, ", ")
+    call add(a:list,resitem)
+endfun
+
+fun! TodoCopyTempItem(item)
+    let ret={}
+    let ret.word=a:item.word
+    let ret.related=[a:item.related]
+    let ret.buffers=[a:item.buffers]
+    return ret
+endfun
 
 " Intelligent completion for projects and Contexts {{{2
 fun! todo#Complete(findstart, base)
@@ -327,10 +346,7 @@ fun! todo#Complete(findstart, base)
         " Here all results are sorted in res, but we need to merge them
         let ret=[]
         if res != []
-            let curitem={}
-            let curitem.word=res[0].word
-            let curitem.related=[]
-            let curitem.buffers=[]
+            let curitem=TodoCopyTempItem(res[0])
             for it in res
                 if curitem.word==it.word
                     " Merge results
@@ -341,19 +357,14 @@ fun! todo#Complete(findstart, base)
                         call add(curitem.buffers,it.buffers)
                     endif
                 else
-                    " Create the definitive item
-                    let resitem={}
-                    let resitem.word=curitem.word
-                    let resitem.info=opp=='+'?"Projects":"Contexts"
-                    let resitem.info.=": ".join(curitem.related, ", ")
-                                \."\nBuffers: ".join(curitem.buffers, ", ")
-                    call add(ret,resitem)
+                    " Add to list
+                    call TodoAddToCompletionList(ret,curitem,opp)
                     " Init new item from it
-                    let curitem.word=it.word
-                    let curitem.related=[it.related]
-                    let curitem.buffers=[it.buffers]
+                    let curitem=TodoCopyTempItem(it)
                 endif
             endfor
+            " Don't forget to add the list item
+            call TodoAddToCompletionList(ret,curitem,opp)
         endif
         return ret
     endif
