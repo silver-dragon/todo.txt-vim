@@ -3,12 +3,17 @@
 " Author:      David Beniamine <David@Beniamine.net>, Leandro Freitas <freitass@gmail.com>
 " License:     Vim license
 " Website:     http://github.com/dbeniamine/todo.txt-vim
-" Version:     0.7.2
 " vim: ts=4 sw=4 :help tw=78 cc=80
 
 " Save context {{{1
 let s:save_cpo = &cpo
 set cpo&vim
+
+if exists("g:Todo_txt_loaded")
+    finish
+else
+    let g:Todo_txt_loaded=0.7.4
+endif
 
 " General options {{{1
 " Some options lose their values when window changes. They will be set every
@@ -96,4 +101,3 @@ endfunction
 
 " Restore context {{{1
 let &cpo = s:save_cpo
-" Modeline {{{1
