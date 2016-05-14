@@ -28,9 +28,9 @@
 
 ## Release notes
 
-v0.7.4 includes the overduedate support from Guilherme Victal, it highlight
-dates in overdue tasks as an Error (as suggested on issue
-[#44][https://github.com/freitass/todo.txt-vim/issues/44]). It depends on a
+v0.7.4 includes the overduedate support from Guilherme Victal (see pull
+[request #45 on freitass version](https://github.com/freitass/todo.txt-vim/pull/45)),
+it highlight dates in overdue tasks as an Error. It depends on a
 Python library, however, and as such will only be able to work if your version
 of Vim was compiled with the `+python` option (as most common versions do).
 
