@@ -51,10 +51,12 @@ highlight  default  link  TodoDate       PreProc
 highlight  default  link  TodoProject    Special
 highlight  default  link  TodoContext    Special
 
+let b:curdir = expand('<sfile>:p:h')
+let s:script_dir = b:curdir . "/python/"
 if has('python')
-    let b:curdir = expand('<sfile>:p:h')
-    let s:script_dir = b:curdir . "/python/"
     execute "pyfile " . s:script_dir. "todo.py"
+elseif has('python3')
+    execute "py3file " . s:script_dir. "todo.py"
 endif
 
 let b:current_syntax = "todo"
