@@ -28,6 +28,8 @@
 
 ## Release notes
 
+v0.7.5 Incorporates [Fievel's work](https://github.com/fievel/todo.txt-vim/commit/0863e1434e9a89ace06c4856b6cb32ba9906e3de) to make overduedates work on python3. I have no version of vim with python3 thus it is only tested on his side, do not hesitate to report issues.
+
 v0.7.4 includes the overduedate support from Guilherme Victal (see pull
 [request #45 on freitass version](https://github.com/freitass/todo.txt-vim/pull/45)),
 it highlight dates in overdue tasks as an Error. It depends on a

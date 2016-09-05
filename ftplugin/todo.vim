@@ -12,7 +12,7 @@ set cpo&vim
 if exists("g:Todo_txt_loaded")
     finish
 else
-    let g:Todo_txt_loaded=0.7.4
+    let g:Todo_txt_loaded=0.7.5
 endif
 
 " General options {{{1
