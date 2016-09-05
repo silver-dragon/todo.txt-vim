@@ -24,6 +24,7 @@ def _year_regex_before(year):
 
     year_regex += ')'
     return '-'.join((year_regex, r'\d{2}', r'\d{2}'))
+
 def _month_regex_before(year, month):
     if month == '01':
         return None
@@ -60,6 +61,7 @@ def _day_regex_before(year, month, day):
         day_regex += ')'
 
     return '-'.join((year, month, day_regex))
+
 
 
 

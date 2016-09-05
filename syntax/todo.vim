@@ -53,10 +53,10 @@ highlight  default  link  TodoContext    Special
 
 let b:curdir = expand('<sfile>:p:h')
 let s:script_dir = b:curdir . "/python/"
-if has('python')
-    execute "pyfile " . s:script_dir. "todo.py"
-elseif has('python3')
+if has('python3')
     execute "py3file " . s:script_dir. "todo.py"
+elseif has('python')
+    execute "pyfile " . s:script_dir. "todo.py"
 endif
 
 let b:current_syntax = "todo"
