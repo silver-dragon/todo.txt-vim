@@ -140,6 +140,21 @@ function! todo#Sort()
         sort /@[a-zA-Z]*/ r
         sort /+[a-zA-Z]*/ r
         sort /\v\([A-Z]\)/ r
+        " Count the number of lines
+        silent normal gg
+        execute "/^\([A-Z]\)/"
+        let l:first=getpos(".")[1]
+        silent normal N
+        let l:last=getpos(".")[1]
+        let l:diff=l:last-l:first+1
+        " Put the sorted lines at the beginning of the file
+        execute ':'.l:first
+        execute ':d'.l:diff
+        silent normal gg
+        silent normal P
+        silent! %s/\(x\s*\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
+        sort n /^x\s*/
+        silent! %s/\(x\s*\d\{4}\)\(\d\{2}\)/\1-\2-/g
     endif
 endfunction
 
