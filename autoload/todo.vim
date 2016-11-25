@@ -137,24 +137,28 @@ function! todo#Sort()
         sort n /^x\s*/
         silent! %s/\(x\s*\d\{4}\)\(\d\{2}\)/\1-\2-/g
     else
+        let oldcursor=getpos(".")
+        silent normal gg
+        let l:first=search('^\s*x')
+        if  l:first != 0
+            sort /^./r
+            " at this point done tasks are at the end
+            let l:first=search('^\s*x')
+            let l:last=search('^\s*x','b')
+            let l:diff=l:last-l:first+1
+            " Cut the done lines
+            execute ':'.l:first.'d a '.l:diff
+        endif
         sort /@[a-zA-Z]*/ r
         sort /+[a-zA-Z]*/ r
-        sort /\v\([A-Z]\)/ r
-        " Count the number of lines
-        silent normal gg
-        execute "/^\([A-Z]\)/"
-        let l:first=getpos(".")[1]
-        silent normal N
-        let l:last=getpos(".")[1]
-        let l:diff=l:last-l:first+1
-        " Put the sorted lines at the beginning of the file
-        execute ':'.l:first
-        execute ':d'.l:diff
-        silent normal gg
-        silent normal P
-        silent! %s/\(x\s*\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
-        sort n /^x\s*/
-        silent! %s/\(x\s*\d\{4}\)\(\d\{2}\)/\1-\2-/g
+        sort /\v([A-Z])/ r
+        if l:first != 0
+            silent normal G"ap
+            execute ':'.l:first.','.l:last.'sort /@[a-zA-Z]*/ r'
+            execute ':'.l:first.','.l:last.'sort /+[a-zA-Z]*/ r'
+            execute ':'.l:first.','.l:last.'sort /\v([A-Z])/ r'
+        endif
+        call cursor(oldcursor)
     endif
 endfunction
 
