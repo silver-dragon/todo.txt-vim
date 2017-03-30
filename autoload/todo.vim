@@ -350,7 +350,7 @@ fun! todo#Complete(findstart, base)
         for bufnr in range(1,bufnr('$'))
             let lines=getbufline(bufnr,1,"$")
             for line in lines
-                if line =~ "[x\s0-9\-]*([a-Z]).* ".a:base
+                if line =~ " ".a:base
                     " init temporary item
                     let item={}
                     let item.word=substitute(line,'.*\('.a:base.'\S*\).*','\1',"")
