@@ -54,12 +54,15 @@ if !exists("g:Todo_txt_do_not_map")
     noremap <script> <silent> <buffer> <localleader>d :call todo#PrependDate()<CR>
 
 " Mark done {{{2
-    noremap <script> <silent> <buffer> <localleader>x :call todo#ToggleMarkAsDone('')<CR>
+    noremap <script> <silent> <buffer> <Plug>DoToggleMarkAsDone :call todo#ToggleMarkAsDone('')<CR>
+                \:call repeat#set("\<Plug>DoToggleMarkAsDone")<CR>
+    nmap <localleader>x <Plug>DoToggleMarkAsDone
+    " noremap <script> <silent> <buffer> <localleader>x :call todo#ToggleMarkAsDone('')<CR>
 
 " Mark done {{{2
-    noremap <script> <silent> <buffer> <localleader>C :call todo#ToggleMarkAsDone('Cancelled')<CR>
-
-
+    noremap <script> <silent> <buffer> <Plug>DoCancel :call todo#ToggleMarkAsDone('Cancelled')<CR>
+                \:call repeat#set("\<Plug>DoCancel")<CR>
+    nmap <localleader>C <Plug>DoCancel
 
 " Mark all done {{{2
     noremap <script> <silent> <buffer> <localleader>X :call todo#MarkAllAsDone()<CR>
