@@ -28,19 +28,19 @@
 
 ## Release notes
 
-v0.7.5 Incorporates [Fievel's work](https://github.com/fievel/todo.txt-vim/commit/0863e1434e9a89ace06c4856b6cb32ba9906e3de) to make overduedates work on python3. I have no version of vim with python3 thus it is only tested on his side, do not hesitate to report issues.
++   v0.7.6 Incorporates [Sietse's work](https://github.com/sietse/todo.txt-vim/commit/57d45200c8b033d31c9191ee0eb0711c801cdb1d) to make cancel and mark as done mapping repeatable using [vim-repeat](https://github.com/tpope/vim-repeat).
++   v0.7.5 Incorporates [Fievel's work](https://github.com/fievel/todo.txt-vim/commit/0863e1434e9a89ace06c4856b6cb32ba9906e3de) to make overduedates work on python3.
++   v0.7.4 includes the overduedate support from Guilherme Victal (see pull
 
-v0.7.4 includes the overduedate support from Guilherme Victal (see pull
-[request #45 on freitass version](https://github.com/freitass/todo.txt-vim/pull/45)),
-it highlight dates in overdue tasks as an Error. It depends on a
-Python library, however, and as such will only be able to work if your version
-of Vim was compiled with the `+python` option (as most common versions do).
+    [request #45 on freitass version](https://github.com/freitass/todo.txt-vim/pull/45)),
+    it highlight dates in overdue tasks as an Error. It depends on a
+    Python library, however, and as such will only be able to work if your version
+    of Vim was compiled with the `+python` option (as most common versions do).
+ 
+    If your Vim installation does **not** have Python support, this plugin **will work just fine** but this feature will be disabled.
 
-If your Vim installation does **not** have Python support, this plugin **will work just fine** but this feature will be disabled.
 
-
-Since v0.7.3, `TodoComplete` is replaced by `todo#Complete`, you might need to
-update your vimrc (see [completion](#completion)).
++   Since v0.7.3, `TodoComplete` is replaced by `todo#Complete`, you might need to update your vimrc (see [completion](#completion)).
 
 ## Introduction
 
