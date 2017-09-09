@@ -25,7 +25,7 @@ def add_due_date_syntax_highlight():
     regex = regex_date_before(date.today())
     regex = r'(^|<)due:%s(>|$)' % regex
 
-    vim.command("syntax match OverDueDate '\\v%s'" % regex)
+    vim.command("syntax match OverDueDate '\\v\\c%s'" % regex)
     vim.command("highlight  default  link  OverDueDate       Error")
 
 add_due_date_syntax_highlight()

@@ -174,7 +174,7 @@ if has('python3')
 elseif has('python')
     execute "pyfile " . s:script_dir. "todo.py"
 else
-    execute 'syntax match TodoOverDueDate /\v<due:' . todo#GetDateRegexForPastDates() . '>/'
+    execute 'syntax match TodoOverDueDate /\v\c<due:' . todo#GetDateRegexForPastDates() . '>/'
     highlight default link TodoOverDueDate Error
 endif
 
