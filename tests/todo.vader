@@ -1,0 +1,327 @@
+#
+# Vader tests for todo.txt-vim plugin
+#
+# [Vader](https://github.com/junegunn/vader.vim)
+
+# Tests for todo#GetDateRegexForPastDates
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,09,07)
+  if exists("g:TodoTxtSortDueDateCursorPos")
+    unlet g:TodoTxtSortDueDateCursorPos
+  endif
+Given todo (Some test todo items):
+  2017-09-04 Test task +TODO due:2017-09-08
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (0000-00-00 should match with reference 2017-09-07):
+  Assert '0000-00-00' =~ '^' . b:rex . '$'
+Execute (0000-12-31 should match with reference 2017-09-07):
+  Assert '0000-12-31' =~ '^' . b:rex . '$'
+Execute (1999-12-31 should match with reference 2017-09-07):
+  Assert '1999-12-31' =~ '^' . b:rex . '$'
+Execute (2000-01-01 should match with reference 2017-09-07):
+  Assert '2000-01-01' =~ '^' . b:rex . '$'
+Execute (2001-01-01 should match with reference 2017-09-07):
+  Assert '2001-01-01' =~ '^' . b:rex . '$'
+Execute (2002-01-01 should match with reference 2017-09-07):
+  Assert '2002-01-01' =~ '^' . b:rex . '$'
+Execute (2003-01-01 should match with reference 2017-09-07):
+  Assert '2003-01-01' =~ '^' . b:rex . '$'
+Execute (2004-01-01 should match with reference 2017-09-07):
+  Assert '2004-01-01' =~ '^' . b:rex . '$'
+Execute (2005-01-01 should match with reference 2017-09-07):
+  Assert '2005-01-01' =~ '^' . b:rex . '$'
+Execute (2006-01-01 should match with reference 2017-09-07):
+  Assert '2006-01-01' =~ '^' . b:rex . '$'
+Execute (2007-01-01 should match with reference 2017-09-07):
+  Assert '2007-01-01' =~ '^' . b:rex . '$'
+Execute (2008-01-01 should match with reference 2017-09-07):
+  Assert '2008-01-01' =~ '^' . b:rex . '$'
+Execute (2009-01-01 should match with reference 2017-09-07):
+  Assert '2009-01-01' =~ '^' . b:rex . '$'
+Execute (2010-01-01 should match with reference 2017-09-07):
+  Assert '2010-01-01' =~ '^' . b:rex . '$'
+Execute (2011-01-01 should match with reference 2017-09-07):
+  Assert '2011-01-01' =~ '^' . b:rex . '$'
+Execute (2012-01-01 should match with reference 2017-09-07):
+  Assert '2012-01-01' =~ '^' . b:rex . '$'
+Execute (2013-01-01 should match with reference 2017-09-07):
+  Assert '2013-01-01' =~ '^' . b:rex . '$'
+Execute (2014-01-01 should match with reference 2017-09-07):
+  Assert '2014-01-01' =~ '^' . b:rex . '$'
+Execute (2015-01-01 should match with reference 2017-09-07):
+  Assert '2015-01-01' =~ '^' . b:rex . '$'
+Execute (2016-01-01 should match with reference 2017-09-07):
+  Assert '2016-01-01' =~ '^' . b:rex . '$'
+Execute (2016-02-29 should match with reference 2017-09-07):
+  Assert '2016-02-29' =~ '^' . b:rex . '$'
+Execute (2016-09-07 should match with reference 2017-09-07):
+  Assert '2016-09-07' =~ '^' . b:rex . '$'
+Execute (2017-01-01 should match with reference 2017-09-07):
+  Assert '2017-01-01' =~ '^' . b:rex . '$'
+Execute (2017-01-31 should match with reference 2017-09-07):
+  Assert '2017-01-31' =~ '^' . b:rex . '$'
+Execute (2017-02-01 should match with reference 2017-09-07):
+  Assert '2017-02-01' =~ '^' . b:rex . '$'
+Execute (2017-02-28 should match with reference 2017-09-07):
+  Assert '2017-02-28' =~ '^' . b:rex . '$'
+Execute (2017-03-01 should match with reference 2017-09-07):
+  Assert '2017-03-01' =~ '^' . b:rex . '$'
+Execute (2017-03-31 should match with reference 2017-09-07):
+  Assert '2017-03-31' =~ '^' . b:rex . '$'
+Execute (2017-04-01 should match with reference 2017-09-07):
+  Assert '2017-04-01' =~ '^' . b:rex . '$'
+Execute (2017-04-30 should match with reference 2017-09-07):
+  Assert '2017-04-30' =~ '^' . b:rex . '$'
+Execute (2017-05-01 should match with reference 2017-09-07):
+  Assert '2017-05-01' =~ '^' . b:rex . '$'
+Execute (2017-05-31 should match with reference 2017-09-07):
+  Assert '2017-05-31' =~ '^' . b:rex . '$'
+Execute (2017-06-01 should match with reference 2017-09-07):
+  Assert '2017-06-01' =~ '^' . b:rex . '$'
+Execute (2017-06-30 should match with reference 2017-09-07):
+  Assert '2017-06-30' =~ '^' . b:rex . '$'
+Execute (2017-07-01 should match with reference 2017-09-07):
+  Assert '2017-07-01' =~ '^' . b:rex . '$'
+Execute (2017-07-31 should match with reference 2017-09-07):
+  Assert '2017-07-31' =~ '^' . b:rex . '$'
+Execute (2017-08-01 should match with reference 2017-09-07):
+  Assert '2017-08-01' =~ '^' . b:rex . '$'
+Execute (2017-08-31 should match with reference 2017-09-07):
+  Assert '2017-08-31' =~ '^' . b:rex . '$'
+Execute (2017-09-01 should match with reference 2017-09-07):
+  Assert '2017-09-01' =~ '^' . b:rex . '$'
+Execute (2017-09-02 should match with reference 2017-09-07):
+  Assert '2017-09-02' =~ '^' . b:rex . '$'
+Execute (2017-09-03 should match with reference 2017-09-07):
+  Assert '2017-09-03' =~ '^' . b:rex . '$'
+Execute (2017-09-03 should match with reference 2017-09-07):
+  Assert '2017-09-03' =~ '^' . b:rex . '$'
+Execute (2017-09-04 should match with reference 2017-09-07):
+  Assert '2017-09-04' =~ '^' . b:rex . '$'
+Execute (2017-09-05 should match with reference 2017-09-07):
+  Assert '2017-09-05' =~ '^' . b:rex . '$'
+Execute (2017-09-06 should match with reference 2017-09-07):
+  Assert '2017-09-06' =~ '^' . b:rex . '$'
+Execute (2017-09-07 should NOT match with reference 2017-09-07):
+  Assert '2017-09-07' !~ b:rex
+Execute (2017-09-08 should NOT match with reference 2017-09-07):
+  Assert '2017-09-08' !~ b:rex
+Execute (2017-09-09 should NOT match with reference 2017-09-07):
+  Assert '2017-09-09' !~ b:rex
+Execute (2017-09-10 should NOT match with reference 2017-09-07):
+  Assert '2017-09-10' !~ b:rex
+Execute (2017-09-30 should NOT match with reference 2017-09-07):
+  Assert '2017-09-30' !~ b:rex
+Execute (2017-10-01 should NOT match with reference 2017-09-07):
+  Assert '2017-10-01' !~ b:rex
+Execute (2017-10-31 should NOT match with reference 2017-09-07):
+  Assert '2017-10-31' !~ b:rex
+Execute (2017-11-01 should NOT match with reference 2017-09-07):
+  Assert '2017-11-01' !~ b:rex
+Execute (2017-11-30 should NOT match with reference 2017-09-07):
+  Assert '2017-11-30' !~ b:rex
+Execute (2017-12-01 should NOT match with reference 2017-09-07):
+  Assert '2017-12-01' !~ b:rex
+Execute (2017-12-31 should NOT match with reference 2017-09-07):
+  Assert '2017-12-31' !~ b:rex
+Execute (2018-01-01 should NOT match with reference 2017-09-07):
+  Assert '2018-01-01' !~ b:rex
+Execute (2018-09-08 should NOT match with reference 2017-09-07):
+  Assert '2018-09-08' !~ b:rex
+Execute (2018-12-31 should NOT match with reference 2017-09-07):
+  Assert '2018-12-31' !~ b:rex
+Execute (2020-12-31 should NOT match with reference 2017-09-07):
+  Assert '2020-12-31' !~ b:rex
+Execute (2025-12-31 should NOT match with reference 2017-09-07):
+  Assert '2025-12-31' !~ b:rex
+Execute (2032-09-06 should NOT match with reference 2017-09-07):
+  Assert '2032-09-06' !~ b:rex
+Execute (2032-09-07 should NOT match with reference 2017-09-07):
+  Assert '2032-09-07' !~ b:rex
+Execute (2099-12-31 should NOT match with reference 2017-09-07):
+  Assert '2099-12-31' !~ b:rex
+Execute (2100-01-01 should NOT match with reference 2017-09-07):
+  Assert '2100-01-01' !~ b:rex
+
+# Test a high day/month
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,11,27)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-09-09 should match with reference 2017-11-27):
+  Assert '2017-09-09' =~ '^' . b:rex . '$'
+Execute (2017-11-01 should match with reference 2017-11-27):
+  Assert '2017-11-01' =~ '^' . b:rex . '$'
+Execute (2017-11-09 should match with reference 2017-11-27):
+  Assert '2017-11-09' =~ '^' . b:rex . '$'
+Execute (2017-11-19 should match with reference 2017-11-27):
+  Assert '2017-11-19' =~ '^' . b:rex . '$'
+Execute (2017-11-26 should match with reference 2017-11-27):
+  Assert '2017-11-26' =~ '^' . b:rex . '$'
+Execute (2017-11-27 should NOT match with reference 2017-11-27):
+  Assert '2017-11-27' !~ b:rex
+Execute (2017-11-28 should NOT match with reference 2017-11-27):
+  Assert '2017-11-28' !~ b:rex
+
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-12-30 should match with reference 2017-12-31):
+  Assert '2017-12-30' =~ '^' . b:rex . '$'
+Execute (2017-12-31 should NOT match with reference 2017-12-31):
+  Assert '2017-12-31' !~ b:rex
+
+# Tests for a future date 2032-01-07
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2032,01,07)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (1999-09-06 should match with reference 2032-01-07):
+  Assert '1999-09-06' =~ '^' . b:rex . '$'
+Execute (2000-09-06 should match with reference 2032-01-07):
+  Assert '2000-09-06' =~ '^' . b:rex . '$'
+Execute (2018-09-06 should match with reference 2032-01-07):
+  Assert '2018-09-06' =~ '^' . b:rex . '$'
+Execute (2031-09-06 should match with reference 2032-01-07):
+  Assert '2031-09-06' =~ '^' . b:rex . '$'
+Execute (2032-01-01 should match with reference 2032-01-07):
+  Assert '2032-01-01' =~ '^' . b:rex . '$'
+Execute (2032-01-02 should match with reference 2032-01-07):
+  Assert '2032-01-02' =~ '^' . b:rex . '$'
+Execute (2032-01-03 should match with reference 2032-01-07):
+  Assert '2032-01-03' =~ '^' . b:rex . '$'
+Execute (2032-01-04 should match with reference 2032-01-07):
+  Assert '2032-01-04' =~ '^' . b:rex . '$'
+Execute (2032-01-05 should match with reference 2032-01-07):
+  Assert '2032-01-05' =~ '^' . b:rex . '$'
+Execute (2032-01-06 should match with reference 2032-01-07):
+  Assert '2032-01-06' =~ '^' . b:rex . '$'
+Execute (2032-01-07 should NOT match with reference 2032-01-07):
+  Assert '2032-01-07' !~ b:rex
+Execute (2032-01-08 should NOT match with reference 2032-01-07):
+  Assert '2032-01-08' !~ b:rex
+
+# Should work from 2000 onwards
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2000,01,01)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (1999-12-31 should match with reference 2000-01-01):
+  Assert '1999-12-31' =~ '^' . b:rex . '$'
+Execute (2000-01-01 should NOT match with reference 2000-01-01):
+  Assert '2000-01-01' !~ b:rex
+
+# Should work out to 2099
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2099,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2099-12-30 should match with reference 2099-12-31):
+  Assert '2099-12-30' =~ '^' . b:rex . '$'
+Execute (2099-12-31 should NOT match with reference 2099-12-31):
+  Assert '2099-12-31' !~ b:rex
+
+# Two digit year is not valid
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(17,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (16-12-31 should NOT match with reference 17-12-31):
+  Assert '16-12-31' !~ b:rex
+Execute (2016-12-31 should NOT match with reference 17-12-31):
+  Assert '2016-12-31' !~ b:rex
+
+Given todo (Some test todo items):
+  2017-09-04 Test task +TODO due:2017-09-08
+  Every task counts
+  Yet another task @home due:2017-09-08
+  STOP BEING ANGRY DUE:2017-07-27
+  I will due:2070-05-12 live forever +SomedayMaybe
+  Another task notdue:2017-09-09
+  Due:2017-09-02 Meh
+  I'd like this to be duE:2017-09-05, please
+  Odd break check due overdue: due: due:2017-MM-DD due:2017-06-13D
+  Old task @home due:2015-06-03
+  Due way in future due:2070-05-14
+Execute (Syntax in a buffer is right: OverDueDate):
+  AssertEqual 'TodoOverDueDate', SyntaxAt(1, 28)
+Execute (Syntax in a buffer is right: OVERDUEDATE):
+  AssertEqual 'TodoOverDueDate', SyntaxAt(4, 22)
+Execute (Syntax in a buffer is right: Date):
+  AssertEqual 'TodoDate', SyntaxAt(1, 2)
+Execute (Syntax in a buffer is right: Project):
+  AssertEqual 'TodoProject', SyntaxAt(1, 24)
+Execute (Syntax in a buffer is right: Context):
+  AssertEqual 'TodoContext', SyntaxAt(3, 18)
+Execute (Syntax in a buffer is right: Key):
+  AssertEqual 'TodoKey', SyntaxAt(6, 15)
+Execute (Syntax in a buffer is right: Normal):
+  AssertEqual '', SyntaxAt(6, 1)
+Do (Sort by due date):
+  :call todo#SortDue()\<CR>
+Expect todo (Sorted list):
+  Old task @home due:2015-06-03
+  STOP BEING ANGRY DUE:2017-07-27
+  Due:2017-09-02 Meh
+  I'd like this to be duE:2017-09-05, please
+  2017-09-04 Test task +TODO due:2017-09-08
+  Yet another task @home due:2017-09-08
+  I will due:2070-05-12 live forever +SomedayMaybe
+  Due way in future due:2070-05-14
+  Every task counts
+  Another task notdue:2017-09-09
+  Odd break check due overdue: due: due:2017-MM-DD due:2017-06-13D
+Then (Check post sort cursor position):
+  AssertEqual 1, line('.')
+Do (Add some tasks due today):
+  OTask due-\<BS>:\<C-R>=strftime("%Y-%m-%d")\<CR> today\<C-O>
+Then (Syntax in a buffer is right: DueToday):
+  Log getline(1)
+  AssertEqual 'TodoDueToday', SyntaxAt(1, 12)
+Do (Sort and check cursor position: top):
+  :let g:TodoTxtSortDueDateCursorPos="top" | call todo#SortDue()\<CR>
+Then (Is cursor at top):
+  AssertEqual 1, line('.')
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on last task with due:date?):
+  AssertEqual 8, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 7, line('.')
+Do (Sort and check cursor position: bottom):
+  :let g:TodoTxtSortDueDateCursorPos="bottom" | call todo#SortDue()\<CR>
+Then (Is cursor on the last line of the buffer?):
+  AssertEqual line('$'), line('.')
+
+Given todo (Some test todo items all with a due:date):
+  2017-09-04 Test task +TODO due:2017-09-08
+  Yet another task @home due:2017-09-10
+  STOP BEING ANGRY DUE:2017-07-27
+  I will due:2070-05-12 live forever +SomedayMaybe
+  I'd like this to be duE:2017-09-05, please
+  Old task @home due:2015-06-03
+Do (Sort by due date):
+  :call todo#SortDue()\<CR>
+Expect todo (Sorted list):
+  Old task @home due:2015-06-03
+  STOP BEING ANGRY DUE:2017-07-27
+  I'd like this to be duE:2017-09-05, please
+  2017-09-04 Test task +TODO due:2017-09-08
+  Yet another task @home due:2017-09-10
+  I will due:2070-05-12 live forever +SomedayMaybe
+
+Given todo (Some test todo items all without a due:date):
+  2017-09-04 Test task +TODO
+  Yet another task @home
+  STOP BEING ANGRY
+Do (Sort by due date):
+  :call todo#SortDue()\<CR>
+Expect todo (Unmodified list):
+  2017-09-04 Test task +TODO
+  Yet another task @home
+  STOP BEING ANGRY
+
