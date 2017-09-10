@@ -169,7 +169,7 @@ endfunction
 function! todo#SortDue()
     " Check how many lines have a due:date on them
     let l:tasksWithDueDate = 0
-    silent! %global/\v\c<due:\d{4}-\d{2}-\d{2}>/let l:tasksWithDueDate += 1
+    silent! %global/\v\c^[^x].*<due:\d{4}-\d{2}-\d{2}>/let l:tasksWithDueDate += 1
     if l:tasksWithDueDate == 0
         " No tasks with a due:date: No need to modify the buffer at all
         " Also means we don't need to cater for no matches on searches below
@@ -183,7 +183,7 @@ function! todo#SortDue()
     " Turn the due:date from due:yyyy-mm-dd to due:yyyymmdd so we can do a numeric sort
     silent! %substitute/\v<(due:\d{4})\-(\d{2})\-(\d{2})>/\1\2\3/ei
     " Sort all the lines with due: by numeric yyyymmdd, they will end up in ascending order at the bottom of the buffer
-    sort in /\<due:/
+    sort in /^[^x].*\<due:/
     " Determine the line number of the first task with a due:date
     let l:firstLineWithDue = line("$") - l:tasksWithDueDate + 1
     " Put the sorted lines at the beginning of the file
