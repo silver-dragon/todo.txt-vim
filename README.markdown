@@ -28,6 +28,8 @@
 
 ## Release notes
 
++   V0.8.1 Incorporates yet antoher Fretep work : highlithing for tasks due today.
+
 +   v0.8 Incorporates Fretep's work on overdue dates (PR#13 and PR#16) witch
 removes python dependency, allow to control the cursor position after a sort by
 todo (see (sort)[#sort] and/or issue #15) and fixes bug when sorting a file
