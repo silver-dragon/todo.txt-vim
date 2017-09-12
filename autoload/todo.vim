@@ -169,7 +169,7 @@ endfunction
 function! todo#SortDue()
     " Check how many lines have a due:date on them
     let l:tasksWithDueDate = 0
-    silent! %global/\v\c^[^x].*<due:\d{4}-\d{2}-\d{2}>/let l:tasksWithDueDate += 1
+    silent! %global/\v\c<due:\d{4}-\d{2}-\d{2}>/let l:tasksWithDueDate += 1
     if l:tasksWithDueDate == 0
         " No tasks with a due:date: No need to modify the buffer at all
         " Also means we don't need to cater for no matches on searches below
@@ -183,27 +183,47 @@ function! todo#SortDue()
     " Turn the due:date from due:yyyy-mm-dd to due:yyyymmdd so we can do a numeric sort
     silent! %substitute/\v<(due:\d{4})\-(\d{2})\-(\d{2})>/\1\2\3/ei
     " Sort all the lines with due: by numeric yyyymmdd, they will end up in ascending order at the bottom of the buffer
-    sort in /^[^x].*\<due:/
+    sort in /\v<due:\ze\d{8}>/
     " Determine the line number of the first task with a due:date
     let l:firstLineWithDue = line("$") - l:tasksWithDueDate + 1
     " Put the sorted lines at the beginning of the file
     if l:firstLineWithDue > 1
         " ...but only if the whole file didn't get sorted.
-        execute l:firstLineWithDue . ",$move 0"
+        execute "silent " . l:firstLineWithDue . ",$move 0"
     endif
     " Change the due:yyyymmdd back to due:yyyy-mm-dd.
     silent! %substitute/\v<(due:\d{4})(\d{2})(\d{2})>/\1-\2-\3/ei
-    " Cursor is now on the last task with a due:date
+    silent global/^x /move$
     " Let's check a global for a user preference on the cursor position.
     if exists("g:TodoTxtSortDueDateCursorPos")
         if g:TodoTxtSortDueDateCursorPos ==? "top"
             normal gg
-        elseif g:TodoTxtSortDueDateCursorPos ==? "lastdue"
-            " Nothing to do
-        elseif g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
-            " Let's try to put the cursor on the first non-overdue task
+        elseif g:TodoTxtSortDueDateCursorPos ==? "lastdue" || g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
+            silent normal G
+            " Sorry for the crazy RegExp. The next command should put cursor at at the top of the completed tasks,
+            " or the bottom of the buffer. This is done by searching backwards for any line not starting with
+            " "x " (x, space) which is important to distinguish from "xample task" for instance, which the more
+            " simple "^[^x]" would match. More info: ":help /\@!".
+            :silent! ?\v^(x )@!?+1
             let l:overduePat = todo#GetDateRegexForPastDates()
-            execute ":silent! ?\\v<due:" . l:overduePat . ">?+1"
+            let l:lastwrapscan = &wrapscan
+            set nowrapscan
+            try
+                if g:TodoTxtSortDueDateCursorPos ==? "lastdue"
+                    " This searches backwards for the last due task
+                    :?\v\c<due:\d{4}\-\d{2}\-\d{2}>
+                elseif g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
+                    " This searches backwards for the last overdue task, and positions the cursor on the following line
+                    execute ":?\\v\\c<due:" . l:overduePat . ">?+1"
+                endif
+            catch
+                " Might fail if there are no active (or overdue) due:date tasks. Requires nowrapscan
+                " This code path always means we want to be at the top of the buffer
+                normal gg
+            finally
+                let &wrapscan = l:lastwrapscan
+            endtry
+        elseif g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
         elseif g:TodoTxtSortDueDateCursorPos ==? "bottom"
             silent normal G
         endif
