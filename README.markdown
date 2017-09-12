@@ -28,6 +28,13 @@
 
 ## Release notes
 
++   V0.8.1 Incorporates yet antoher Fretep work : highlithing for tasks due today.
+
++   v0.8 Incorporates Fretep's work on overdue dates (PR#13 and PR#16) witch
+removes python dependency, allow to control the cursor position after a sort by
+todo (see (sort)[#sort] and/or issue #15) and fixes bug when sorting a file
+containing only lines with due:date (issue #14).
+
 +   v0.7.6 Incorporates [Sietse's work](https://github.com/sietse/todo.txt-vim/commit/57d45200c8b033d31c9191ee0eb0711c801cdb1d) to make cancel and mark as done mapping repeatable using [vim-repeat](https://github.com/tpope/vim-repeat).
 +   v0.7.5 Incorporates [Fievel's work](https://github.com/fievel/todo.txt-vim/commit/0863e1434e9a89ace06c4856b6cb32ba9906e3de) to make overduedates work on python3.
 +   v0.7.4 includes the overduedate support from Guilherme Victal (see pull
@@ -214,6 +221,19 @@ prevent this behavior, add the following line to your vimrc
 + `<LocalLeader>spc` : Sort the file by project, context then by priority
 + `<leader>-sd` : Sort the file by due-date. Entries with a due date appears
 sorted by at the beginning of the file, the rest of the file is not modified.
+
+When you sort by due dates, at the end of the sort, your cursor will be placed
+at the top of the file. This behavior can be set with the following global
+variable :
+
+    let g:TodoTxtSortDueDateCursorPos = "top"
+
+Possible values are :
+
++ `top` (default): The first line of the buffer, i.e. your most outstanding task
++ `lastdue`: The last task with a due:date set
++ `notoverdue`: The first task that is not overdue (requires #13)
++ `bottom`: The last line of the buffer
 
 ### Priorities
 
