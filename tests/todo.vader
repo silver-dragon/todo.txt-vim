@@ -239,6 +239,7 @@ Given todo (Some test todo items):
   Yet another task @home due:2017-09-08
   STOP BEING ANGRY DUE:2017-07-27
   I will due:2070-05-12 live forever +SomedayMaybe
+  x This task is done due:2017-09-05
   Another task notdue:2017-09-09
   Due:2017-09-02 Meh
   I'd like this to be duE:2017-09-05, please
@@ -246,7 +247,7 @@ Given todo (Some test todo items):
   Old task @home due:2015-06-03
   Due way in future due:2070-05-14
 Execute (Syntax in a buffer is right: OverDueDate):
-  AssertEqual 'TodoOverDueDate', SyntaxAt(1, 28)
+  AssertEqual 'TodoOverDueDate', SyntaxAt(1, 32)
 Execute (Syntax in a buffer is right: OVERDUEDATE):
   AssertEqual 'TodoOverDueDate', SyntaxAt(4, 22)
 Execute (Syntax in a buffer is right: Date):
@@ -255,13 +256,18 @@ Execute (Syntax in a buffer is right: Project):
   AssertEqual 'TodoProject', SyntaxAt(1, 24)
 Execute (Syntax in a buffer is right: Context):
   AssertEqual 'TodoContext', SyntaxAt(3, 18)
-Execute (Syntax in a buffer is right: Key):
-  AssertEqual 'TodoKey', SyntaxAt(6, 15)
+Execute (Syntax in a buffer is right: Key notdue):
+  AssertEqual 'TodoKey', SyntaxAt(7, 19)
+Execute (Syntax in a buffer is right: Key due):
+  AssertEqual 'TodoKey', SyntaxAt(12, 19)
 Execute (Syntax in a buffer is right: Normal):
-  AssertEqual '', SyntaxAt(6, 1)
-Do (Sort by due date):
+  AssertEqual '', SyntaxAt(7, 1)
+Execute (Syntax in a buffer is right: TodoDone):
+  AssertEqual 'TodoDone', SyntaxAt(6, 3)
+Do (FIXME Broken because of #17: Sort by due date):
   :call todo#SortDue()\<CR>
 Expect todo (Sorted list):
+# FIXME: There is a bug with the todo#SortDue() where tasks with due:date starting on column 1 do not sort correctly
   Old task @home due:2015-06-03
   STOP BEING ANGRY DUE:2017-07-27
   Due:2017-09-02 Meh
@@ -271,6 +277,7 @@ Expect todo (Sorted list):
   I will due:2070-05-12 live forever +SomedayMaybe
   Due way in future due:2070-05-14
   Every task counts
+  x This task is done due:2017-09-05
   Another task notdue:2017-09-09
   Odd break check due overdue: due: due:2017-MM-DD due:2017-06-13D
 Then (Check post sort cursor position):
@@ -284,11 +291,11 @@ Do (Sort and check cursor position: top):
   :let g:TodoTxtSortDueDateCursorPos="top" | call todo#SortDue()\<CR>
 Then (Is cursor at top):
   AssertEqual 1, line('.')
-Do (Sort and check cursor position: lastdue):
+Do (FIXME Broken because of #17: Sort and check cursor position: lastdue):
   :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
 Then (Is cursor on last task with due:date?):
   AssertEqual 8, line('.')
-Do (Sort and check cursor position: notoverdue):
+Do (FIXME Broken because #18 does not deal with complete tasks: Sort and check cursor position: notoverdue):
   :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
 Then (Is cursor on first non-overdue task?):
   AssertEqual 7, line('.')
@@ -296,6 +303,25 @@ Do (Sort and check cursor position: bottom):
   :let g:TodoTxtSortDueDateCursorPos="bottom" | call todo#SortDue()\<CR>
 Then (Is cursor on the last line of the buffer?):
   AssertEqual line('$'), line('.')
+
+Given todo (Some test todo items - none overdue):
+  Every task counts
+  x This task is done due:2017-09-05
+  Another task notdue:2017-09-09
+  Due way in future due:2070-06-15
+  Due way in future due:2070-05-14
+Do (FIXME Broken because #18 bug introduced by fretep: Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the first due task?):
+  AssertEqual 1, line('.')
+Do (FIXME Broken because #18: Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last due task?):
+  AssertEqual 2, line('.')
+Do (Sort and check cursor position: top):
+  :let g:TodoTxtSortDueDateCursorPos="top" | call todo#SortDue()\<CR>
+Then (Is cursor on the first task?):
+  AssertEqual 1, line('.')
 
 Given todo (Some test todo items all with a due:date):
   2017-09-04 Test task +TODO due:2017-09-08
