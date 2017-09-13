@@ -193,7 +193,7 @@ function! todo#SortDue()
     endif
     " Change the due:yyyymmdd back to due:yyyy-mm-dd.
     silent! %substitute/\v<(due:\d{4})(\d{2})(\d{2})>/\1-\2-\3/ei
-    silent global/^x /move$
+    silent global/\C^x /move$
     " Let's check a global for a user preference on the cursor position.
     if exists("g:TodoTxtSortDueDateCursorPos")
         if g:TodoTxtSortDueDateCursorPos ==? "top"
@@ -203,8 +203,8 @@ function! todo#SortDue()
             " Sorry for the crazy RegExp. The next command should put cursor at at the top of the completed tasks,
             " or the bottom of the buffer. This is done by searching backwards for any line not starting with
             " "x " (x, space) which is important to distinguish from "xample task" for instance, which the more
-            " simple "^[^x]" would match. More info: ":help /\@!".
-            :silent! ?\v^(x )@!?+1
+            " simple "^[^x]" would match. More info: ":help /\@!". Be sure to enforce case sensitivity on "x".
+            :silent! ?\v\C^(x )@!?+1
             let l:overduePat = todo#GetDateRegexForPastDates()
             let l:lastwrapscan = &wrapscan
             set nowrapscan
@@ -212,6 +212,9 @@ function! todo#SortDue()
                 if g:TodoTxtSortDueDateCursorPos ==? "lastdue"
                     " This searches backwards for the last due task
                     :?\v\c<due:\d{4}\-\d{2}\-\d{2}>
+                    " Try a forward search in case the last line of the buffer was a due:date task, don't match done
+                    " Be sure to enforce case sensitivity on "x" while allowing mixed case on "due:"
+                    :silent! /\v\C^(x )@!&.*<[dD][uU][eE]:\d{4}\-\d{2}\-\d{2}>
                 elseif g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
                     " This searches backwards for the last overdue task, and positions the cursor on the following line
                     execute ":?\\v\\c<due:" . l:overduePat . ">?+1"
@@ -223,7 +226,6 @@ function! todo#SortDue()
             finally
                 let &wrapscan = l:lastwrapscan
             endtry
-        elseif g:TodoTxtSortDueDateCursorPos ==? "notoverdue"
         elseif g:TodoTxtSortDueDateCursorPos ==? "bottom"
             silent normal G
         endif
