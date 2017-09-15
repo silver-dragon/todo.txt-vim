@@ -1,6 +1,6 @@
 " File:        autoload/todo.vim
 " Description: Todo.txt sorting plugin
-" Author:      David Beniamine <david@beniamine.net>
+" Author:      David Beniamine <david@beniamine.net>, Peter (fretep) <githib.5678@9ox.net>
 " Licence:     Vim licence
 " Website:     http://github.com/dbeniamine/todo.txt.vim
 " vim: ts=4 sw=4 :help tw=78 cc=80
