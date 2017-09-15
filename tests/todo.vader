@@ -1,0 +1,680 @@
+" File:        tests/todo.vader
+" Description: Vader tests for todo.txt-vim plugin
+" Author:      Peter (fretep) <githib.5678@9ox.net>
+" Licence:     Vim licence
+" Website:     http://github.com/dbeniamine/todo.txt.vim
+" vim: ts=2 sw=2 sts=2 expandtab :help tw=78 cc=80 foldmethod=marker
+
+" [Vader](https://github.com/junegunn/vader.vim) is a simple unit testing
+" plugin for VIM.
+
+" file: syntax/todo.vim {{{1
+
+" syntax match {{{2
+
+Given todo (todo items active and done);
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L01
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L02
+x (A) Done  due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L03
+Active      due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L04
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L05
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L06
+Execute (Syntax for done task):
+  AssertEqual 'TodoDone',         SyntaxAt( 3,  1)
+  AssertEqual 'TodoDone',         SyntaxAt( 3,  4)
+  AssertEqual 'TodoDone',         SyntaxAt( 3,  7)
+  AssertEqual 'TodoKey',          SyntaxAt( 3, 13)
+  AssertEqual 'TodoKey',          SyntaxAt( 3, 28)
+  AssertEqual 'TodoKey',          SyntaxAt( 3, 72)
+  AssertEqual 'TodoDate',         SyntaxAt( 3, 17)
+  AssertEqual 'TodoDate',         SyntaxAt( 3, 32)
+  AssertEqual 'TodoDate',         SyntaxAt( 3, 43)
+  AssertEqual 'TodoProject',      SyntaxAt( 3, 54)
+  AssertEqual 'TodoContext',      SyntaxAt( 3, 63)
+Execute (Syntax for active task):
+  AssertEqual '',                 SyntaxAt( 4,  1)
+  AssertEqual 'TodoOverDueDate',  SyntaxAt( 4, 13)
+  AssertEqual 'TodoKey',          SyntaxAt( 4, 28)
+  AssertEqual 'TodoKey',          SyntaxAt( 4, 72)
+  AssertEqual 'TodoOverDueDate',  SyntaxAt( 4, 17)
+  AssertEqual 'TodoDate',         SyntaxAt( 4, 32)
+  AssertEqual 'TodoDate',         SyntaxAt( 4, 43)
+  AssertEqual 'TodoProject',      SyntaxAt( 4, 54)
+  AssertEqual 'TodoContext',      SyntaxAt( 4, 63)
+Given todo (todo items with priority);
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L01
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L02
+(A) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L03
+(B) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L04
+(C) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L05
+(D) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L06
+(E) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L07
+(F) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L08
+(G) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L09
+(H) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L10
+(I) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L11
+(J) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L12
+(K) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L13
+(L) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L14
+(M) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L15
+(N) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L16
+(O) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L17
+(P) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L18
+(Q) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L19
+(R) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L20
+(S) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L21
+(T) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L22
+(U) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L23
+(V) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L24
+(W) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L25
+(X) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L26
+(Y) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L27
+(Z) Priorit due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L28
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L29
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L30
+Execute (Syntax for priority task):
+  AssertEqual 'TodoPriorityA',    SyntaxAt( 3,  2)
+  AssertEqual 'TodoPriorityA',    SyntaxAt( 3,  5)
+  AssertEqual 'TodoPriorityB',    SyntaxAt( 4,  2)
+  AssertEqual 'TodoPriorityB',    SyntaxAt( 4,  5)
+  AssertEqual 'TodoPriorityC',    SyntaxAt( 5,  2)
+  AssertEqual 'TodoPriorityC',    SyntaxAt( 5,  5)
+  AssertEqual 'TodoPriorityD',    SyntaxAt( 6,  2)
+  AssertEqual 'TodoPriorityD',    SyntaxAt( 6,  5)
+  AssertEqual 'TodoPriorityE',    SyntaxAt( 7,  2)
+  AssertEqual 'TodoPriorityE',    SyntaxAt( 7,  5)
+  AssertEqual 'TodoPriorityF',    SyntaxAt( 8,  2)
+  AssertEqual 'TodoPriorityF',    SyntaxAt( 8,  5)
+  AssertEqual 'TodoPriorityG',    SyntaxAt( 9,  2)
+  AssertEqual 'TodoPriorityG',    SyntaxAt( 9,  5)
+  AssertEqual 'TodoPriorityH',    SyntaxAt(10,  2)
+  AssertEqual 'TodoPriorityH',    SyntaxAt(10,  5)
+  AssertEqual 'TodoPriorityI',    SyntaxAt(11,  2)
+  AssertEqual 'TodoPriorityI',    SyntaxAt(11,  5)
+  AssertEqual 'TodoPriorityJ',    SyntaxAt(12,  2)
+  AssertEqual 'TodoPriorityJ',    SyntaxAt(12,  5)
+  AssertEqual 'TodoPriorityK',    SyntaxAt(13,  2)
+  AssertEqual 'TodoPriorityK',    SyntaxAt(13,  5)
+  AssertEqual 'TodoPriorityL',    SyntaxAt(14,  2)
+  AssertEqual 'TodoPriorityL',    SyntaxAt(14,  5)
+  AssertEqual 'TodoPriorityM',    SyntaxAt(15,  2)
+  AssertEqual 'TodoPriorityM',    SyntaxAt(15,  5)
+  AssertEqual 'TodoPriorityN',    SyntaxAt(16,  2)
+  AssertEqual 'TodoPriorityN',    SyntaxAt(16,  5)
+  AssertEqual 'TodoPriorityO',    SyntaxAt(17,  2)
+  AssertEqual 'TodoPriorityO',    SyntaxAt(17,  5)
+  AssertEqual 'TodoPriorityP',    SyntaxAt(18,  2)
+  AssertEqual 'TodoPriorityP',    SyntaxAt(18,  5)
+  AssertEqual 'TodoPriorityQ',    SyntaxAt(19,  2)
+  AssertEqual 'TodoPriorityQ',    SyntaxAt(19,  5)
+  AssertEqual 'TodoPriorityR',    SyntaxAt(20,  2)
+  AssertEqual 'TodoPriorityR',    SyntaxAt(20,  5)
+  AssertEqual 'TodoPriorityS',    SyntaxAt(21,  2)
+  AssertEqual 'TodoPriorityS',    SyntaxAt(21,  5)
+  AssertEqual 'TodoPriorityT',    SyntaxAt(22,  2)
+  AssertEqual 'TodoPriorityT',    SyntaxAt(22,  5)
+  AssertEqual 'TodoPriorityU',    SyntaxAt(23,  2)
+  AssertEqual 'TodoPriorityU',    SyntaxAt(23,  5)
+  AssertEqual 'TodoPriorityV',    SyntaxAt(24,  2)
+  AssertEqual 'TodoPriorityV',    SyntaxAt(24,  5)
+  AssertEqual 'TodoPriorityW',    SyntaxAt(25,  2)
+  AssertEqual 'TodoPriorityW',    SyntaxAt(25,  5)
+  AssertEqual 'TodoPriorityX',    SyntaxAt(26,  2)
+  AssertEqual 'TodoPriorityX',    SyntaxAt(26,  5)
+  AssertEqual 'TodoPriorityY',    SyntaxAt(27,  2)
+  AssertEqual 'TodoPriorityY',    SyntaxAt(27,  5)
+Given todo (todo items with invalid or misleading syntax);
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L01
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L02
+X Done tasks must start with a lowercase x then space                             L03
+xDone tasks must start with a lowercase x then space                              L04
+XDone tasks must start with a lowercase x then space                              L05
+(a) Priority must start with an uppercase letter in rounds followed by space      L06
+(A)Priority must start with an uppercase letter in rounds followed by space       L07
+A  Priority must start with an uppercase letter in rounds followed by space       L08
+a  Priority must start with an uppercase letter in rounds followed by space       L09
+Priority (A) must start with an uppercase letter in rounds followed by space      L10
+due:2050-01-01 keys are valid on the start of the line                            L11
+due:2010-01-01 overdue dates are valid on the start of the line                   L12
+2010-01-01 dates are valid on the start of the line                               L13
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L14
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L15
+Invalid dates 17-10-05 20100101 01-01-2010 2010/01/01 10/01/01 2010-01-01-2010    L16
+@Contexts are valid on the start of the line                                      L17
++Projects are valid on the start of the line                                      L18
+The key: syntax must be followed by a value, same for due:                        L19
+due: syntax must be a whole word notdue:2010-01-01 pro@jects and con+texts also   L20
+x 345678901234567890123456789012345678901234567890123456789012345678901234567890  L21
+x   .    1    .    2    .    3    .    4    .    5    .    6    .    7    .    8  L22
+Execute (Syntax for invalid or misleading tasks):
+  " Invalid done or priority
+  AssertEqual '',                 SyntaxAt( 3,  1)
+  AssertEqual '',                 SyntaxAt( 4,  1)
+  AssertEqual '',                 SyntaxAt( 5,  1)
+  AssertEqual '',                 SyntaxAt( 6,  1)
+  AssertEqual '',                 SyntaxAt( 7,  1)
+  AssertEqual '',                 SyntaxAt( 8,  1)
+  AssertEqual '',                 SyntaxAt( 9,  1)
+  AssertEqual '',                 SyntaxAt(10,  1)
+  " Valid keys and dates at start of line
+  AssertEqual 'TodoKey',          SyntaxAt(11,  1)
+  AssertEqual 'TodoDate',         SyntaxAt(11,  5)
+  AssertEqual 'TodoOverDueDate',  SyntaxAt(12,  1)
+  AssertEqual 'TodoDate',         SyntaxAt(13,  1)
+  " Invalid date formats.
+  " FIXME: Not all cases are tested, not sure how strict to be
+  " AssertEqual '',                 SyntaxAt(16, 15)  " FIXME
+  AssertEqual '',                 SyntaxAt(16, 24)
+  " AssertEqual '',                 SyntaxAt(16, 33)  " FIXME
+  AssertEqual '',                 SyntaxAt(16, 42)
+  AssertEqual '',                 SyntaxAt(16, 44)
+  AssertEqual '',                 SyntaxAt(16, 55)
+  " AssertEqual '',                 SyntaxAt(16, 64)  " FIXME
+  AssertEqual '',                 SyntaxAt(16, 78)
+  " Contexts and projects on the start of a line (valid)
+  AssertEqual 'TodoContext',      SyntaxAt(17,  1)
+  AssertEqual 'TodoProject',      SyntaxAt(18,  1)
+  " Invalid keys, etc
+  AssertEqual '',                 SyntaxAt(19,  5)
+  AssertEqual '',                 SyntaxAt(19, 55)
+  AssertEqual '',                 SyntaxAt(20,  1)
+  AssertEqual 'TodoKey',          SyntaxAt(20, 34)
+  AssertEqual 'TodoDate',         SyntaxAt(20, 41)
+  AssertEqual '',                 SyntaxAt(20, 55)
+  AssertEqual '',                 SyntaxAt(20, 69)
+Do (Insert a task due today):
+  OTask due-\<BS>:\<C-R>=strftime("%Y-%m-%d")\<CR> today\<C-O>
+Then (Syntax for task due today):
+  Log getline(1)
+  AssertEqual 'TodoDueToday', SyntaxAt(1, 12)
+
+" function todo#GetDateRegexForPastDates() {{{2
+
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,09,07)
+Given todo (Some test todo items):
+  Active      due:2000-01-01 due:2050-01-01 2017-09-10 +Project @Context key:value  L04
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (0000-00-00 should match with reference 2017-09-07):
+  Assert '0000-00-00' =~ '^' . b:rex . '$'
+Execute (0000-12-31 should match with reference 2017-09-07):
+  Assert '0000-12-31' =~ '^' . b:rex . '$'
+Execute (1999-12-31 should match with reference 2017-09-07):
+  Assert '1999-12-31' =~ '^' . b:rex . '$'
+Execute (2000-01-01 should match with reference 2017-09-07):
+  Assert '2000-01-01' =~ '^' . b:rex . '$'
+Execute (2001-01-01 should match with reference 2017-09-07):
+  Assert '2001-01-01' =~ '^' . b:rex . '$'
+Execute (2002-01-01 should match with reference 2017-09-07):
+  Assert '2002-01-01' =~ '^' . b:rex . '$'
+Execute (2003-01-01 should match with reference 2017-09-07):
+  Assert '2003-01-01' =~ '^' . b:rex . '$'
+Execute (2004-01-01 should match with reference 2017-09-07):
+  Assert '2004-01-01' =~ '^' . b:rex . '$'
+Execute (2005-01-01 should match with reference 2017-09-07):
+  Assert '2005-01-01' =~ '^' . b:rex . '$'
+Execute (2006-01-01 should match with reference 2017-09-07):
+  Assert '2006-01-01' =~ '^' . b:rex . '$'
+Execute (2007-01-01 should match with reference 2017-09-07):
+  Assert '2007-01-01' =~ '^' . b:rex . '$'
+Execute (2008-01-01 should match with reference 2017-09-07):
+  Assert '2008-01-01' =~ '^' . b:rex . '$'
+Execute (2009-01-01 should match with reference 2017-09-07):
+  Assert '2009-01-01' =~ '^' . b:rex . '$'
+Execute (2010-01-01 should match with reference 2017-09-07):
+  Assert '2010-01-01' =~ '^' . b:rex . '$'
+Execute (2011-01-01 should match with reference 2017-09-07):
+  Assert '2011-01-01' =~ '^' . b:rex . '$'
+Execute (2012-01-01 should match with reference 2017-09-07):
+  Assert '2012-01-01' =~ '^' . b:rex . '$'
+Execute (2013-01-01 should match with reference 2017-09-07):
+  Assert '2013-01-01' =~ '^' . b:rex . '$'
+Execute (2014-01-01 should match with reference 2017-09-07):
+  Assert '2014-01-01' =~ '^' . b:rex . '$'
+Execute (2015-01-01 should match with reference 2017-09-07):
+  Assert '2015-01-01' =~ '^' . b:rex . '$'
+Execute (2016-01-01 should match with reference 2017-09-07):
+  Assert '2016-01-01' =~ '^' . b:rex . '$'
+Execute (2016-02-29 should match with reference 2017-09-07):
+  Assert '2016-02-29' =~ '^' . b:rex . '$'
+Execute (2016-09-07 should match with reference 2017-09-07):
+  Assert '2016-09-07' =~ '^' . b:rex . '$'
+Execute (2017-01-01 should match with reference 2017-09-07):
+  Assert '2017-01-01' =~ '^' . b:rex . '$'
+Execute (2017-01-31 should match with reference 2017-09-07):
+  Assert '2017-01-31' =~ '^' . b:rex . '$'
+Execute (2017-02-01 should match with reference 2017-09-07):
+  Assert '2017-02-01' =~ '^' . b:rex . '$'
+Execute (2017-02-28 should match with reference 2017-09-07):
+  Assert '2017-02-28' =~ '^' . b:rex . '$'
+Execute (2017-03-01 should match with reference 2017-09-07):
+  Assert '2017-03-01' =~ '^' . b:rex . '$'
+Execute (2017-03-31 should match with reference 2017-09-07):
+  Assert '2017-03-31' =~ '^' . b:rex . '$'
+Execute (2017-04-01 should match with reference 2017-09-07):
+  Assert '2017-04-01' =~ '^' . b:rex . '$'
+Execute (2017-04-30 should match with reference 2017-09-07):
+  Assert '2017-04-30' =~ '^' . b:rex . '$'
+Execute (2017-05-01 should match with reference 2017-09-07):
+  Assert '2017-05-01' =~ '^' . b:rex . '$'
+Execute (2017-05-31 should match with reference 2017-09-07):
+  Assert '2017-05-31' =~ '^' . b:rex . '$'
+Execute (2017-06-01 should match with reference 2017-09-07):
+  Assert '2017-06-01' =~ '^' . b:rex . '$'
+Execute (2017-06-30 should match with reference 2017-09-07):
+  Assert '2017-06-30' =~ '^' . b:rex . '$'
+Execute (2017-07-01 should match with reference 2017-09-07):
+  Assert '2017-07-01' =~ '^' . b:rex . '$'
+Execute (2017-07-31 should match with reference 2017-09-07):
+  Assert '2017-07-31' =~ '^' . b:rex . '$'
+Execute (2017-08-01 should match with reference 2017-09-07):
+  Assert '2017-08-01' =~ '^' . b:rex . '$'
+Execute (2017-08-31 should match with reference 2017-09-07):
+  Assert '2017-08-31' =~ '^' . b:rex . '$'
+Execute (2017-09-01 should match with reference 2017-09-07):
+  Assert '2017-09-01' =~ '^' . b:rex . '$'
+Execute (2017-09-02 should match with reference 2017-09-07):
+  Assert '2017-09-02' =~ '^' . b:rex . '$'
+Execute (2017-09-03 should match with reference 2017-09-07):
+  Assert '2017-09-03' =~ '^' . b:rex . '$'
+Execute (2017-09-03 should match with reference 2017-09-07):
+  Assert '2017-09-03' =~ '^' . b:rex . '$'
+Execute (2017-09-04 should match with reference 2017-09-07):
+  Assert '2017-09-04' =~ '^' . b:rex . '$'
+Execute (2017-09-05 should match with reference 2017-09-07):
+  Assert '2017-09-05' =~ '^' . b:rex . '$'
+Execute (2017-09-06 should match with reference 2017-09-07):
+  Assert '2017-09-06' =~ '^' . b:rex . '$'
+Execute (2017-09-07 should NOT match with reference 2017-09-07):
+  Assert '2017-09-07' !~ b:rex
+Execute (2017-09-08 should NOT match with reference 2017-09-07):
+  Assert '2017-09-08' !~ b:rex
+Execute (2017-09-09 should NOT match with reference 2017-09-07):
+  Assert '2017-09-09' !~ b:rex
+Execute (2017-09-10 should NOT match with reference 2017-09-07):
+  Assert '2017-09-10' !~ b:rex
+Execute (2017-09-30 should NOT match with reference 2017-09-07):
+  Assert '2017-09-30' !~ b:rex
+Execute (2017-10-01 should NOT match with reference 2017-09-07):
+  Assert '2017-10-01' !~ b:rex
+Execute (2017-10-31 should NOT match with reference 2017-09-07):
+  Assert '2017-10-31' !~ b:rex
+Execute (2017-11-01 should NOT match with reference 2017-09-07):
+  Assert '2017-11-01' !~ b:rex
+Execute (2017-11-30 should NOT match with reference 2017-09-07):
+  Assert '2017-11-30' !~ b:rex
+Execute (2017-12-01 should NOT match with reference 2017-09-07):
+  Assert '2017-12-01' !~ b:rex
+Execute (2017-12-31 should NOT match with reference 2017-09-07):
+  Assert '2017-12-31' !~ b:rex
+Execute (2018-01-01 should NOT match with reference 2017-09-07):
+  Assert '2018-01-01' !~ b:rex
+Execute (2018-09-08 should NOT match with reference 2017-09-07):
+  Assert '2018-09-08' !~ b:rex
+Execute (2018-12-31 should NOT match with reference 2017-09-07):
+  Assert '2018-12-31' !~ b:rex
+Execute (2020-12-31 should NOT match with reference 2017-09-07):
+  Assert '2020-12-31' !~ b:rex
+Execute (2025-12-31 should NOT match with reference 2017-09-07):
+  Assert '2025-12-31' !~ b:rex
+Execute (2032-09-06 should NOT match with reference 2017-09-07):
+  Assert '2032-09-06' !~ b:rex
+Execute (2032-09-07 should NOT match with reference 2017-09-07):
+  Assert '2032-09-07' !~ b:rex
+Execute (2099-12-31 should NOT match with reference 2017-09-07):
+  Assert '2099-12-31' !~ b:rex
+Execute (2100-01-01 should NOT match with reference 2017-09-07):
+  Assert '2100-01-01' !~ b:rex
+
+" Test a high day/month
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,11,27)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-09-09 should match with reference 2017-11-27):
+  Assert '2017-09-09' =~ '^' . b:rex . '$'
+Execute (2017-11-01 should match with reference 2017-11-27):
+  Assert '2017-11-01' =~ '^' . b:rex . '$'
+Execute (2017-11-09 should match with reference 2017-11-27):
+  Assert '2017-11-09' =~ '^' . b:rex . '$'
+Execute (2017-11-19 should match with reference 2017-11-27):
+  Assert '2017-11-19' =~ '^' . b:rex . '$'
+Execute (2017-11-26 should match with reference 2017-11-27):
+  Assert '2017-11-26' =~ '^' . b:rex . '$'
+Execute (2017-11-27 should NOT match with reference 2017-11-27):
+  Assert '2017-11-27' !~ b:rex
+Execute (2017-11-28 should NOT match with reference 2017-11-27):
+  Assert '2017-11-28' !~ b:rex
+
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-12-30 should match with reference 2017-12-31):
+  Assert '2017-12-30' =~ '^' . b:rex . '$'
+Execute (2017-12-31 should NOT match with reference 2017-12-31):
+  Assert '2017-12-31' !~ b:rex
+
+" Tests for a future date 2032-01-07
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2032,01,07)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (1999-09-06 should match with reference 2032-01-07):
+  Assert '1999-09-06' =~ '^' . b:rex . '$'
+Execute (2000-09-06 should match with reference 2032-01-07):
+  Assert '2000-09-06' =~ '^' . b:rex . '$'
+Execute (2018-09-06 should match with reference 2032-01-07):
+  Assert '2018-09-06' =~ '^' . b:rex . '$'
+Execute (2031-09-06 should match with reference 2032-01-07):
+  Assert '2031-09-06' =~ '^' . b:rex . '$'
+Execute (2032-01-01 should match with reference 2032-01-07):
+  Assert '2032-01-01' =~ '^' . b:rex . '$'
+Execute (2032-01-02 should match with reference 2032-01-07):
+  Assert '2032-01-02' =~ '^' . b:rex . '$'
+Execute (2032-01-03 should match with reference 2032-01-07):
+  Assert '2032-01-03' =~ '^' . b:rex . '$'
+Execute (2032-01-04 should match with reference 2032-01-07):
+  Assert '2032-01-04' =~ '^' . b:rex . '$'
+Execute (2032-01-05 should match with reference 2032-01-07):
+  Assert '2032-01-05' =~ '^' . b:rex . '$'
+Execute (2032-01-06 should match with reference 2032-01-07):
+  Assert '2032-01-06' =~ '^' . b:rex . '$'
+Execute (2032-01-07 should NOT match with reference 2032-01-07):
+  Assert '2032-01-07' !~ b:rex
+Execute (2032-01-08 should NOT match with reference 2032-01-07):
+  Assert '2032-01-08' !~ b:rex
+
+" Should work from 2000 onwards
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2000,01,01)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (1999-12-31 should match with reference 2000-01-01):
+  Assert '1999-12-31' =~ '^' . b:rex . '$'
+Execute (2000-01-01 should NOT match with reference 2000-01-01):
+  Assert '2000-01-01' !~ b:rex
+
+" Should work out to 2099
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2099,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2099-12-30 should match with reference 2099-12-31):
+  Assert '2099-12-30' =~ '^' . b:rex . '$'
+Execute (2099-12-31 should NOT match with reference 2099-12-31):
+  Assert '2099-12-31' !~ b:rex
+
+" Two digit year is not valid
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(17,12,31)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (16-12-31 should NOT match with reference 17-12-31):
+  Assert '16-12-31' !~ b:rex
+Execute (2016-12-31 should NOT match with reference 17-12-31):
+  Assert '2016-12-31' !~ b:rex
+
+" file: autoload/todo.vim {{{1
+
+" function: todo#SortDue() {{{2
+
+Before:
+    let g:TodoTxtSortDueDateCursorPos = "top"
+" In given/expected lists:
+"     GIV:xx is the order the task is given
+"     EXP:xx is the order the task is expected to be sorted into
+" Use :sort n /GIV:/   or  :sort n /EXP:/   to sort by given/expected order
+" All invalid dates (i.e. that should not be sorted) are in 2011.
+Given todo (Tasks for sorting with a bit of everything):
+  active  dUE:2051-01-01 cAsE                                     EXP:24 GIV:01
+  overdue due:2001-01-01                                          EXP:02 GIV:02
+  notdue  overdue:2011-11-11 invalid key                          EXP:33 GIV:03
+  overdue duE:2009-01-01 cAsE                                     EXP:18 GIV:04
+  xoverdue due:2001-02-01 This is not done (must be lower x)      EXP:03 GIV:05
+  overdue due:2012-01-01 \|| no tasks the between bars ||/        EXP:21 GIV:06
+  x done  due:2011-11-11 topmost done task                        EXP:44 GIV:07
+  notdue  due: 2011-11-11 space invalidates due:                  EXP:34 GIV:08
+  overdue due:2005-01-01 +Project @Context                        EXP:10 GIV:09
+  overdue due:2002-01-01 @Context                                 EXP:04 GIV:10
+  overdue due:2004-02-01                                          EXP:09 GIV:11
+  notdue  due: due:2011-MM-DD                                     EXP:35 GIV:12
+  overdue due:2000-01-01 cursor here for top, most overdue        EXP:01 GIV:13
+  notdue  due:2011-11-1                                           EXP:36 GIV:14
+  active  due:2059-01-01 bottommost active task                   EXP:32 GIV:15
+  overdue due:2006-01-01                                          EXP:12 GIV:16
+  overdue due:2007-02-01 +Project                                 EXP:15 GIV:17
+  active  due:2056-01-01                                          EXP:29 GIV:18
+  notdue  due:2011-1-11                                           EXP:37 GIV:19
+  x done  due:2011-11-11                                          EXP:45 GIV:20
+  overdue dUe:2008-02-01 cAsE                                     EXP:17 GIV:21
+  X overdue due:2002-02-01 This is not done (must be lower x)     EXP:05 GIV:22
+  +Project overdue due:2003-02-01 project at start of line        EXP:07 GIV:23
+  notdue  due:2011                                                EXP:38 GIV:24
+  active  DUe:2052-01-01 cAsE                                     EXP:25 GIV:25
+  overdue due:2007-01-01                                          EXP:14 GIV:26
+  overdue Due:2008-01-01 cAsE                                     EXP:16 GIV:27
+  notdue  @Project                                                EXP:39 GIV:28
+  active  due:2055-01-01                                          EXP:28 GIV:29
+  active  due:2057-01-01                                          EXP:30 GIV:30
+  overdue DuE:2009-02-01 cAsE                                     EXP:19 GIV:31
+  notdue  @Context                                                EXP:40 GIV:32
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:46 GIV:33
+  active  DUE:2053-01-01 cAsE                                     EXP:26 GIV:34
+  active  key:value due:2054-01-01 leading key:value              EXP:27 GIV:35
+  active  due:2058-01-01                                          EXP:31 GIV:36
+  notdue  key:value                                               EXP:41 GIV:37
+  overdue due:2017-01-01 Last overdue task when sorted            EXP:22 GIV:38
+  overdue due:2010-12-31 /|| no tasks the between bars ||\        EXP:20 GIV:39
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:23 GIV:40
+  notdue  due:invalid    invalid due date                         EXP:42 GIV:41
+  overdue 2011-11-11 due:2005-02-01 leading date                  EXP:11 GIV:42
+  due:2004-01-01 overdue due: at start of line                    EXP:08 GIV:43
+  notdue  notdue:2011-11-11 invalid key                           EXP:43 GIV:44
+  overdue due:2006-02-01 due:2011-11-11 two dates, choose first   EXP:13 GIV:45
+  @Context overdue due:2003-01-01 context at start of line        EXP:06 GIV:46
+Do (Sort by due date):
+  :call todo#SortDue()\<CR>
+Expect todo (Sorted list):
+  overdue due:2000-01-01 cursor here for top, most overdue        EXP:01 GIV:13
+  overdue due:2001-01-01                                          EXP:02 GIV:02
+  xoverdue due:2001-02-01 This is not done (must be lower x)      EXP:03 GIV:05
+  overdue due:2002-01-01 @Context                                 EXP:04 GIV:10
+  X overdue due:2002-02-01 This is not done (must be lower x)     EXP:05 GIV:22
+  @Context overdue due:2003-01-01 context at start of line        EXP:06 GIV:46
+  +Project overdue due:2003-02-01 project at start of line        EXP:07 GIV:23
+  due:2004-01-01 overdue due: at start of line                    EXP:08 GIV:43
+  overdue due:2004-02-01                                          EXP:09 GIV:11
+  overdue due:2005-01-01 +Project @Context                        EXP:10 GIV:09
+  overdue 2011-11-11 due:2005-02-01 leading date                  EXP:11 GIV:42
+  overdue due:2006-01-01                                          EXP:12 GIV:16
+  overdue due:2006-02-01 due:2011-11-11 two dates, choose first   EXP:13 GIV:45
+  overdue due:2007-01-01                                          EXP:14 GIV:26
+  overdue due:2007-02-01 +Project                                 EXP:15 GIV:17
+  overdue Due:2008-01-01 cAsE                                     EXP:16 GIV:27
+  overdue dUe:2008-02-01 cAsE                                     EXP:17 GIV:21
+  overdue duE:2009-01-01 cAsE                                     EXP:18 GIV:04
+  overdue DuE:2009-02-01 cAsE                                     EXP:19 GIV:31
+  overdue due:2010-12-31 /|| no tasks the between bars ||\        EXP:20 GIV:39
+  overdue due:2012-01-01 \|| no tasks the between bars ||/        EXP:21 GIV:06
+  overdue due:2017-01-01 Last overdue task when sorted            EXP:22 GIV:38
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:23 GIV:40
+  active  dUE:2051-01-01 cAsE                                     EXP:24 GIV:01
+  active  DUe:2052-01-01 cAsE                                     EXP:25 GIV:25
+  active  DUE:2053-01-01 cAsE                                     EXP:26 GIV:34
+  active  key:value due:2054-01-01 leading key:value              EXP:27 GIV:35
+  active  due:2055-01-01                                          EXP:28 GIV:29
+  active  due:2056-01-01                                          EXP:29 GIV:18
+  active  due:2057-01-01                                          EXP:30 GIV:30
+  active  due:2058-01-01                                          EXP:31 GIV:36
+  active  due:2059-01-01 bottommost active task                   EXP:32 GIV:15
+  notdue  overdue:2011-11-11 invalid key                          EXP:33 GIV:03
+  notdue  due: 2011-11-11 space invalidates due:                  EXP:34 GIV:08
+  notdue  due: due:2011-MM-DD                                     EXP:35 GIV:12
+  notdue  due:2011-11-1                                           EXP:36 GIV:14
+  notdue  due:2011-1-11                                           EXP:37 GIV:19
+  notdue  due:2011                                                EXP:38 GIV:24
+  notdue  @Project                                                EXP:39 GIV:28
+  notdue  @Context                                                EXP:40 GIV:32
+  notdue  key:value                                               EXP:41 GIV:37
+  notdue  due:invalid    invalid due date                         EXP:42 GIV:41
+  notdue  notdue:2011-11-11 invalid key                           EXP:43 GIV:44
+  x done  due:2011-11-11 topmost done task                        EXP:44 GIV:07
+  x done  due:2011-11-11                                          EXP:45 GIV:20
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:46 GIV:33
+Do (Sort by due date):
+  :call todo#SortDue()\<CR>
+Then (Check post sort cursor position: top):
+  AssertEqual 1, line('.')
+Do (Sort and check cursor position: not set):
+  :unlet g:TodoTxtSortDueDateCursorPos | call todo#SortDue()\<CR>
+Then (Is cursor at top):
+  AssertEqual 1, line('.')
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is the cursor on the last task with a due:date?):
+  AssertEqual 32, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 23, line('.')
+Do (Sort and check cursor position: bottom):
+  :let g:TodoTxtSortDueDateCursorPos="bottom" | call todo#SortDue()\<CR>
+Then (Is cursor on the last line of the buffer?):
+  AssertEqual line('$'), line('.')
+
+Given todo (Tasks for sorting with no done tasks):
+  overdue due:2000-01-01 cursor here for top, most overdue        EXP:01
+  overdue due:2001-01-01                                          EXP:02
+  overdue due:2002-01-01                                          EXP:03
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:04
+  active  due:2055-01-01                                          EXP:05
+  active  due:2059-01-01 bottommost active task                   EXP:06
+  notdue                                                          EXP:07
+  notdue                                                          EXP:08
+  notdue                                                          EXP:09
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 6, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 4, line('.')
+
+Given todo (Tasks for sorting with no overdue tasks):
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:01
+  active  due:2055-01-01                                          EXP:02
+  active  due:2059-01-01 bottommost active task                   EXP:03
+  notdue                                                          EXP:04
+  notdue                                                          EXP:05
+  notdue                                                          EXP:06
+  x done  due:2011-11-11 topmost done task                        EXP:07
+  x done  due:2011-11-11                                          EXP:08
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:09
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 3, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 1, line('.')
+
+Given todo (Tasks for sorting with no active tasks):
+  overdue due:2000-01-01 cursor here for top, most overdue        EXP:01
+  overdue due:2001-01-01                                          EXP:02
+  overdue due:2002-01-01                                          EXP:03
+  notdue                                                          EXP:04
+  notdue                                                          EXP:05
+  notdue                                                          EXP:06
+  x done  due:2011-11-11 topmost done task                        EXP:07
+  x done  due:2011-11-11                                          EXP:08
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:09
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 3, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 4, line('.')
+
+Given todo (Tasks for sorting with no active or done tasks):
+  overdue due:2000-01-01 cursor here for top, most overdue        EXP:01
+  overdue due:2001-01-01                                          EXP:02
+  overdue due:2002-01-01                                          EXP:03
+  notdue                                                          EXP:04
+  notdue                                                          EXP:05
+  notdue                                                          EXP:06
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 3, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 4, line('.')
+
+Given todo (Tasks for sorting with no overdue or done tasks):
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:01
+  active  due:2055-01-01                                          EXP:02
+  active  due:2059-01-01 bottommost active task                   EXP:03
+  notdue                                                          EXP:04
+  notdue                                                          EXP:05
+  notdue                                                          EXP:06
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 3, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 1, line('.')
+
+Given todo (Tasks for sorting with no overdue or active tasks):
+  notdue                                                          EXP:01
+  notdue                                                          EXP:02
+  notdue                                                          EXP:03
+  x done  due:2011-11-11 topmost done task                        EXP:04
+  x done  due:2011-11-11                                          EXP:05
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:06
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 1, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 1, line('.')
+
+Given todo (Tasks for sorting with only not due tasks):
+  notdue                                                          EXP:01
+  notdue                                                          EXP:02
+  notdue                                                          EXP:03
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 1, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 1, line('.')
+
+Given todo (Tasks for sorting with only due tasks):
+  active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:01
+  active  due:2055-01-01                                          EXP:02
+  active  due:2059-01-01 bottommost active task                   EXP:03
+Do (Sort and check cursor position: lastdue):
+  :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
+Then (Is cursor on the last task with a due:date set?):
+  AssertEqual 3, line('.')
+Do (Sort and check cursor position: notoverdue):
+  :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
+Then (Is cursor on first non-overdue task?):
+  AssertEqual 1, line('.')
+
+After:
+    unlet g:TodoTxtSortDueDateCursorPos
+
