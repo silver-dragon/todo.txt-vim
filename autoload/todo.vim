@@ -184,7 +184,7 @@ function! todo#SortDue()
     " Turn the due:date from due:yyyy-mm-dd to due:yyyymmdd so we can do a numeric sort
     silent! %substitute/\v<(due:\d{4})\-(\d{2})\-(\d{2})>/\1\2\3/ei
     " Sort all the lines with due: by numeric yyyymmdd, they will end up in ascending order at the bottom of the buffer
-    sort in /\v<due:\ze\d{8}>/
+    sort in /\v\c<due:\ze\d{8}>/
     " Determine the line number of the first task with a due:date
     let l:firstLineWithDue = line("$") - l:tasksWithDueDate + 1
     " Put the sorted lines at the beginning of the file
