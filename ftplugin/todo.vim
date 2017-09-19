@@ -3,7 +3,6 @@
 " Author:      David Beniamine <David@Beniamine.net>, Leandro Freitas <freitass@gmail.com>
 " License:     Vim license
 " Website:     http://github.com/dbeniamine/todo.txt-vim
-" vim: ts=4 sw=4 :help tw=78 cc=80
 
 " Save context {{{1
 let s:save_cpo = &cpo
@@ -55,13 +54,13 @@ if !exists("g:Todo_txt_do_not_map")
 
 " Mark done {{{2
     noremap <script> <silent> <buffer> <Plug>DoToggleMarkAsDone :call todo#ToggleMarkAsDone('')<CR>
-                \:call repeat#set("\<Plug>DoToggleMarkAsDone")<CR>
+                \:silent! call repeat#set("\<Plug>DoToggleMarkAsDone")<CR>
     nmap <localleader>x <Plug>DoToggleMarkAsDone
     " noremap <script> <silent> <buffer> <localleader>x :call todo#ToggleMarkAsDone('')<CR>
 
 " Mark done {{{2
     noremap <script> <silent> <buffer> <Plug>DoCancel :call todo#ToggleMarkAsDone('Cancelled')<CR>
-                \:call repeat#set("\<Plug>DoCancel")<CR>
+                \:silent! call repeat#set("\<Plug>DoCancel")<CR>
     nmap <localleader>C <Plug>DoCancel
 
 " Mark all done {{{2
@@ -104,3 +103,5 @@ endfunction
 
 " Restore context {{{1
 let &cpo = s:save_cpo
+
+" vim: tabstop=4 shiftwidth=4 softtabstop=4 expandtab foldmethod=marker

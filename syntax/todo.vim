@@ -3,7 +3,6 @@
 " Author:      David Beniamine <David@Beniamine.net>,Leandro Freitas <freitass@gmail.com>
 " License:     Vim license
 " Website:     http://github.com/dbeniamine/todo.txt-vim
-" vim: ts=4 sw=4 :help tw=78 cc=80
 
 if exists("b:current_syntax")
     finish
@@ -42,9 +41,7 @@ syntax  match  TodoProject    '\(^\|\W\)+[^[:blank:]]\+'  contains=NONE
 syntax  match  TodoContext    '\(^\|\W\)@[^[:blank:]]\+'  contains=NONE
 
 let s:todayDate=strftime('%Y\-%m\-%d')
-"TODO: Figure out how to allow stop the following line being highlighted inside TodoDone
-"execute 'syntax match TodoDueToday    /\v\c<(due:)@4<=' . s:todayDate . '/ contains=NONE contained'
-execute 'syntax match TodoDueToday    /\v\c<due:' . s:todayDate . '/ contains=NONE'
+execute 'syntax match TodoDueToday    /\v\c<due:' . s:todayDate . '>/ contains=NONE'
 
 " Other priority colours might be defined by the user
 highlight  default  link  TodoKey        Special
@@ -158,16 +155,20 @@ function! todo#GetDateRegexForPastDates(...)
     " PART 6. Days of the month part 2.
     " i.e.  for 2017-09-07: "2017-09-0[0-6]"
     "       for 2017-12-29: "2017-12-2[0-8]"
-    let l:y = strpart(printf('%02d', l:day), 0, 1) " First digit of the day
-    let l:overdueRex = l:overdueRex . '(' . l:year . '\-' . printf('%02d', l:month) . '\-' . l:y
-    let l:y = strpart(printf('%02d', l:day), 1, 1) " Last digit of the day
-    if l:y > 0
-        let l:overdueRex = l:overdueRex . '[0-' . (l:y - 1) . ']'
-    else
-        let l:overdueRex = l:overdueRex . '0'
+    "       for 2017-09-20: skip
+    let l:d = strpart(printf('%02d', l:day), 1, 1) " Last digit of the day
+    if l:d > 0
+        let l:y = strpart(printf('%02d', l:day), 0, 1) " First digit of the day
+        let l:overdueRex = l:overdueRex . '(' . l:year . '\-' . printf('%02d', l:month) . '\-' . l:y
+        if l:d > 1
+            let l:overdueRex = l:overdueRex . '[0-' . (l:d - 1) . ']'
+        else
+            let l:overdueRex = l:overdueRex . '0'
+        endif
+        let l:overdueRex = l:overdueRex . ')'
     endif
-    let l:overdueRex = l:overdueRex . ')'
 
+    let l:overdueRex = substitute(l:overdueRex, '|$', '', 'e')
     let l:overdueRex = l:overdueRex . ')'
 
     return l:overdueRex
@@ -177,3 +178,5 @@ execute 'syntax match TodoOverDueDate /\v\c<due:' . todo#GetDateRegexForPastDate
 highlight default link TodoOverDueDate Error
 
 let b:current_syntax = "todo"
+
+" vim: tabstop=4 shiftwidth=4 softtabstop=4 expandtab foldmethod=marker

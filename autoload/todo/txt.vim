@@ -120,4 +120,4 @@ function! todo#txt#prioritize_add_action(priority)
 endfunction
 
 " Modeline {{{1
-" vim: ts=8 sw=4 sts=4 et foldenable foldmethod=marker foldcolumn=1
+" vim: tabstop=4 shiftwidth=4 softtabstop=4 expandtab foldmethod=marker

@@ -28,9 +28,9 @@
 
 ## Release notes
 
-+   V0.8.1 Incorporates yet antoher Fretep work : highlithing for tasks due today.
++   V0.8.1 Incorporates yet another Fretep work : highlighting for tasks due today.
 
-+   v0.8 Incorporates Fretep's work on overdue dates (PR#13 and PR#16) witch
++   v0.8 Incorporates Fretep's work on overdue dates (PR#13 and PR#16) which
 removes python dependency, allow to control the cursor position after a sort by
 todo (see (sort)[#sort] and/or issue #15) and fixes bug when sorting a file
 containing only lines with due:date (issue #14).
@@ -60,7 +60,7 @@ by David Beniamine.
 Todo.txt is a standard human readable todo notes file defined [here](http://todotxt.com):
 
 "The todo.txt format is a simple set of
-[rules](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format)
+[rules](https://github.com/todotxt/todotxt/)
 that make todo.txt both human and machine-readable. The format supports
 priorities, creation and completion dates, projects and contexts. That's
 all you need to be productive. See an example Todo.txt file":
@@ -77,7 +77,7 @@ all you need to be productive. See an example Todo.txt file":
 ### Why this fork ?
 
 This plugin is a fork of [freitass
-todo.txt-vim](https://github.com/freitass/todo.txt-vim). It add severals cool
+todo.txt-vim](https://github.com/freitass/todo.txt-vim). It add several cool
 functionalities including:
 
 + [Hierarchical sort](##hierarchical-sort)
@@ -119,7 +119,7 @@ having copied the files.  Then you will be able to get the commands help with:
 
 ## TodoTxt Files
 
-This plugin provides a Flexible file naming for todo.txt, all the following
+This plugin provides flexible file naming for todo.txt, all the following
 names are recognized as todo:
 
     YYYY-MM-[Tt]odo.txt
@@ -200,7 +200,7 @@ For more information on the available flags see `help :sort`
 
 ## Mappings
 
-By default todo-txt.vim set all the mappings secribed in this section. To
+By default todo-txt.vim sets all the mappings described in this section. To
 prevent this behavior, add the following line to your vimrc
 
    let g:Todo_txt_do_not_map=1
@@ -214,13 +214,13 @@ prevent this behavior, add the following line to your vimrc
 + `<LocalLeader>s` : Sort the file by priority
 + `<LocalLeader>s+` : Sort the file on `+Projects`
 + `<LocalLeader>s@` : Sort the file on `@Contexts`
-+ `<LocalLeader>sd` : Sort the file on due dates
 + `<LocalLeader>sc` : Sort the file by context then by priority
 + `<LocalLeader>scp` : Sort the file by context, project then by priority
 + `<LocalLeader>sp` : Sort the file by project then by priority
 + `<LocalLeader>spc` : Sort the file by project, context then by priority
-+ `<leader>-sd` : Sort the file by due-date. Entries with a due date appears
-sorted by at the beginning of the file, the rest of the file is not modified.
++ `<LocalLeader>sd` : Sort the file on due dates. Entries with a due date appear
+sorted by at the beginning of the file, completed tasks are moved to the bottom and
+the rest of the file is not modified.
 
 When you sort by due dates, at the end of the sort, your cursor will be placed
 at the top of the file. This behavior can be set with the following global

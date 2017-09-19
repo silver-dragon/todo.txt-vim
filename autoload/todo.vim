@@ -3,7 +3,6 @@
 " Author:      David Beniamine <david@beniamine.net>, Peter (fretep) <githib.5678@9ox.net>
 " Licence:     Vim licence
 " Website:     http://github.com/dbeniamine/todo.txt.vim
-" vim: ts=4 sw=4 :help tw=78 cc=80
 
 " These two variables are parameters for the successive calls the vim sort
 "   '' means no flags
@@ -30,7 +29,8 @@ function! todo#GetCurpos()
         return getpos('.')
 endfunction
 
-" Increment and Decrement The Priority
+" Increment and Decrement The Priority.
+" TODO: Make nrformats local to buffers of type todo
 :set nf=octal,hex,alpha
 
 function! todo#PrioritizeIncrease()
@@ -63,15 +63,14 @@ endfunction
 
 function! todo#PrependDate()
     if (getline(".") =~ '\v^\(')
-	    execute "normal! 0f)a\<space>\<esc>l\"=strftime(\"%Y-%m-%d\")\<esc>P"
+        execute "normal! 0f)a\<space>\<esc>l\"=strftime(\"%Y-%m-%d\")\<esc>P"
     else
-        normal! 0"=strftime("%Y-%m-%d ")
-        P
+        normal! I=strftime("%Y-%m-%d ")
     endif
 endfunction
 
 function! todo#ToggleMarkAsDone(status)
-    if (getline(".") =~ 'x\s*\d\{4\}')
+    if (getline(".") =~ '\C^\s*x\s*\d\{4\}')
         :call todo#UnMarkAsDone(a:status)
     else
         :call todo#MarkAsDone(a:status)
@@ -84,7 +83,7 @@ function! todo#UnMarkAsDone(status)
     else
         let pat=' '.a:status
     endif
-    exec ':s/\s*x\s*\d\{4}-\d\{1,2}-\d\{1,2}'.pat.'\s*//g'
+    exec ':s/\C^\s*x\s*\d\{4}-\d\{1,2}-\d\{1,2}'.pat.'\s*//g'
 endfunction
 
 function! todo#MarkAsDone(status)
@@ -138,6 +137,7 @@ function! todo#Sort()
     " vim :sort is usually stable
     " we sort first on contexts, then on projects and then on priority
     if expand('%')=~'[Dd]one.*.txt'
+        " FIXME: Put some unit tests around this, and fix case sensitivity if ignorecase is set.
         silent! %s/\(x\s*\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
         sort n /^x\s*/
         silent! %s/\(x\s*\d\{4}\)\(\d\{2}\)/\1-\2-/g
@@ -443,4 +443,4 @@ fun! todo#Complete(findstart, base)
     endif
 endfun
 
-
+" vim: tabstop=4 shiftwidth=4 softtabstop=4 expandtab foldmethod=marker

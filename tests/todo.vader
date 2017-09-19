@@ -3,7 +3,6 @@
 " Author:      Peter (fretep) <githib.5678@9ox.net>
 " Licence:     Vim licence
 " Website:     http://github.com/dbeniamine/todo.txt.vim
-" vim: ts=2 sw=2 sts=2 expandtab :help tw=78 cc=80 foldmethod=marker
 
 " [Vader](https://github.com/junegunn/vader.vim) is a simple unit testing
 " plugin for VIM.
@@ -416,7 +415,73 @@ Execute (16-12-31 should NOT match with reference 17-12-31):
 Execute (2016-12-31 should NOT match with reference 17-12-31):
   Assert '2016-12-31' !~ b:rex
 
+" Make sure current date doesn't match
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(strftime("%Y"), strftime("%m"), strftime("%d"))
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (Current date should not match):
+  Assert strftime("%Y-%m-%d") !~ b:rex
+
+" Incorrectly matching current date, some breakpoints that previously were found to be an issue
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,09,20)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-09-19 should match with reference 2017-09-20):
+  Assert '2017-09-19' =~ b:rex
+Execute (2017-09-20 should NOT match with reference 2017-09-20):
+  Assert '2017-09-20' !~ b:rex
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,09,30)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-09-29 should match with reference 2017-09-30):
+  Assert '2017-09-29' =~ b:rex
+Execute (2017-09-30 should NOT match with reference 2017-09-30):
+  Assert '2017-09-30' !~ b:rex
+
 " file: autoload/todo.vim {{{1
+
+" function! todo#ToggleMarkAsDone(status) {{{2
+
+" NOTES:
+"   - Rules on leading whitespace is not clear, and really could be taken
+"     either way. Current behaviour is to treat leading whitespace as valid.
+"     TODO: Ensure behavior of leading whitespace is consistent for everything
+"     including priorities (which are currently not).
+"   - FIXME: Incorrect handling of priorities is expected below, see #21.
+Given todo (Tasks):
+  x 2017-09-18 Complete task
+  x 2017-09-18 2017-09-01 Completed task with a created date
+  x 2017-09-18 (A) Completed priority task
+  x 2017-09-18 2017-09-01 (A) Completed priority task with a created date
+  X 2017-09-18 Not to be confused for a complete task
+  Active task
+  2017-09-01 Active task with a created date
+  (A) Active priority task
+  (A) 2017-09-01 Active priority task with a created date
+  X 2017-09-18 Not to be confused for a complete task
+  XNot to be confused for a complete task
+   x 2017-09-18 Rules are not clear on leading whitespace, see comments in test
+  Tricky incomplete task x 2017-09-18
+Execute (Toggle completed):
+  global/./call todo#ToggleMarkAsDone('')
+  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+Expect todo (Toggled tasks with today as **TODAY**):
+  Complete task
+  2017-09-01 Completed task with a created date
+  (A) Completed priority task
+  2017-09-01 (A) Completed priority task with a created date
+  x **TODAY** X 2017-09-18 Not to be confused for a complete task
+  x **TODAY** Active task
+  x **TODAY** 2017-09-01 Active task with a created date
+  x (A) **TODAY** Active priority task
+  x (A) **TODAY** 2017-09-01 Active priority task with a created date
+  x **TODAY** X 2017-09-18 Not to be confused for a complete task
+  x **TODAY** XNot to be confused for a complete task
+  Rules are not clear on leading whitespace, see comments in test
+  x **TODAY** Tricky incomplete task x 2017-09-18
 
 " function: todo#SortDue() {{{2
 
@@ -678,3 +743,4 @@ Then (Is cursor on first non-overdue task?):
 After:
     unlet g:TodoTxtSortDueDateCursorPos
 
+" vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab foldmethod=marker
