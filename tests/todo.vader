@@ -445,12 +445,6 @@ Execute (2017-09-30 should NOT match with reference 2017-09-30):
 
 " function! todo#ToggleMarkAsDone(status) {{{2
 
-" NOTES:
-"   - Rules on leading whitespace is not clear, and really could be taken
-"     either way. Current behaviour is to treat leading whitespace as valid.
-"     TODO: Ensure behavior of leading whitespace is consistent for everything
-"     including priorities (which are currently not).
-"   - FIXME: Incorrect handling of priorities is expected below, see #21.
 Given todo (Tasks):
   x 2017-09-18 Complete task
   x 2017-09-18 2017-09-01 Completed task with a created date
@@ -463,10 +457,10 @@ Given todo (Tasks):
   (C) 2017-09-01 Active priority task with a created date
   X 2017-09-18 Not to be confused for a complete task
   XNot to be confused for a complete task
-   x 2017-09-18 Rules are not clear on leading whitespace, see comments in test
+   x 2017-09-18 Leading whitespace is not valid
   Tricky incomplete task x 2017-09-18
 Execute (Toggle completed):
-  global/./call todo#ToggleMarkAsDone('')
+  :global/./call todo#ToggleMarkAsDone('')
   execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
 Expect todo (Toggled tasks with today as **TODAY**):
   Complete task
@@ -480,8 +474,31 @@ Expect todo (Toggled tasks with today as **TODAY**):
   x **TODAY** 2017-09-01 Active priority task with a created date pri:C
   x **TODAY** X 2017-09-18 Not to be confused for a complete task
   x **TODAY** XNot to be confused for a complete task
-  x **TODAY** x 2017-09-18 Rules are not clear on leading whitespace, see comments in test
+  x **TODAY** x 2017-09-18 Leading whitespace is not valid
   x **TODAY** Tricky incomplete task x 2017-09-18
+Execute (Toggle twice):
+  :global/./call todo#ToggleMarkAsDone('')
+  :global/./call todo#ToggleMarkAsDone('')
+  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+Expect todo (Tasks, completed on today):
+  x **TODAY** Complete task
+  x **TODAY** 2017-09-01 Completed task with a created date
+  x **TODAY** Completed priority task pri:A
+  x **TODAY** 2017-09-01 (A) Completed priority task with a created date
+  X 2017-09-18 Not to be confused for a complete task
+  Active task
+  2017-09-01 Active task with a created date
+  (A) Active priority task
+  (C) 2017-09-01 Active priority task with a created date
+  X 2017-09-18 Not to be confused for a complete task
+  XNot to be confused for a complete task
+  x 2017-09-18 Leading whitespace is not valid
+  Tricky incomplete task x 2017-09-18
+" The tests above use :global/ to run todo#ToggleMarkAsDone on every line, this
+" is because Vader seems to have an issue with updating the line using %,
+" however, using global avoids catching exceptions, whereas % gets them.
+Execute (Check todo#ToggleMarkAsDone for exceptions):
+  :%call todo#ToggleMarkAsDone('')
 
 " function: todo#SortDue() {{{2
 
@@ -759,18 +776,21 @@ Given todo (Tasks):
   xinvalid due:2059-01-01                                         L:09
   Xinvalid due:2059-01-01                                         L:10
   active  due:2059-01-01                                          L:11
-Execute (Check folding):
-  AssertEqual TodoFoldLevel(1),   0
-  AssertEqual TodoFoldLevel(2),   1
-  AssertEqual TodoFoldLevel(3),   1
-  AssertEqual TodoFoldLevel(4),   1
-  AssertEqual TodoFoldLevel(5),   0
-  AssertEqual TodoFoldLevel(6),   0
-  AssertEqual TodoFoldLevel(7),   1
-  AssertEqual TodoFoldLevel(8),   0
-  AssertEqual TodoFoldLevel(9),   0
-  AssertEqual TodoFoldLevel(10),  0
-  AssertEqual TodoFoldLevel(11),  0
+Execute (Check folding level):
+  AssertEqual foldlevel(1),       0, 'L:01'
+  AssertEqual foldlevel(2),       1, 'L:02'
+  AssertEqual foldlevel(3),       1, 'L:03'
+  AssertEqual foldlevel(4),       1, 'L:04'
+  AssertEqual foldlevel(5),       0, 'L:05'
+  AssertEqual foldlevel(6),       0, 'L:06'
+  AssertEqual foldlevel(7),       1, 'L:07'
+  AssertEqual foldlevel(8),       0, 'L:08'
+  AssertEqual foldlevel(9),       0, 'L:09'
+  AssertEqual foldlevel(10),      0, 'L:10'
+  AssertEqual foldlevel(11),      0, 'L:11'
+Execute (Check folding text):
+  AssertEqual foldtextresult(2),  '+- 3 Completed tasks '
+  AssertEqual foldtextresult(4),  '+- 1 Completed tasks '
 
 "}}}
 

@@ -91,14 +91,14 @@ function! todo#UnMarkAsDone(status)
         let pat=' '.a:status
     endif
     exec ':s/\C^x\s*\d\{4}-\d\{1,2}-\d\{1,2}'.pat.'\s*//g'
-    silent s/\C\(.*\) pri:\([A-Z]\)/(\2) \1/
+    silent s/\C\(.*\) pri:\([A-Z]\)/(\2) \1/e
 endfunction
 
 function! todo#MarkAsDone(status)
     if a:status!=''
         exec 'normal! I'.a:status.' '
     endif
-    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1'
+    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     call todo#PrependDate()
     if (getline(".") =~ '^ ')
         normal! gIx
