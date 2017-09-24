@@ -173,6 +173,12 @@ buffers in which they appears in the preview window. It does the same thing
 for context except that it gives in the preview the list of projects existing
 in each existing contexts.
 
+If you don't want the preview window to open when performing completion, add the
+following lines to your vimrc:
+
+    au filetype todo setlocal completeopt-=preview
+
+
 ## Hierarchical sort
 
 This fork provides a hierarchical sorting function designed to do by project

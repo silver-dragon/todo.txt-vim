@@ -393,7 +393,11 @@ endfun
 fun! TodoCopyTempItem(item)
     let ret={}
     let ret.word=a:item.word
-    let ret.related=[a:item.related]
+    if has_key(a:item, "related")
+        let ret.related=[a:item.related]
+    else
+        let ret.related=[]
+    endif
     let ret.buffers=[a:item.buffers]
     return ret
 endfun
@@ -423,7 +427,9 @@ fun! todo#Complete(findstart, base)
                     let item={}
                     let item.word=substitute(line,'.*\('.a:base.'\S*\).*','\1',"")
                     let item.buffers=bufname(bufnr)
-                    let item.related=substitute(line,'.*\s\('.opp.'\S\S*\).*','\1',"")
+                    if line =~ '.*\s\('.opp.'\S\S*\).*'
+                        let item.related=substitute(line,'.*\s\('.opp.'\S\S*\).*','\1',"")
+                    endif
                     call add(res,item)
                 endif
             endfor
@@ -436,7 +442,7 @@ fun! todo#Complete(findstart, base)
             for it in res
                 if curitem.word==it.word
                     " Merge results
-                    if index(curitem.related,it.related) <0
+                    if has_key(curitem, "related") && has_key(it, "related") && index(curitem.related,it.related) <0
                         call add(curitem.related,it.related)
                     endif
                     if index(curitem.buffers,it.buffers) <0

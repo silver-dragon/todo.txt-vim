@@ -11,6 +11,7 @@ set rtp+=~/.vim/bundle/vader.vim
 set rtp+=./
 filetype plugin indent on
 syntax enable
+autocmd filetype todo setlocal omnifunc=todo#Complete
 EOF
 ) +Vader! tests/*.vader && echo Success || exit 1
 
@@ -24,6 +25,7 @@ set rtp+=~/.vim/bundle/vader.vim
 set rtp+=./
 filetype plugin indent on
 syntax enable
+autocmd filetype todo setlocal omnifunc=todo#Complete
 set ignorecase
 EOF
 ) +Vader! tests/*.vader && echo Success || exit 1
@@ -37,6 +39,7 @@ set rtp+=~/.vim/bundle/vader.vim
 set rtp+=./
 filetype plugin indent on
 syntax enable
+autocmd filetype todo setlocal omnifunc=todo#Complete
 set iskeyword+=-
 EOF
 ) +Vader! tests/*.vader && echo Success || exit 1

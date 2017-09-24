@@ -11,6 +11,7 @@ set rtp+=~/.vim/bundle/vader.vim
 set rtp+=./
 filetype plugin indent on
 syntax enable
+autocmd filetype todo setlocal omnifunc=todo#Complete
 EOF
-) tests/todo.txt
+) $*
 

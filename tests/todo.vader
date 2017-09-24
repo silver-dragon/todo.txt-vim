@@ -760,6 +760,33 @@ Then (Is cursor on first non-overdue task?):
 After:
     unlet g:TodoTxtSortDueDateCursorPos
 
+" function todo#Complete(findstart, base) {{{2
+Given todo (Tasks):
+  2017-09-23 Test task +SecretProject @Work due:2017-09-26
+  Tricky lowercase @wrongCaseSelected +selectedWrongCase
+  Project without a context +SecretProject
+Do (Complete context W):
+  Go@W\<C-X>\<C-O>
+Expect todo (Context Work):
+  2017-09-23 Test task +SecretProject @Work due:2017-09-26
+  Tricky lowercase @wrongCaseSelected +selectedWrongCase
+  Project without a context +SecretProject
+  @Work
+Do (Complete project S):
+  Go+S\<C-X>\<C-O>
+Expect todo (Project SecretProject):
+  2017-09-23 Test task +SecretProject @Work due:2017-09-26
+  Tricky lowercase @wrongCaseSelected +selectedWrongCase
+  Project without a context +SecretProject
+  +SecretProject
+Execute (Complete project and switch to preview):
+  :execute "normal Go+\<C-X>\<C-O>\<ESC>"
+  :blast!
+Expect (Project SecretProject):
+  Contexts: @Context
+  Buffers: tests/todo.vader
+  
+
 " file: ftplugin/todo.vim {{{1
 
 " function: TodoFoldLevel(lnum) {{{2
