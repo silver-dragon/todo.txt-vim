@@ -4,15 +4,15 @@
 " License:     Vim license
 " Website:     http://github.com/dbeniamine/todo.txt-vim
 
-" Save context {{{1
-let s:save_cpo = &cpo
-set cpo&vim
-
 if exists("g:Todo_txt_loaded")
     finish
 else
     let g:Todo_txt_loaded=0.8.1
 endif
+
+" Save context {{{1
+let s:save_cpo = &cpo
+set cpo&vim
 
 " General options {{{1
 " Some options lose their values when window changes. They will be set every
@@ -73,6 +73,13 @@ if !exists("g:Todo_txt_do_not_map")
     nnoremap <script> <silent> <buffer> <localleader>sd :call todo#SortDue()<CR>
 " try fix format {{{2
     nnoremap <script> <silent> <buffer> <localleader>ff :call todo#FixFormat()<CR>
+
+" Prefix creation date when opening a new line {{{2
+    if exists("g:Todo_txt_prefix_creation_date")
+        nnoremap <script> <silent> <buffer> o o<C-R>=strftime("%Y-%m-%d")<CR> 
+        nnoremap <script> <silent> <buffer> O O<C-R>=strftime("%Y-%m-%d")<CR> 
+        inoremap <script> <silent> <buffer> <CR> <CR><C-R>=strftime("%Y-%m-%d")<CR> 
+    endif
 endif
 
 " Folding {{{1
