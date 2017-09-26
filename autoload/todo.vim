@@ -95,10 +95,10 @@ function! todo#UnMarkAsDone(status)
 endfunction
 
 function! todo#MarkAsDone(status)
+    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     if a:status!=''
         exec 'normal! I'.a:status.' '
     endif
-    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     call todo#PrependDate()
     if (getline(".") =~ '^ ')
         normal! gIx

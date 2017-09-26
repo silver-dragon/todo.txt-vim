@@ -448,8 +448,8 @@ Execute (2017-09-30 should NOT match with reference 2017-09-30):
 Given todo (Tasks):
   x 2017-09-18 Complete task
   x 2017-09-18 2017-09-01 Completed task with a created date
-  x 2017-09-18 (A) Completed priority task
-  x 2017-09-18 2017-09-01 (A) Completed priority task with a created date
+  x 2017-09-18 Completed priority pri:A task
+  x 2017-09-18 2017-09-01 Completed priority task with a created date pri:A
   X 2017-09-18 Not to be confused for a complete task
   Active task
   2017-09-01 Active task with a created date
@@ -466,7 +466,7 @@ Expect todo (Toggled tasks with today as **TODAY**):
   Complete task
   2017-09-01 Completed task with a created date
   (A) Completed priority task
-  2017-09-01 (A) Completed priority task with a created date
+  (A) 2017-09-01 Completed priority task with a created date
   x **TODAY** X 2017-09-18 Not to be confused for a complete task
   x **TODAY** Active task
   x **TODAY** 2017-09-01 Active task with a created date
@@ -484,7 +484,7 @@ Expect todo (Tasks, completed on today):
   x **TODAY** Complete task
   x **TODAY** 2017-09-01 Completed task with a created date
   x **TODAY** Completed priority task pri:A
-  x **TODAY** 2017-09-01 (A) Completed priority task with a created date
+  x **TODAY** 2017-09-01 Completed priority task with a created date pri:A
   X 2017-09-18 Not to be confused for a complete task
   Active task
   2017-09-01 Active task with a created date
@@ -499,6 +499,63 @@ Expect todo (Tasks, completed on today):
 " however, using global avoids catching exceptions, whereas % gets them.
 Execute (Check todo#ToggleMarkAsDone for exceptions):
   :%call todo#ToggleMarkAsDone('')
+
+" function! todo#ToggleMarkAsDone('Cancelled') {{{2
+
+Given todo (Tasks):
+  x 2017-09-18 Cancelled Cancelled task
+  x 2017-09-18 Cancelled 2017-09-01 Cancelledd task with a created date
+  x 2017-09-18 Cancelled Cancelledd priority pri:A task
+  x 2017-09-18 Cancelled 2017-09-01 Cancelledd priority task with a created date pri:A
+  X 2017-09-18 Cancelled Not to be confused for a cancelle task
+  Active task
+  2017-09-01 Active task with a created date
+  (A) Active priority task
+  (C) 2017-09-01 Active priority task with a created date
+  X 2017-09-18 Not to be confused for a cancelle task
+  XNot to be confused for a cancelle task
+   x 2017-09-18 Leading whitespace is not valid
+  Tricky incancelle task x 2017-09-18
+Execute (Toggle cancelled):
+  :global/./call todo#ToggleMarkAsDone('Cancelled')
+  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+Expect todo (Toggled tasks with today as **TODAY**):
+  Cancelled task
+  2017-09-01 Cancelledd task with a created date
+  (A) Cancelledd priority task
+  (A) 2017-09-01 Cancelledd priority task with a created date
+  x **TODAY** Cancelled X 2017-09-18 Cancelled Not to be confused for a cancelle task
+  x **TODAY** Cancelled Active task
+  x **TODAY** Cancelled 2017-09-01 Active task with a created date
+  x **TODAY** Cancelled Active priority task pri:A
+  x **TODAY** Cancelled 2017-09-01 Active priority task with a created date pri:C
+  x **TODAY** Cancelled X 2017-09-18 Not to be confused for a cancelle task
+  x **TODAY** Cancelled XNot to be confused for a cancelle task
+  x **TODAY** Cancelled x 2017-09-18 Leading whitespace is not valid
+  x **TODAY** Cancelled Tricky incancelle task x 2017-09-18
+Execute (Toggle twice):
+  :global/./call todo#ToggleMarkAsDone('Cancelled')
+  :global/./call todo#ToggleMarkAsDone('Cancelled')
+  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+Expect todo (Tasks, cancelled on today):
+  x **TODAY** Cancelled Cancelled task
+  x **TODAY** Cancelled 2017-09-01 Cancelledd task with a created date
+  x **TODAY** Cancelled Cancelledd priority task pri:A
+  x **TODAY** Cancelled 2017-09-01 Cancelledd priority task with a created date pri:A
+  X 2017-09-18 Cancelled Not to be confused for a cancelle task
+  Active task
+  2017-09-01 Active task with a created date
+  (A) Active priority task
+  (C) 2017-09-01 Active priority task with a created date
+  X 2017-09-18 Not to be confused for a cancelle task
+  XNot to be confused for a cancelle task
+  x 2017-09-18 Leading whitespace is not valid
+  Tricky incancelle task x 2017-09-18
+" The tests above use :global/ to run todo#ToggleMarkAsDone on every line, this
+" is because Vader seems to have an issue with updating the line using %,
+" however, using global avoids catching exceptions, whereas % gets them.
+Execute (Check todo#ToggleMarkAsDone for exceptions):
+  :%call todo#ToggleMarkAsDone('Cancelled')
 
 " function: todo#SortDue() {{{2
 
