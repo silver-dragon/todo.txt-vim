@@ -442,7 +442,7 @@ fun! todo#Complete(findstart, base)
             for it in res
                 if curitem.word==it.word
                     " Merge results
-                    if has_key(curitem, "related") && has_key(it, "related") && index(curitem.related,it.related) <0
+                    if has_key(it, "related") && index(curitem.related,it.related) <0
                         call add(curitem.related,it.related)
                     endif
                     if index(curitem.buffers,it.buffers) <0
