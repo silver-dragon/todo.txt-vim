@@ -178,6 +178,11 @@ following lines to your vimrc:
 
     au filetype todo setlocal completeopt-=preview
 
+If you would like the preview window to open even if there is only one match for
+a completion, then add the following lines to your vimrc:
+
+    au filetype todo setlocal completeopt+=menuone
+
 
 ## Hierarchical sort
 
@@ -255,6 +260,12 @@ Possible values are :
 + `date<tab>`  : (Insert mode) Insert the current date
 + `due:`  : (Insert mode) Insert `due:` followed by the current date
 + `DUE:`  : (Insert mode) Insert `DUE:` followed by the current date
+
+If you would like the creation date (today) prefixed on new lines, add the
+following to your vimrc:
+
+    let g:Todo_txt_prefix_creation_date=1
+
 
 ### Done
 

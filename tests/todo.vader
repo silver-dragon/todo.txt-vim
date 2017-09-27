@@ -561,6 +561,10 @@ Execute (Check todo#ToggleMarkAsDone for exceptions):
 
 Before:
     let g:TodoTxtSortDueDateCursorPos = "top"
+After:
+  if exists("g:TodoTxtSortDueDateCursorPos")
+    unlet g:TodoTxtSortDueDateCursorPos
+  endif
 " In given/expected lists:
 "     GIV:xx is the order the task is given
 "     EXP:xx is the order the task is expected to be sorted into
@@ -814,10 +818,10 @@ Do (Sort and check cursor position: notoverdue):
 Then (Is cursor on first non-overdue task?):
   AssertEqual 1, line('.')
 
-After:
-    unlet g:TodoTxtSortDueDateCursorPos
 
 " function todo#Complete(findstart, base) {{{2
+Before:
+After:
 Given todo (Tasks):
   2017-09-23 Test task +SecretProject @Work due:2017-09-26
   Tricky lowercase @wrongCaseSelected +selectedWrongCase
@@ -846,8 +850,46 @@ Expect (Project SecretProject):
 
 " file: ftplugin/todo.vim {{{1
 
+" Mappings {{{2
+
+Before:
+  let g:Todo_txt_prefix_creation_date=0
+After:
+  unlet g:Todo_txt_prefix_creation_date
+Given todo (Empty buffer):
+Do (Open a new line - o):
+  oNew task
+Expect todo (New task with no creation date):
+  
+  New task
+Before:
+  let g:Todo_txt_prefix_creation_date=1
+  unlet g:Todo_txt_loaded
+  source ftplugin/todo.vim
+After:
+  unlet g:Todo_txt_prefix_creation_date
+  nunmap <buffer> o
+  nunmap <buffer> O
+  iunmap <buffer> <CR>
+Given todo (Empty buffer):
+Execute (Open some new lines):
+  :normal oNew task o
+  :normal ONew task O
+  :normal ANew task CR
+  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+Expect todo (New task with no creation date):
+  
+  **TODAY** New task O
+  **TODAY** New task CR
+  **TODAY** New task o
+Before:
+After:
+
+
 " function: TodoFoldLevel(lnum) {{{2
 
+Before:
+After:
 Given todo (Tasks):
   active  due:2050-01-01 task                                     L:01
   x 2017-09-01 complete task 1                                    L:02
