@@ -128,7 +128,9 @@ function! todo#GetDateRegexForPastDates(...)
 
     " PART 4: All months to the end of the previous month
     " i.e. for a date of 2017-09-07, "2017-(0[1-8])-\d{2}"
-    "       for 2017-11-30: "2017-(0\d|1[0-1])-\d{2}"
+    "       for 2017-10-01: "2017-(0[0-9])-\d{2}"
+    "       for 2017-11-30: "2017-(0\d|1[0-0])-\d{2}"
+    "       for 2017-12-30: "2017-(0\d|1[0-1])-\d{2}"
     "       for 2017-01-20: skip
     " This only applies if the reference date is not in January
     if l:month > 1
@@ -137,6 +139,10 @@ function! todo#GetDateRegexForPastDates(...)
             let l:overdueRex = l:overdueRex . '\d|1'
         endif
         let l:y = strpart(printf('%02d', l:month), 1, 1) " Second digit of the month
+        if l:month == 10
+            " When the month is 10, y = 0, and y - 1 = -1 = bad, deal with it.
+            let l:y = 10
+        endif
         let l:overdueRex = l:overdueRex . '[0-' . (l:y - 1) . '])\-\d{2})|'
     endif
 
