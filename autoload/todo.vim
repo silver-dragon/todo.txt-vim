@@ -359,6 +359,272 @@ function! Todo_txt_InsertSpaceIfNeeded(str)
     retur a:str
 endfunction
 
+" function todo#ChangeDueDate {{{2
+function! todo#ChangeDueDate(units, unit_type)
+    " Change the due:date on the current line by a number of days, months or
+    " years
+    "
+    " units is the number of unit_type to add or subtract, integer values only
+    " unit_type may be one of 'd' (days), 'm' (months) or 'y' (years), as
+    " handled by todo#DateAdd
+
+    let l:currentline = getline('.')
+
+    " Don't operate on complete tasks
+    if l:currentline =~# '^x '
+        return
+    endif
+
+    let l:dueDateRex = '\v\c(^|\s)due:\zs\d{4}\-\d{2}\-\d{2}\ze(\s|$)'
+
+    let l:duedate = matchstr(l:currentline, l:dueDateRex)
+    if l:duedate == ''
+        " No due date on current line, then add the due date as an offset from
+        " current date. I.e. a v:count of 1 is due tomorrow, etc
+        if l:currentline =~? '\v\c(^|\s)due:'
+            " Has an invalid due: keyword, so don't add another, and don't
+            " change the line
+            return
+        endif
+        let l:duedate = strftime('%Y-%m-%d')
+        let l:currentline .= ' due:' . l:duedate
+    endif
+
+    let l:duedate = todo#DateStringAdd(l:duedate, v:count1 * a:units, a:unit_type)
+
+    if setline('.', substitute(l:currentline, l:dueDateRex, l:duedate, '')) != 0
+        throw "Failed to set line"
+    endif
+endfunction "}}}
+
+" General date calculation functions {{{1
+
+" function todo#GetDaysInMonth {{{2
+function! todo#GetDaysInMonth(month, year)
+    " Given a month and year, returns the number of days in the month, taking
+    " leap years into consideration.
+
+    if index([1, 3, 5, 7, 8, 10, 12], a:month) >= 0
+        return 31
+    elseif index([4, 6, 9, 11], a:month) >= 0
+        return 30
+    else
+        " February, leap year fun.
+        if a:year % 4 != 0
+            return 28
+        elseif a:year % 100 != 0
+            return 29
+        elseif a:year % 400 != 0
+            return 28
+        else
+            return 29
+        endif
+    endif
+endfunction
+
+" function todo#DateAdd {{{2
+function! todo#DateAdd(year, month, day, units, unit_type)
+    " Add or subtract days, months or years from a date
+    "
+    " Date must be passed in components of year, month and day, all integers
+    " units is the number of unit_type to add or subtract, integer values only
+    " unit_type may be one of:
+    "   d       days
+    "   m       months, keeps the day of the month static except in the case
+    "           that the day is the last day in the month or the day is higher
+    "           than the number of days in the resultant month, where the result
+    "           will stick to the end of the month. Examples:
+    "               2017-01-15 +1m 2017-02-15 +1m 2017-03-15 +1m 2017-04-15
+    "               2017-01-31 +1m 2017-02-28 +1m 2017-03-31 +1m 2017-04-30
+    "               2017-01-30 +1m 2017-02-28 +1m 2017-03-31
+    "               2017-01-30 +2m 2017-03-30
+    "   y       years
+
+
+    " It is my understanding that VIM does not have date math functionality
+    " built in. Given we only have to deal with dates, and not times, it isn't
+    " all that scary to roll our own - we just need to watch out for leap years.
+
+    " Check and clean up input
+    if index(["d", "m", "y"], a:unit_type) < 0
+        throw 'Invalid unit "'. a:unit_type . '" passed to todo#DateAdd()'
+    endif
+
+    let l:d = str2nr(a:day)
+    let l:m = str2nr(a:month)
+    let l:y = str2nr(a:year)
+    let l:i = str2nr(a:units)
+
+    " Years can be handled simply as 12 x months
+    if a:unit_type == "y"
+        let l:utype = "m"
+        let l:i = l:i * 12
+    else
+        let l:utype = a:unit_type
+    endif
+
+    " Check and clean up input
+    if l:m < 1
+        if l:m == 0
+            let l:m = str2nr(strftime('%m'))
+        else
+            let l:m = 1
+        endif
+    endif
+    if l:m > 12
+        if l:i < 0 && l:utype == "m"
+            " Subtracting an invalid (high) month
+            " See comments for passing a high day below. Same reason for this.
+            let l:m = 13
+        else
+            let l:m = 12
+        endif
+    endif
+    if l:y < 1900           " See end of function for rationale
+        if l:y == 0
+            let l:y = str2nr(strftime('%Y'))
+        else
+            let l:y = 1900
+        endif
+    endif
+
+    " Grab number of days in the month specified
+    let l:daysInMonth = todo#GetDaysInMonth(l:m, l:y)
+
+    " Check and clean up input
+    if l:d < 1
+        if l:d == 0
+            let l:d = str2nr(strftime('%d'))
+        else
+            let l:d = 1
+        endif
+    endif
+    " Allow passing a high day, this allows subtraction to be more sane when
+    " the day is out of bounds, i.e. 2017-04-80 should probably come out as
+    " 2017-04-30 not 2017-04-29. Addition deals with days being out of
+    " bounds (high) fine, and if days are untouched, out of bounds user
+    " input is caught at the end of the function.
+    " if l:d > l:daysInMonth
+    "     let l:d = l:daysInMonth
+    " endif
+
+    if l:utype == "d"
+        " Adding DAYS
+        while l:i > 0
+            let l:d += 1
+            if l:d > l:daysInMonth
+                let l:d = 1
+                let l:m += 1
+                if l:m > 12
+                    let l:m = 1
+                    let l:y += 1
+                endif
+                let l:daysInMonth = todo#GetDaysInMonth(l:m, l:y)
+            endif
+            let l:i -= 1
+        endwhile
+        " Subtracting DAYS
+        while l:i < 0
+            let l:d -= 1
+            if l:d < 1
+                let l:m -= 1
+                if l:m < 1
+                    if l:y > 1900
+                        let l:m = 12
+                        let l:y -= 1
+                    else
+                        let l:d = 1
+                        let l:m = 1
+                        break
+                    endif
+                endif
+                let l:daysInMonth = todo#GetDaysInMonth(l:m, l:y)
+                let l:d = l:daysInMonth
+            endif
+            let l:i += 1
+        endwhile
+    elseif l:utype == "m"
+        if l:d >= l:daysInMonth
+            let l:wasLastDayOfMonth = 1
+        else
+            let l:wasLastDayOfMonth = 0
+        endif
+        " Adding MONTHS
+        while l:i > 0
+            let l:m += 1
+            if l:m > 12
+                let l:m = 1
+                let l:y += 1
+            endif
+            let l:i -= 1
+        endwhile
+        " Subtracting MONTHS
+        while l:i < 0
+            let l:m -= 1
+            if l:m < 1
+                if l:y > 1900
+                    let l:m = 12
+                    let l:y -= 1
+                else
+                    let l:m = 1
+                endif
+            endif
+            let l:i += 1
+        endwhile
+        let l:daysInMonth = todo#GetDaysInMonth(l:m, l:y)
+        if l:wasLastDayOfMonth
+            let l:d = l:daysInMonth
+        endif
+    endif
+
+    " Enforce some limits beyond which, I don't want to support.
+    if l:y < 1900
+        " Seeing as the date is going to be converted back to a string, dates
+        " less that 1000 are bound to cause bugs. Given this is an app for tasks
+        " you are doing in the here and now, I'm not supporting way back in the
+        " past.
+        let l:y = 1900
+        let l:daysInMonth = todo#GetDaysInMonth(l:m, l:y)
+    endif
+    " If we mess with the year (just above), or the user passes a day higher
+    " than the month, catch it here.
+    if l:d > l:daysInMonth
+        let l:d = l:daysInMonth
+    endif
+    return [l:y, l:m, l:d]
+endfunction
+
+" function todo#DateStringAdd {{{2
+function! todo#DateStringAdd(date, units, unit_type)
+    " A very thin overload of todo#DateAdd() that takes and returns the date as
+    " a string rather than in [year, month, day] component form.
+    "
+    " Date must be passed in "YYYY-MM-DD" format, and is returned in this form
+    " also.
+
+    let [l:year, l:month, l:day] = todo#ParseDate(a:date)
+    let [l:year, l:month, l:day] = todo#DateAdd(l:year, l:month, l:day, a:units, a:unit_type)
+    let l:resulting_date = printf('%04d', l:year) . '-' . printf('%02d', l:month) . '-' . printf('%02d', l:day)
+    return l:resulting_date
+endfunction
+
+" function todo#ParseDate {{{2
+function! todo#ParseDate(datestring)
+    " Given a date as a string in the format "YYYY-MM-DD", split the date into a
+    " list [year, month, day]
+    "
+    " Does not check if the date is valid other than being digits. Will throw an
+    " exception if the text does not match the expected date format.
+
+    if a:datestring !~? '\v^(\d{4})\-(\d{2})\-(\d{2})$'
+        throw "Invalid date passed '" . a:datestring . "'."
+    endif
+    let l:year = str2nr(strpart(a:datestring, 0, 4))
+    let l:month = str2nr(strpart(a:datestring, 5, 2))
+    let l:day = str2nr(strpart(a:datestring, 8, 2))
+    return [l:year, l:month, l:day]
+endfunction "}}}
+
 " Completion {{{1
 
 " Simple keyword completion on all buffers {{{2

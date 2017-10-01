@@ -23,7 +23,12 @@ setlocal wrapmargin=0
 
 " Mappings {{{1
 
-if !exists("g:Todo_txt_do_not_map")
+nnoremap <silent> <buffer> <Plug>TodotxtIncrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateNormal")<CR>
+vnoremap <silent> <buffer> <Plug>TodotxtIncrementDueDateVisual :call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateVisual")<CR>
+nnoremap <silent> <buffer> <Plug>TodotxtDecrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateNormal")<CR>
+vnoremap <silent> <buffer> <Plug>TodotxtDecrementDueDateVisual :call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateVisual")<CR>
+
+if !exists("g:Todo_txt_do_not_map") || ! g:Todo_txt_do_not_map
 " Sort todo by (first) context
     noremap <silent><localleader>sc :call todo#HierarchicalSort('@', '', 1)<CR>
 
@@ -74,6 +79,11 @@ if !exists("g:Todo_txt_do_not_map")
 " try fix format {{{2
     nnoremap <script> <silent> <buffer> <localleader>ff :call todo#FixFormat()<CR>
 
+    nmap <localleader>p <Plug>TodotxtIncrementDueDateNormal
+    vmap <localleader>p <Plug>TodotxtIncrementDueDateVisual
+    nmap <localleader>P <Plug>TodotxtDecrementDueDateNormal
+    vmap <localleader>P <Plug>TodotxtDecrementDueDateVisual
+
 " Prefix creation date when opening a new line {{{2
     if exists("g:Todo_txt_prefix_creation_date")
         nnoremap <script> <silent> <buffer> o o<C-R>=strftime("%Y-%m-%d")<CR> 
@@ -81,6 +91,12 @@ if !exists("g:Todo_txt_do_not_map")
         inoremap <script> <silent> <buffer> <CR> <CR><C-R>=strftime("%Y-%m-%d")<CR> 
     endif
 endif
+
+" Functions for maps {{{1
+function! s:ChangeDueDateWrapper(by_days, repeat_mapping)
+    call todo#ChangeDueDate(a:by_days, 'd')
+    silent! call repeat#set(a:repeat_mapping, v:count)
+endfunction
 
 " Folding {{{1
 " Options {{{2

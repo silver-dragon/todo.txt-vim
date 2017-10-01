@@ -470,7 +470,7 @@ Given todo (Tasks):
   Tricky incomplete task x 2017-09-18
 Execute (Toggle completed):
   :global/./call todo#ToggleMarkAsDone('')
-  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
 Expect todo (Toggled tasks with today as **TODAY**):
   Complete task
   2017-09-01 Completed task with a created date
@@ -488,7 +488,7 @@ Expect todo (Toggled tasks with today as **TODAY**):
 Execute (Toggle twice):
   :global/./call todo#ToggleMarkAsDone('')
   :global/./call todo#ToggleMarkAsDone('')
-  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
 Expect todo (Tasks, completed on today):
   x **TODAY** Complete task
   x **TODAY** 2017-09-01 Completed task with a created date
@@ -525,50 +525,52 @@ After:
 Given todo (Tasks for sorting with a bit of everything):
   active  dUE:2051-01-01 cAsE                                     EXP:24 GIV:01
   overdue due:2001-01-01                                          EXP:02 GIV:02
-  notdue  overdue:2011-11-11 invalid key                          EXP:33 GIV:03
+  notdue  overdue:2011-11-11 invalid key                          EXP:34 GIV:03
   overdue duE:2009-01-01 cAsE                                     EXP:18 GIV:04
   xoverdue due:2001-02-01 This is not done (must be lower x)      EXP:03 GIV:05
   overdue due:2012-01-01 \|| no tasks the between bars ||/        EXP:21 GIV:06
-  x done  due:2011-11-11 topmost done task                        EXP:44 GIV:07
-  notdue  due: 2011-11-11 space invalidates due:                  EXP:34 GIV:08
+  x done  due:2011-11-11 topmost done task                        EXP:46 GIV:07
+  notdue  due: 2011-11-11 space invalidates due:                  EXP:35 GIV:08
   overdue due:2005-01-01 +Project @Context                        EXP:10 GIV:09
   overdue due:2002-01-01 @Context                                 EXP:04 GIV:10
   overdue due:2004-02-01                                          EXP:09 GIV:11
-  notdue  due: due:2011-MM-DD                                     EXP:35 GIV:12
+  notdue  due: due:2011-MM-DD                                     EXP:36 GIV:12
   overdue due:2000-01-01 cursor here for top, most overdue        EXP:01 GIV:13
-  notdue  due:2011-11-1                                           EXP:36 GIV:14
-  active  due:2059-01-01 bottommost active task                   EXP:32 GIV:15
+  notdue  due:2011-11-1                                           EXP:37 GIV:14
+  active  due:2059-01-01 bottommost active task                   EXP:33 GIV:15
   overdue due:2006-01-01                                          EXP:12 GIV:16
   overdue due:2007-02-01 +Project                                 EXP:15 GIV:17
   active  due:2056-01-01                                          EXP:29 GIV:18
-  notdue  due:2011-1-11                                           EXP:37 GIV:19
-  x done  due:2011-11-11                                          EXP:45 GIV:20
+  notdue  due:2011-1-11                                           EXP:38 GIV:19
+  x done  due:2011-11-11                                          EXP:47 GIV:20
   overdue dUe:2008-02-01 cAsE                                     EXP:17 GIV:21
   X overdue due:2002-02-01 This is not done (must be lower x)     EXP:05 GIV:22
   +Project overdue due:2003-02-01 project at start of line        EXP:07 GIV:23
-  notdue  due:2011                                                EXP:38 GIV:24
+  notdue  due:2011                                                EXP:39 GIV:24
   active  DUe:2052-01-01 cAsE                                     EXP:25 GIV:25
   overdue due:2007-01-01                                          EXP:14 GIV:26
   overdue Due:2008-01-01 cAsE                                     EXP:16 GIV:27
-  notdue  @Project                                                EXP:39 GIV:28
+  notdue  @Project                                                EXP:40 GIV:28
   active  due:2055-01-01                                          EXP:28 GIV:29
   active  due:2057-01-01                                          EXP:30 GIV:30
   overdue DuE:2009-02-01 cAsE                                     EXP:19 GIV:31
-  notdue  @Context                                                EXP:40 GIV:32
-  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:46 GIV:33
+  notdue  @Context                                                EXP:41 GIV:32
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:48 GIV:33
   active  DUE:2053-01-01 cAsE                                     EXP:26 GIV:34
   active  key:value due:2054-01-01 leading key:value              EXP:27 GIV:35
   active  due:2058-01-01                                          EXP:31 GIV:36
-  notdue  key:value                                               EXP:41 GIV:37
+  notdue  key:value                                               EXP:42 GIV:37
   overdue due:2017-01-01 Last overdue task when sorted            EXP:22 GIV:38
   overdue due:2010-12-31 /|| no tasks the between bars ||\        EXP:20 GIV:39
   active  due:2050-01-01 cursor here with "notoverdue" setting    EXP:23 GIV:40
-  notdue  due:invalid    invalid due date                         EXP:42 GIV:41
+  notdue  due:invalid    invalid due date                         EXP:43 GIV:41
   overdue 2011-11-11 due:2005-02-01 leading date                  EXP:11 GIV:42
   due:2004-01-01 overdue due: at start of line                    EXP:08 GIV:43
-  notdue  notdue:2011-11-11 invalid key                           EXP:43 GIV:44
+  notdue  notdue:2011-11-11 invalid key                           EXP:44 GIV:44
   overdue due:2006-02-01 due:2011-11-11 two dates, choose first   EXP:13 GIV:45
   @Context overdue due:2003-01-01 context at start of line        EXP:06 GIV:46
+  active  due date at very end of line                            EXP:32 GIV:47 due:2058-02-01
+"FIXME:  notdue  due:2011-11-11- trailing - invalidates the date         EXP:45 GIV:48
 Do (Sort by due date):
   :call todo#SortDue()\<CR>
 Expect todo (Sorted list):
@@ -603,21 +605,22 @@ Expect todo (Sorted list):
   active  due:2056-01-01                                          EXP:29 GIV:18
   active  due:2057-01-01                                          EXP:30 GIV:30
   active  due:2058-01-01                                          EXP:31 GIV:36
-  active  due:2059-01-01 bottommost active task                   EXP:32 GIV:15
-  notdue  overdue:2011-11-11 invalid key                          EXP:33 GIV:03
-  notdue  due: 2011-11-11 space invalidates due:                  EXP:34 GIV:08
-  notdue  due: due:2011-MM-DD                                     EXP:35 GIV:12
-  notdue  due:2011-11-1                                           EXP:36 GIV:14
-  notdue  due:2011-1-11                                           EXP:37 GIV:19
-  notdue  due:2011                                                EXP:38 GIV:24
-  notdue  @Project                                                EXP:39 GIV:28
-  notdue  @Context                                                EXP:40 GIV:32
-  notdue  key:value                                               EXP:41 GIV:37
-  notdue  due:invalid    invalid due date                         EXP:42 GIV:41
-  notdue  notdue:2011-11-11 invalid key                           EXP:43 GIV:44
-  x done  due:2011-11-11 topmost done task                        EXP:44 GIV:07
-  x done  due:2011-11-11                                          EXP:45 GIV:20
-  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:46 GIV:33
+  active  due date at very end of line                            EXP:32 GIV:47 due:2058-02-01
+  active  due:2059-01-01 bottommost active task                   EXP:33 GIV:15
+  notdue  overdue:2011-11-11 invalid key                          EXP:34 GIV:03
+  notdue  due: 2011-11-11 space invalidates due:                  EXP:35 GIV:08
+  notdue  due: due:2011-MM-DD                                     EXP:36 GIV:12
+  notdue  due:2011-11-1                                           EXP:37 GIV:14
+  notdue  due:2011-1-11                                           EXP:38 GIV:19
+  notdue  due:2011                                                EXP:39 GIV:24
+  notdue  @Project                                                EXP:40 GIV:28
+  notdue  @Context                                                EXP:41 GIV:32
+  notdue  key:value                                               EXP:42 GIV:37
+  notdue  due:invalid    invalid due date                         EXP:43 GIV:41
+  notdue  notdue:2011-11-11 invalid key                           EXP:44 GIV:44
+  x done  due:2011-11-11 topmost done task                        EXP:46 GIV:07
+  x done  due:2011-11-11                                          EXP:47 GIV:20
+  x done  due:2011-11-11 bottommost done task cursor here bottom  EXP:48 GIV:33
 Do (Sort by due date):
   :call todo#SortDue()\<CR>
 Then (Check post sort cursor position: top):
@@ -629,7 +632,7 @@ Then (Is cursor at top):
 Do (Sort and check cursor position: lastdue):
   :let g:TodoTxtSortDueDateCursorPos="lastdue" | call todo#SortDue()\<CR>
 Then (Is the cursor on the last task with a due:date?):
-  AssertEqual 32, line('.')
+  AssertEqual 33, line('.')
 Do (Sort and check cursor position: notoverdue):
   :let g:TodoTxtSortDueDateCursorPos="notoverdue" | call todo#SortDue()\<CR>
 Then (Is cursor on first non-overdue task?):
@@ -792,17 +795,302 @@ Expect todo (Project SecretProject):
   Tricky lowercase @wrongCaseSelected +selectedWrongCase
   Project without a context +SecretProject
   +SecretProject
-Execute (Complete project and switch to preview):
-  :execute "normal Go+\<C-X>\<C-O>\<ESC>"
-  :blast!
-Expect (Project SecretProject):
-  Contexts: @Context
-  Buffers: tests/todo.vader
-  
+" FIXME: It seems the omnicomplete preview window tests are being run from the
+" .vader file rather than the Given block, weird.
+" Execute (Complete project and switch to preview):
+"   :execute "normal Go+\<C-X>\<C-O>\<ESC>"
+"   :blast!
+" Expect (FIXME Project SecretProject):
+"   Contexts: @Context
+"   Buffers: tests/todo.vader
+"   
+
+" function todo#GetDaysInMonth(month, year) {{{2
+Before:
+After:
+Given:
+Execute (todo#GetDaysInMonth):
+  AssertEqual todo#GetDaysInMonth( 1, 2017), 31, "Days in January not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2000), 29, "Days in February 2000 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2100), 28, "Days in February 2100 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2200), 28, "Days in February 2200 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2300), 28, "Days in February 2300 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2400), 29, "Days in February 2400 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2001), 28, "Days in February 2001 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2002), 28, "Days in February 2002 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2003), 28, "Days in February 2003 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2004), 29, "Days in February 2004 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2008), 29, "Days in February 2008 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2010), 28, "Days in February 2010 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2020), 29, "Days in February 2020 not correct"
+  AssertEqual todo#GetDaysInMonth( 2, 2017), 28, "Days in February 2017 not correct"
+  AssertEqual todo#GetDaysInMonth( 3, 2017), 31, "Days in March not correct"
+  AssertEqual todo#GetDaysInMonth( 4, 2017), 30, "Days in April not correct"
+  AssertEqual todo#GetDaysInMonth( 5, 2017), 31, "Days in May not correct"
+  AssertEqual todo#GetDaysInMonth( 6, 2017), 30, "Days in June not correct"
+  AssertEqual todo#GetDaysInMonth( 7, 2017), 31, "Days in July not correct"
+  AssertEqual todo#GetDaysInMonth( 8, 2017), 31, "Days in August not correct"
+  AssertEqual todo#GetDaysInMonth( 9, 2017), 30, "Days in September not correct"
+  AssertEqual todo#GetDaysInMonth(10, 2017), 31, "Days in October not correct"
+  AssertEqual todo#GetDaysInMonth(11, 2017), 30, "Days in November not correct"
+  AssertEqual todo#GetDaysInMonth(12, 2017), 31, "Days in December not correct"
+
+" function todo#ParseDate(datestring) {{{2
+Before:
+After:
+Given:
+Execute (todo#ParseDate):
+  AssertEqual todo#ParseDate('2017-01-02'), [2017, 01, 02]
+  AssertEqual todo#ParseDate('2017-02-01'), [2017, 02, 01]
+  AssertEqual todo#ParseDate('2017-10-01'), [2017, 10, 01]
+  AssertEqual todo#ParseDate('2017-11-01'), [2017, 11, 01]
+  AssertEqual todo#ParseDate('2017-12-01'), [2017, 12, 01]
+  AssertThrows call todo#ParseDate('17-02-01')
+  AssertThrows call todo#ParseDate('2017-02-01 ')
+  AssertThrows call todo#ParseDate(' 2017-02-01')
+
+" function todo#DateAdd(year, month, day, units, unit_type) {{{2
+Before:
+After:
+Given:
+Execute (todo#DateAdd, days):
+  AssertEqual todo#DateAdd(2000,  01,   01,   -1, 'd'), [1999, 12, 31]
+  AssertEqual todo#DateAdd(1999,  12,   31,    1, 'd'), [2000, 01, 01]
+  AssertEqual todo#DateAdd('2000','01', '01',  1, 'd'), [2000, 01, 02]
+  AssertEqual todo#DateAdd(2000,  01,   04,   -1, 'd'), [2000, 01, 03]
+  AssertEqual todo#DateAdd(2000,  01,   06,   -2, 'd'), [2000, 01, 04]
+  AssertEqual todo#DateAdd(2000,  01,   03,    2, 'd'), [2000, 01, 05]
+  AssertEqual todo#DateAdd(1999,  12,   06,   31, 'd'), [2000, 01, 06]
+  AssertEqual todo#DateAdd(2000,  02,   07,  -31, 'd'), [2000, 01, 07]
+  AssertEqual todo#DateAdd(2001,  01,   08, -366, 'd'), [2000, 01, 08]
+  AssertEqual todo#DateAdd(1999,  01,   09,  365, 'd'), [2000, 01, 09]
+  AssertEqual todo#DateAdd(2000,  02,   28,    2, 'd'), [2000, 03, 01]
+  AssertEqual todo#DateAdd(2000,  02,   28,    1, 'd'), [2000, 02, 29]
+  AssertEqual todo#DateAdd(2000,  12,   31,    1, 'd'), [2001, 01, 01]
+  AssertEqual todo#DateAdd(2004,  03,   01,   -1, 'd'), [2004, 02, 29]
+  AssertEqual todo#DateAdd(2010,  03,   31,    1, 'd'), [2010, 04, 01]
+  AssertEqual todo#DateAdd(2010,  04,   30,    1, 'd'), [2010, 05, 01]
+  AssertEqual todo#DateAdd(2010,  05,   31,    1, 'd'), [2010, 06, 01]
+  AssertEqual todo#DateAdd(2010,  06,   30,    1, 'd'), [2010, 07, 01]
+  AssertEqual todo#DateAdd(2010,  07,   31,    1, 'd'), [2010, 08, 01]
+  AssertEqual todo#DateAdd(2010,  08,   31,    1, 'd'), [2010, 09, 01]
+  AssertEqual todo#DateAdd(2010,  09,   30,    1, 'd'), [2010, 10, 01]
+  AssertEqual todo#DateAdd(2010,  10,   31,    1, 'd'), [2010, 11, 01]
+  AssertEqual todo#DateAdd(2010,  11,   30,    1, 'd'), [2010, 12, 01]
+  AssertEqual todo#DateAdd(2010,  12,   31,    1, 'd'), [2011, 01, 01]
+  AssertEqual todo#DateAdd(2016,  02,   01,   -1, 'd'), [2016, 01, 31]
+  AssertEqual todo#DateAdd(2016,  03,   01,   -1, 'd'), [2016, 02, 29]
+  AssertEqual todo#DateAdd(2016,  04,   01,   -1, 'd'), [2016, 03, 31]
+  AssertEqual todo#DateAdd(2016,  05,   01,   -1, 'd'), [2016, 04, 30]
+  AssertEqual todo#DateAdd(2016,  06,   01,   -1, 'd'), [2016, 05, 31]
+  AssertEqual todo#DateAdd(2016,  07,   01,   -1, 'd'), [2016, 06, 30]
+  AssertEqual todo#DateAdd(2016,  08,   01,   -1, 'd'), [2016, 07, 31]
+  AssertEqual todo#DateAdd(2016,  09,   01,   -1, 'd'), [2016, 08, 31]
+  AssertEqual todo#DateAdd(2016,  10,   01,   -1, 'd'), [2016, 09, 30]
+  AssertEqual todo#DateAdd(2016,  11,   01,   -1, 'd'), [2016, 10, 31]
+  AssertEqual todo#DateAdd(2016,  12,   01,   -1, 'd'), [2016, 11, 30]
+  AssertEqual todo#DateAdd(2017,  01,   01,   -1, 'd'), [2016, 12, 31]
+  AssertEqual todo#DateAdd(2016,  01,   01,   -1, 'd'), [2015, 12, 31]
+  AssertEqual todo#DateAdd(2017,  03,   01,   -1, 'd'), [2017, 02, 28]
+  AssertEqual todo#DateAdd(2017,  02,   28,    1, 'd'), [2017, 03, 01]
+  AssertEqual todo#DateAdd(2017,  04,   01,   30, 'd'), [2017, 05, 01]
+  AssertEqual todo#DateAdd(1900,  01,   01, 1520, 'd'), [1904, 03, 01]
+  AssertEqual todo#DateAdd(2304,  03,   01,-1520, 'd'), [2300, 01, 01]
+Execute (todo#DateAdd, months):
+  " Add one month to a date in the middle of the month should keep day of month
+  AssertEqual todo#DateAdd(2016,  12,   27,    1, 'm'), [2017, 01, 27]
+  AssertEqual todo#DateAdd(2017,  01,   27,    1, 'm'), [2017, 02, 27]
+  AssertEqual todo#DateAdd(2017,  02,   27,    1, 'm'), [2017, 03, 27]
+  AssertEqual todo#DateAdd(2017,  03,   27,    1, 'm'), [2017, 04, 27]
+  AssertEqual todo#DateAdd(2017,  04,   27,    1, 'm'), [2017, 05, 27]
+  AssertEqual todo#DateAdd(2017,  05,   27,    1, 'm'), [2017, 06, 27]
+  AssertEqual todo#DateAdd(2017,  06,   27,    1, 'm'), [2017, 07, 27]
+  AssertEqual todo#DateAdd(2017,  07,   27,    1, 'm'), [2017, 08, 27]
+  AssertEqual todo#DateAdd(2017,  08,   27,    1, 'm'), [2017, 09, 27]
+  AssertEqual todo#DateAdd(2017,  09,   27,    1, 'm'), [2017, 10, 27]
+  AssertEqual todo#DateAdd(2017,  10,   27,    1, 'm'), [2017, 11, 27]
+  AssertEqual todo#DateAdd(2017,  11,   27,    1, 'm'), [2017, 12, 27]
+  AssertEqual todo#DateAdd(2017,  12,   27,    1, 'm'), [2018, 01, 27]
+  " Sub one month to a date in the middle of the month should keep day of month
+  AssertEqual todo#DateAdd(2017,  02,   26,   -1, 'm'), [2017, 01, 26]
+  AssertEqual todo#DateAdd(2017,  03,   26,   -1, 'm'), [2017, 02, 26]
+  AssertEqual todo#DateAdd(2017,  04,   26,   -1, 'm'), [2017, 03, 26]
+  AssertEqual todo#DateAdd(2017,  05,   26,   -1, 'm'), [2017, 04, 26]
+  AssertEqual todo#DateAdd(2017,  06,   26,   -1, 'm'), [2017, 05, 26]
+  AssertEqual todo#DateAdd(2017,  07,   26,   -1, 'm'), [2017, 06, 26]
+  AssertEqual todo#DateAdd(2017,  08,   26,   -1, 'm'), [2017, 07, 26]
+  AssertEqual todo#DateAdd(2017,  09,   26,   -1, 'm'), [2017, 08, 26]
+  AssertEqual todo#DateAdd(2017,  10,   26,   -1, 'm'), [2017, 09, 26]
+  AssertEqual todo#DateAdd(2017,  11,   26,   -1, 'm'), [2017, 10, 26]
+  AssertEqual todo#DateAdd(2017,  12,   26,   -1, 'm'), [2017, 11, 26]
+  AssertEqual todo#DateAdd(2018,  01,   26,   -1, 'm'), [2017, 12, 26]
+  AssertEqual todo#DateAdd(2018,  02,   26,   -1, 'm'), [2018, 01, 26]
+  " End of month should be sticky
+  AssertEqual todo#DateAdd(2010,  01,   31,    1, 'm'), [2010, 02, 28]
+  AssertEqual todo#DateAdd(2010,  02,   28,    1, 'm'), [2010, 03, 31]
+  AssertEqual todo#DateAdd(2010,  03,   31,    1, 'm'), [2010, 04, 30]
+  AssertEqual todo#DateAdd(2010,  04,   30,    1, 'm'), [2010, 05, 31]
+  AssertEqual todo#DateAdd(2010,  05,   31,    1, 'm'), [2010, 06, 30]
+  AssertEqual todo#DateAdd(2010,  06,   30,    1, 'm'), [2010, 07, 31]
+  AssertEqual todo#DateAdd(2010,  07,   31,    1, 'm'), [2010, 08, 31]
+  AssertEqual todo#DateAdd(2010,  08,   31,    1, 'm'), [2010, 09, 30]
+  AssertEqual todo#DateAdd(2010,  09,   30,    1, 'm'), [2010, 10, 31]
+  AssertEqual todo#DateAdd(2010,  10,   31,    1, 'm'), [2010, 11, 30]
+  AssertEqual todo#DateAdd(2010,  11,   30,    1, 'm'), [2010, 12, 31]
+  AssertEqual todo#DateAdd(2010,  12,   31,    1, 'm'), [2011, 01, 31]
+  " End of month should be sticky
+  AssertEqual todo#DateAdd(2012,  01,   31,   -1, 'm'), [2011, 12, 31]
+  AssertEqual todo#DateAdd(2012,  02,   29,   -1, 'm'), [2012, 01, 31]
+  AssertEqual todo#DateAdd(2012,  03,   31,   -1, 'm'), [2012, 02, 29]
+  AssertEqual todo#DateAdd(2012,  04,   30,   -1, 'm'), [2012, 03, 31]
+  AssertEqual todo#DateAdd(2012,  05,   31,   -1, 'm'), [2012, 04, 30]
+  AssertEqual todo#DateAdd(2012,  06,   30,   -1, 'm'), [2012, 05, 31]
+  AssertEqual todo#DateAdd(2012,  07,   31,   -1, 'm'), [2012, 06, 30]
+  AssertEqual todo#DateAdd(2012,  08,   31,   -1, 'm'), [2012, 07, 31]
+  AssertEqual todo#DateAdd(2012,  09,   30,   -1, 'm'), [2012, 08, 31]
+  AssertEqual todo#DateAdd(2012,  10,   31,   -1, 'm'), [2012, 09, 30]
+  AssertEqual todo#DateAdd(2012,  11,   30,   -1, 'm'), [2012, 10, 31]
+  AssertEqual todo#DateAdd(2012,  12,   31,   -1, 'm'), [2012, 11, 30]
+  " When adding more than one month, the intermediate months should not impact
+  " EOM calculations.
+  AssertEqual todo#DateAdd(2000,  01,   30,   11, 'm'), [2000, 12, 30]
+  AssertEqual todo#DateAdd(2000,  01,   31,    9, 'm'), [2000, 10, 31]
+  AssertEqual todo#DateAdd(2001,  12,   30,  -11, 'm'), [2001, 01, 30]
+  AssertEqual todo#DateAdd(2001,  10,   31,   -9, 'm'), [2001, 01, 31]
+Execute (todo#DateAdd, years):
+  AssertEqual todo#DateAdd(1900,  11,   30,    1, 'y'), [1901, 11, 30]
+  AssertEqual todo#DateAdd(1900,  11,   30,    2, 'y'), [1902, 11, 30]
+  AssertEqual todo#DateAdd(1900,  11,   30,    5, 'y'), [1905, 11, 30]
+  AssertEqual todo#DateAdd(1915,  11,   30,   -1, 'y'), [1914, 11, 30]
+  AssertEqual todo#DateAdd(1915,  11,   30,   -2, 'y'), [1913, 11, 30]
+  AssertEqual todo#DateAdd(1915,  11,   30,   -5, 'y'), [1910, 11, 30]
+  " 2012 is a leap year
+  AssertEqual todo#DateAdd(2011,  02,   05,    3, 'y'), [2014, 02, 05]
+Execute (todo#DateAdd, boundaries and validity):
+  AssertEqual todo#DateAdd(1800,  01,   01,    1, 'd'), [1900, 01, 02]
+  AssertEqual todo#DateAdd(1800,  01,   01,   -1, 'd'), [1900, 01, 01]
+  AssertEqual todo#DateAdd(2017,  30,   01,    1, 'd'), [2017, 12, 02]
+  AssertEqual todo#DateAdd(2017,  30,   01,   -1, 'd'), [2017, 11, 30]
+  AssertEqual todo#DateAdd(2017,  04,   80,    1, 'd'), [2017, 05, 01]
+  AssertEqual todo#DateAdd(2017,  04,   80,   -1, 'd'), [2017, 04, 30]
+  AssertEqual todo#DateAdd(2017,  07,   80,   -1, 'd'), [2017, 07, 31]
+  AssertEqual todo#DateAdd(1800,  01,   03,    1, 'm'), [1900, 02, 03]
+  AssertEqual todo#DateAdd(1800,  01,   03,   -1, 'm'), [1900, 01, 03]
+  AssertEqual todo#DateAdd(2017,  30,   03,    1, 'm'), [2018, 01, 03]
+  AssertEqual todo#DateAdd(2017,  30,   03,   -1, 'm'), [2017, 12, 03]
+  AssertEqual todo#DateAdd(2017,  04,   80,    1, 'm'), [2017, 05, 31]
+  AssertEqual todo#DateAdd(2017,  04,   80,   -1, 'm'), [2017, 03, 31]
+  AssertEqual todo#DateAdd(-1,    -1,   -1,    1, 'd'), [1900, 01, 02]
+  " People may well use the behaviours below to their advantage, it could be
+  " useful, we should try to keep this consistent.
+  AssertEqual todo#DateAdd(0,      0,    0,    1, 'd'), [str2nr(strftime('%Y')), str2nr(strftime('%m')), str2nr(strftime('%d')) + 1]
+  AssertEqual todo#DateAdd(0,     08,   05,    1, 'd'), [str2nr(strftime('%Y')), 08, 06]
+  AssertEqual todo#DateAdd(2016,   0,   06,    1, 'd'), [2016, str2nr(strftime('%m')), 07]
+  AssertEqual todo#DateAdd(2015,  07,    0,    1, 'd'), [2015, 07, str2nr(strftime('%d')) + 1]
+  AssertEqual todo#DateAdd(2015,  08,   08,    0, 'd'), [2015, 08, 08]
+  AssertEqual todo#DateAdd(2016,  09,   09,    0, 'm'), [2016, 09, 09]
+  AssertEqual todo#DateAdd(1600,  50,   50,    0, 'd'), [1900, 12, 31]
+  AssertEqual todo#DateAdd(0,     50,   50,    0, 'd'), [str2nr(strftime('%Y')), 12, 31]
+
+" function todo#ChangeDueDate(units, unit_type) {{{2
+Before:
+After:
+Given todo (Tasks with a bit of everything):
+  active  dUE:2051-01-01 cAsE                                               L01
+  notdue  overdue:2011-11-11 invalid key                                    L02
+  xoverdue due:2001-02-01 This is not done (must be lower x)                L03
+  x done  due:2011-11-11 completed task                                     L04
+  notdue  due: 2011-11-11 space invalidates due:                            L05
+  overdue due:2005-02-28 +Project @Context                                  L06
+  notdue  due: due:2011-MM-DD                                               L07
+  notdue  due:2011-11-1                                                     L08
+  overdue dUe:2008-02-01 cAsE                                               L09
+  X overdue due:2002-02-01 This is not done (must be lower x)               L10
+  +Project overdue due:2003-02-01 project at start of line                  L11
+  notdue  due:2011                                                          L12
+  active  DUe:2052-01-01 cAsE                                               L13
+  notdue  @Project                                                          L14
+  active  key:value due:2054-01-01 leading key:value                        L15
+  overdue due:2010-12-31                                                    L16
+  notdue  due:invalid    invalid due date                                   L17
+  overdue 2011-11-11 due:2005-02-01 leading date                            L18
+  due:2004-01-01 overdue due: at start of line                              L19
+  overdue due:2006-02-01 due:2011-11-11 two dates, choose first             L20
+  overdue due:2011-11-11- trailing - invalidates the date                   L21
+  active  due date at very end of line                                      L22 due:2058-02-01
+Execute (todo#ChangeDueDate):
+  :%call todo#ChangeDueDate(1, 'd')
+  :let [s:year, s:month, s:day] = todo#ParseDate(strftime("%Y-%m-%d"))
+  :let [s:year, s:month, s:day] = todo#DateAdd(s:year, s:month, s:day, 1, 'd')
+  :let s:duedate = printf('%04d', s:year) . '-' . printf('%02d', s:month) . '-' . printf('%02d', s:day)
+  execute "silent %substitute/" . s:duedate . "/**EXPECTDUE**/"
+Expect todo (Tasks with due date incremented):
+  active  dUE:2051-01-02 cAsE                                               L01
+  notdue  overdue:2011-11-11 invalid key                                    L02 due:**EXPECTDUE**
+  xoverdue due:2001-02-02 This is not done (must be lower x)                L03
+  x done  due:2011-11-11 completed task                                     L04
+  notdue  due: 2011-11-11 space invalidates due:                            L05
+  overdue due:2005-03-01 +Project @Context                                  L06
+  notdue  due: due:2011-MM-DD                                               L07
+  notdue  due:2011-11-1                                                     L08
+  overdue dUe:2008-02-02 cAsE                                               L09
+  X overdue due:2002-02-02 This is not done (must be lower x)               L10
+  +Project overdue due:2003-02-02 project at start of line                  L11
+  notdue  due:2011                                                          L12
+  active  DUe:2052-01-02 cAsE                                               L13
+  notdue  @Project                                                          L14 due:**EXPECTDUE**
+  active  key:value due:2054-01-02 leading key:value                        L15
+  overdue due:2011-01-01                                                    L16
+  notdue  due:invalid    invalid due date                                   L17
+  overdue 2011-11-11 due:2005-02-02 leading date                            L18
+  due:2004-01-02 overdue due: at start of line                              L19
+  overdue due:2006-02-02 due:2011-11-11 two dates, choose first             L20
+  overdue due:2011-11-11- trailing - invalidates the date                   L21
+  active  due date at very end of line                                      L22 due:2058-02-02
 
 " file: ftplugin/todo.vim {{{1
 
 " Mappings {{{2
+
+Before:
+After:
+Given todo (Tasks):
+  First task, postpone 1 day, should result in 2017-01-02 due:2017-01-01
+  Second task, postpone 5 days, should result in 2017-01-06 due:2017-01-01
+  Third task, postpone -1 day, should result in 2017-02-19 due:2017-02-20
+  Forth task, postpone -5 day, should result in 2017-02-15 due:2017-02-20
+  Fifth task, should not be changed from 2017-03-01 due:2017-03-01
+Do (Postpone tasks - normal mode):
+  \pj5\pj\Pj5\P
+Expect todo (Postponed tasks):
+  First task, postpone 1 day, should result in 2017-01-02 due:2017-01-02
+  Second task, postpone 5 days, should result in 2017-01-06 due:2017-01-06
+  Third task, postpone -1 day, should result in 2017-02-19 due:2017-02-19
+  Forth task, postpone -5 day, should result in 2017-02-15 due:2017-02-15
+  Fifth task, should not be changed from 2017-03-01 due:2017-03-01
+
+Given todo (Tasks):
+  Task visual block 1, should result in 2017-01-02 due:2017-01-01           L01
+  Task visual block 1, should result in 2017-01-02 due:2017-01-01           L02
+  Task visual block 2, should result in 2017-01-06 due:2017-01-01           L03
+  Task visual block 2, should result in 2017-01-06 due:2017-01-01           L04
+  Task visual block 3, should result in 2017-02-19 due:2017-02-20           L05
+  Task visual block 3, should result in 2017-02-19 due:2017-02-20           L06
+  Task visual block 4, should result in 2017-02-15 due:2017-02-20           L07
+  Task visual block 4, should result in 2017-02-15 due:2017-02-20           L08
+  Fifth task, should not be changed from 2017-03-01 due:2017-03-01          L09
+Do (Postpone tasks - visual mode):
+  Vj\pjVj5\pjVj\PjVj5\P
+Expect todo (Postponed tasks):
+  Task visual block 1, should result in 2017-01-02 due:2017-01-02           L01
+  Task visual block 1, should result in 2017-01-02 due:2017-01-02           L02
+  Task visual block 2, should result in 2017-01-06 due:2017-01-06           L03
+  Task visual block 2, should result in 2017-01-06 due:2017-01-06           L04
+  Task visual block 3, should result in 2017-02-19 due:2017-02-19           L05
+  Task visual block 3, should result in 2017-02-19 due:2017-02-19           L06
+  Task visual block 4, should result in 2017-02-15 due:2017-02-15           L07
+  Task visual block 4, should result in 2017-02-15 due:2017-02-15           L08
+  Fifth task, should not be changed from 2017-03-01 due:2017-03-01          L09
 
 Before:
   let g:Todo_txt_prefix_creation_date=0
@@ -828,7 +1116,7 @@ Execute (Open some new lines):
   :normal oNew task o
   :normal ONew task O
   :normal ANew task CR
-  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
 Expect todo (New task with no creation date):
   
   **TODAY** New task O

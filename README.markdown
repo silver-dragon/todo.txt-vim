@@ -257,6 +257,8 @@ Possible values are :
 ### Dates
 
 + `<LocalLeader>d` : Insert the current date
++ `<LocalLeader>p` : Postpone the due date (accepts a count)
++ `<LocalLeader>P` : Decrement the due date (accepts a count)
 + `date<tab>`  : (Insert mode) Insert the current date
 + `due:`  : (Insert mode) Insert `due:` followed by the current date
 + `DUE:`  : (Insert mode) Insert `DUE:` followed by the current date
