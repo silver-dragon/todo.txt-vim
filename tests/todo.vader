@@ -423,7 +423,8 @@ Execute (Log generated RegExp):
 Execute (Current date should not match):
   Assert strftime("%Y-%m-%d") !~ b:rex
 
-" Incorrectly matching current date, some breakpoints that previously were found to be an issue
+" Incorrectly matching current date, some breakpoints that previously were found
+" to be an issue
 Before:
   let b:rex = todo#GetDateRegexForPastDates(2017,09,20)
 Execute (Log generated RegExp):
@@ -440,6 +441,14 @@ Execute (2017-09-29 should match with reference 2017-09-30):
   Assert '2017-09-29' =~ b:rex
 Execute (2017-09-30 should NOT match with reference 2017-09-30):
   Assert '2017-09-30' !~ b:rex
+Before:
+  let b:rex = todo#GetDateRegexForPastDates(2017,10,01)
+Execute (Log generated RegExp):
+  Log b:rex
+Execute (2017-09-30 should match with reference 2017-10-01):
+  Assert '2017-09-30' =~ b:rex
+Execute (2017-10-01 should NOT match with reference 2017-10-01):
+  Assert '2017-10-01' !~ b:rex
 
 " file: autoload/todo.vim {{{1
 
