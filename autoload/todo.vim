@@ -95,10 +95,10 @@ function! todo#UnMarkAsDone(status)
 endfunction
 
 function! todo#MarkAsDone(status)
+    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     if a:status!=''
         exec 'normal! I'.a:status.' '
     endif
-    exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     call todo#PrependDate()
     if (getline(".") =~ '^ ')
         normal! gIx
@@ -708,7 +708,7 @@ fun! todo#Complete(findstart, base)
             for it in res
                 if curitem.word==it.word
                     " Merge results
-                    if has_key(curitem, "related") && has_key(it, "related") && index(curitem.related,it.related) <0
+                    if has_key(it, "related") && index(curitem.related,it.related) <0
                         call add(curitem.related,it.related)
                     endif
                     if index(curitem.buffers,it.buffers) <0
