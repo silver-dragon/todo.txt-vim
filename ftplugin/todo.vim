@@ -79,6 +79,7 @@ if !exists("g:Todo_txt_do_not_map") || ! g:Todo_txt_do_not_map
 " try fix format {{{2
     nnoremap <script> <silent> <buffer> <localleader>ff :call todo#FixFormat()<CR>
 
+" increment and decrement due:date {{{2
     nmap <localleader>p <Plug>TodotxtIncrementDueDateNormal
     vmap <localleader>p <Plug>TodotxtIncrementDueDateVisual
     nmap <localleader>P <Plug>TodotxtDecrementDueDateNormal
@@ -94,7 +95,8 @@ endif
 
 " Functions for maps {{{1
 function! s:ChangeDueDateWrapper(by_days, repeat_mapping)
-    call todo#ChangeDueDate(a:by_days, 'd')
+    call todo#CreateNewRecurrence(0)
+    call todo#ChangeDueDate(a:by_days, 'd', '')
     silent! call repeat#set(a:repeat_mapping, v:count)
 endfunction
 

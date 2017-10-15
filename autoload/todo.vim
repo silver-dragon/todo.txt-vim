@@ -95,6 +95,7 @@ function! todo#UnMarkAsDone(status)
 endfunction
 
 function! todo#MarkAsDone(status)
+    call todo#CreateNewRecurrence(1)
     exec ':s/\C^(\([A-Z]\))\(.*\)/\2 pri:\1/e'
     if a:status!=''
         exec 'normal! I'.a:status.' '
@@ -359,14 +360,99 @@ function! Todo_txt_InsertSpaceIfNeeded(str)
     retur a:str
 endfunction
 
+" function todo#CreateNewRecurrence {{{2
+function! todo#CreateNewRecurrence(triggerOnNonStrict)
+    " Given a line with a rec:timespan, create a new task based off the
+    " recurrence and move the recurring tasks due:date to the next occurrence.
+    "
+    " This is implemented by a few other systems, so we will try to be as
+    " compatible as possible with the existing specifications.
+    "
+    " Other example implementations:
+    "   <http://swiftodoapp.com/>
+    "   <https://github.com/bram85/todo.txt-tools/wiki/Recurrence>
+    "
+
+    let l:currentline = getline('.')
+
+    " Don't operate on complete tasks
+    if l:currentline =~# '^x '
+        return
+    endif
+
+    let l:rec_date_rex = '\v\c(^|\s)rec:(\+)?(\d+)([dwmy])(\s|$)'
+    let l:rec_parts = matchlist(l:currentline, l:rec_date_rex)
+    " Don't operate on tasks without a valid "rec:" keyword.
+    if empty(l:rec_parts)
+        " If a "rec:" keyword exists, but it didn't match our expectations, warn
+        " the user, and abort whatever is happening otherwise a recurring task
+        " might be marked complete without a new recurrence being created.
+        if l:currentline =~? '\v\c(^|\s)rec:'
+            throw "Recurrence pattern is invalid. Aborting operation."
+        endif
+        return
+    endif
+
+    " Operations like postponing a task should not trigger the task to be
+    " duplicated, non-strict mode allows the changing of the due date.
+    let l:is_strict = l:rec_parts[2] ==# "+"
+    if ! a:triggerOnNonStrict && ! l:is_strict
+        return
+    endif
+
+    let l:units = str2nr(l:rec_parts[3])
+    if l:units < 1
+        let l:units = 1
+    endif
+    let l:unit_type = l:rec_parts[4]
+    " If we had a space on both sides of the "rec:" that we are removing, then
+    " we need to insert a space, otherwise, not.
+    if l:rec_parts[1] ==# ' ' && l:rec_parts[5] ==# ' '
+        let l:replace_string = ' '
+    else
+        let l:replace_string = ''
+    endif
+
+    " New task should have the rec: keyword stripped
+    let l:newline = substitute(l:currentline, l:rec_date_rex, l:replace_string, '')
+    " Insert above current line
+    let l:new_task_line_num = line('.')
+    if append(l:new_task_line_num - 1, l:newline) != 0
+        throw "Failed at append line"
+    endif
+
+    " At this point, we need to change the due date of the recurring task.
+    " Modes:
+    "       Strict mode:        From the existing due date
+    "       Non-Strict mode:    From the current date
+    " So, we don't need to do anything for strict mode. Non-strict mode requires
+    " setting the current date.
+    if l:is_strict
+        call todo#ChangeDueDate(l:units, l:unit_type, '')
+    else
+        call todo#ChangeDueDate(l:units, l:unit_type, strftime('%Y-%m-%d'))
+    endif
+
+    " Move onto the copied task
+    call cursor(l:new_task_line_num, col('.'))
+    if l:new_task_line_num != line('.')
+        throw "Failed to move cursor"
+    endif
+endfunction
+
 " function todo#ChangeDueDate {{{2
-function! todo#ChangeDueDate(units, unit_type)
+function! todo#ChangeDueDate(units, unit_type, from_reference)
     " Change the due:date on the current line by a number of days, months or
     " years
     "
-    " units is the number of unit_type to add or subtract, integer values only
-    " unit_type may be one of 'd' (days), 'm' (months) or 'y' (years), as
-    " handled by todo#DateAdd
+    " units             The number of unit_type to add or subtract, integer
+    "                   values only
+    " unit_type         May be one of 'd' (days), 'm' (months) or 'y' (years),
+    "                   as handled by todo#DateAdd
+    " from_reference    Allows passing a different date to base the calculation
+    "                   on, ignoring the existing due date in the line. Leave as
+    "                   an empty string to use the due:date in the line,
+    "                   otherwise a date as a string in the form "YYYY-MM-DD".
 
     let l:currentline = getline('.')
 
@@ -378,7 +464,7 @@ function! todo#ChangeDueDate(units, unit_type)
     let l:dueDateRex = '\v\c(^|\s)due:\zs\d{4}\-\d{2}\-\d{2}\ze(\s|$)'
 
     let l:duedate = matchstr(l:currentline, l:dueDateRex)
-    if l:duedate == ''
+    if l:duedate ==# ''
         " No due date on current line, then add the due date as an offset from
         " current date. I.e. a v:count of 1 is due tomorrow, etc
         if l:currentline =~? '\v\c(^|\s)due:'
@@ -388,6 +474,10 @@ function! todo#ChangeDueDate(units, unit_type)
         endif
         let l:duedate = strftime('%Y-%m-%d')
         let l:currentline .= ' due:' . l:duedate
+    endif
+    " If a valid reference has been passed, let's use it.
+    if a:from_reference =~# '\v^\d{4}\-\d{2}\-\d{2}$'
+        let l:duedate = a:from_reference
     endif
 
     let l:duedate = todo#DateStringAdd(l:duedate, v:count1 * a:units, a:unit_type)
@@ -430,6 +520,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
     " units is the number of unit_type to add or subtract, integer values only
     " unit_type may be one of:
     "   d       days
+    "   w       weeks, 7 days
     "   m       months, keeps the day of the month static except in the case
     "           that the day is the last day in the month or the day is higher
     "           than the number of days in the resultant month, where the result
@@ -438,7 +529,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
     "               2017-01-31 +1m 2017-02-28 +1m 2017-03-31 +1m 2017-04-30
     "               2017-01-30 +1m 2017-02-28 +1m 2017-03-31
     "               2017-01-30 +2m 2017-03-30
-    "   y       years
+    "   y       years, 12 months
 
 
     " It is my understanding that VIM does not have date math functionality
@@ -446,7 +537,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
     " all that scary to roll our own - we just need to watch out for leap years.
 
     " Check and clean up input
-    if index(["d", "m", "y"], a:unit_type) < 0
+    if index(["d", "D", "w", "W", "m", "M", "y", "Y"], a:unit_type) < 0
         throw 'Invalid unit "'. a:unit_type . '" passed to todo#DateAdd()'
     endif
 
@@ -455,10 +546,13 @@ function! todo#DateAdd(year, month, day, units, unit_type)
     let l:y = str2nr(a:year)
     let l:i = str2nr(a:units)
 
-    " Years can be handled simply as 12 x months
-    if a:unit_type == "y"
+    " Years can be handled simply as 12 x months, weeks as 7 x days
+    if a:unit_type ==? "y"
         let l:utype = "m"
         let l:i = l:i * 12
+    elseif a:unit_type ==? "w"
+        let l:utype = "d"
+        let l:i = l:i * 7
     else
         let l:utype = a:unit_type
     endif
@@ -472,7 +566,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
         endif
     endif
     if l:m > 12
-        if l:i < 0 && l:utype == "m"
+        if l:i < 0 && l:utype ==? "m"
             " Subtracting an invalid (high) month
             " See comments for passing a high day below. Same reason for this.
             let l:m = 13
@@ -508,7 +602,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
     "     let l:d = l:daysInMonth
     " endif
 
-    if l:utype == "d"
+    if l:utype ==? "d"
         " Adding DAYS
         while l:i > 0
             let l:d += 1
@@ -543,7 +637,7 @@ function! todo#DateAdd(year, month, day, units, unit_type)
             endif
             let l:i += 1
         endwhile
-    elseif l:utype == "m"
+    elseif l:utype ==? "m"
         if l:d >= l:daysInMonth
             let l:wasLastDayOfMonth = 1
         else

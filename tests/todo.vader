@@ -7,6 +7,8 @@
 " [Vader](https://github.com/junegunn/vader.vim) is a simple unit testing
 " plugin for VIM.
 
+Include: include/setup.vader
+
 " file: syntax/todo.vim {{{1
 
 " syntax match {{{2
@@ -470,7 +472,7 @@ Given todo (Tasks):
   Tricky incomplete task x 2017-09-18
 Execute (Toggle completed):
   :global/./call todo#ToggleMarkAsDone('')
-  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  :call ReplaceCurrentDates('')
 Expect todo (Toggled tasks with today as **TODAY**):
   Complete task
   2017-09-01 Completed task with a created date
@@ -488,7 +490,7 @@ Expect todo (Toggled tasks with today as **TODAY**):
 Execute (Toggle twice):
   :global/./call todo#ToggleMarkAsDone('')
   :global/./call todo#ToggleMarkAsDone('')
-  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  :call ReplaceCurrentDates('')
 Expect todo (Tasks, completed on today):
   x **TODAY** Complete task
   x **TODAY** 2017-09-01 Completed task with a created date
@@ -527,7 +529,7 @@ Given todo (Tasks):
   Tricky incancelle task x 2017-09-18
 Execute (Toggle cancelled):
   :global/./call todo#ToggleMarkAsDone('Cancelled')
-  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  :call ReplaceCurrentDates('')
 Expect todo (Toggled tasks with today as **TODAY**):
   Cancelled task
   2017-09-01 Cancelledd task with a created date
@@ -545,7 +547,7 @@ Expect todo (Toggled tasks with today as **TODAY**):
 Execute (Toggle twice):
   :global/./call todo#ToggleMarkAsDone('Cancelled')
   :global/./call todo#ToggleMarkAsDone('Cancelled')
-  execute "%substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  :call ReplaceCurrentDates('')
 Expect todo (Tasks, cancelled on today):
   x **TODAY** Cancelled Cancelled task
   x **TODAY** Cancelled 2017-09-01 Cancelledd task with a created date
@@ -953,6 +955,11 @@ Execute (todo#DateAdd, days):
   AssertEqual todo#DateAdd(2017,  04,   01,   30, 'd'), [2017, 05, 01]
   AssertEqual todo#DateAdd(1900,  01,   01, 1520, 'd'), [1904, 03, 01]
   AssertEqual todo#DateAdd(2304,  03,   01,-1520, 'd'), [2300, 01, 01]
+Execute (todo#DateAdd, weeks):
+  AssertEqual todo#DateAdd(2014,  08,   07,    1, 'w'), [2014, 08, 14]
+  AssertEqual todo#DateAdd(2014,  08,   07,    2, 'w'), [2014, 08, 21]
+  AssertEqual todo#DateAdd(2014,  08,   04,   -3, 'w'), [2014, 07, 14]
+  AssertEqual todo#DateAdd(2014,  08,   04,   -2, 'w'), [2014, 07, 21]
 Execute (todo#DateAdd, months):
   " Add one month to a date in the middle of the month should keep day of month
   AssertEqual todo#DateAdd(2016,  12,   27,    1, 'm'), [2017, 01, 27]
@@ -1023,7 +1030,7 @@ Execute (todo#DateAdd, years):
   AssertEqual todo#DateAdd(1915,  11,   30,   -5, 'y'), [1910, 11, 30]
   " 2012 is a leap year
   AssertEqual todo#DateAdd(2011,  02,   05,    3, 'y'), [2014, 02, 05]
-Execute (todo#DateAdd, boundaries and validity):
+Execute (todo#DateAdd, boundaries, variations and validity):
   AssertEqual todo#DateAdd(1800,  01,   01,    1, 'd'), [1900, 01, 02]
   AssertEqual todo#DateAdd(1800,  01,   01,   -1, 'd'), [1900, 01, 01]
   AssertEqual todo#DateAdd(2017,  30,   01,    1, 'd'), [2017, 12, 02]
@@ -1038,6 +1045,15 @@ Execute (todo#DateAdd, boundaries and validity):
   AssertEqual todo#DateAdd(2017,  04,   80,    1, 'm'), [2017, 05, 31]
   AssertEqual todo#DateAdd(2017,  04,   80,   -1, 'm'), [2017, 03, 31]
   AssertEqual todo#DateAdd(-1,    -1,   -1,    1, 'd'), [1900, 01, 02]
+  " Case
+  AssertEqual todo#DateAdd(1950,  10,   10,    2, 'D'), [1950, 10, 12]
+  AssertEqual todo#DateAdd(1950,  10,   10,   -2, 'D'), [1950, 10, 08]
+  AssertEqual todo#DateAdd(1950,  10,   10,    2, 'W'), [1950, 10, 24]
+  AssertEqual todo#DateAdd(1950,  10,   10,   -2, 'W'), [1950, 09, 26]
+  AssertEqual todo#DateAdd(1950,  10,   10,    2, 'M'), [1950, 12, 10]
+  AssertEqual todo#DateAdd(1950,  10,   10,   -2, 'M'), [1950, 08, 10]
+  AssertEqual todo#DateAdd(1950,  10,   10,    2, 'Y'), [1952, 10, 10]
+  AssertEqual todo#DateAdd(1950,  10,   10,   -2, 'Y'), [1948, 10, 10]
   " People may well use the behaviours below to their advantage, it could be
   " useful, we should try to keep this consistent.
   AssertEqual todo#DateAdd(0,      0,    0,    1, 'd'), [str2nr(strftime('%Y')), str2nr(strftime('%m')), str2nr(strftime('%d')) + 1]
@@ -1049,7 +1065,7 @@ Execute (todo#DateAdd, boundaries and validity):
   AssertEqual todo#DateAdd(1600,  50,   50,    0, 'd'), [1900, 12, 31]
   AssertEqual todo#DateAdd(0,     50,   50,    0, 'd'), [str2nr(strftime('%Y')), 12, 31]
 
-" function todo#ChangeDueDate(units, unit_type) {{{2
+" function todo#ChangeDueDate(units, unit_type, from_reference) {{{2
 Before:
 After:
 Given todo (Tasks with a bit of everything):
@@ -1076,14 +1092,14 @@ Given todo (Tasks with a bit of everything):
   overdue due:2011-11-11- trailing - invalidates the date                   L21
   active  due date at very end of line                                      L22 due:2058-02-01
 Execute (todo#ChangeDueDate):
-  :%call todo#ChangeDueDate(1, 'd')
+  :%call todo#ChangeDueDate(1, 'd', '')
   :let [s:year, s:month, s:day] = todo#ParseDate(strftime("%Y-%m-%d"))
   :let [s:year, s:month, s:day] = todo#DateAdd(s:year, s:month, s:day, 1, 'd')
   :let s:duedate = printf('%04d', s:year) . '-' . printf('%02d', s:month) . '-' . printf('%02d', s:day)
-  execute "silent %substitute/" . s:duedate . "/**EXPECTDUE**/"
+  :call ReplaceCurrentDates(s:duedate)
 Expect todo (Tasks with due date incremented):
   active  dUE:2051-01-02 cAsE                                               L01
-  notdue  overdue:2011-11-11 invalid key                                    L02 due:**EXPECTDUE**
+  notdue  overdue:2011-11-11 invalid key                                    L02 due:**EXPECTED**
   xoverdue due:2001-02-02 This is not done (must be lower x)                L03
   x done  due:2011-11-11 completed task                                     L04
   notdue  due: 2011-11-11 space invalidates due:                            L05
@@ -1095,7 +1111,7 @@ Expect todo (Tasks with due date incremented):
   +Project overdue due:2003-02-02 project at start of line                  L11
   notdue  due:2011                                                          L12
   active  DUe:2052-01-02 cAsE                                               L13
-  notdue  @Project                                                          L14 due:**EXPECTDUE**
+  notdue  @Project                                                          L14 due:**EXPECTED**
   active  key:value due:2054-01-02 leading key:value                        L15
   overdue due:2011-01-01                                                    L16
   notdue  due:invalid    invalid due date                                   L17
@@ -1105,10 +1121,168 @@ Expect todo (Tasks with due date incremented):
   overdue due:2011-11-11- trailing - invalidates the date                   L21
   active  due date at very end of line                                      L22 due:2058-02-02
 
+" function todo#CreateNewRecurrence(triggerOnNonStrict) {{{2
+Before:
+After:
+Given todo (Recurring tasks - strict):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task rec:+5d should be 2020-01-07 after
+  L03 dUE:2020-01-03 cAsE rEc:+5M should be 2020-06-03 after
+  rec:+1y L04 task starting with a recur keyword due:2020-01-04 should be 2021-01-04 after
+  L05 due:2020-01-05 recur at end of line, should be 2020-01-19 after rec:+2w
+  L06 due:2020-01-06 REC:+1D REC:+1W REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L07 unrelated task 2
+Execute (todo#CreateNewRecurrence 1):
+  :01call todo#CreateNewRecurrence(1)
+  :AssertEqual 1, line('.')
+  :02call todo#CreateNewRecurrence(1)
+  :AssertEqual 2, line('.')
+  :04call todo#CreateNewRecurrence(1)
+  :AssertEqual 4, line('.')
+  :06call todo#CreateNewRecurrence(1)
+  :AssertEqual 6, line('.')
+  :08call todo#CreateNewRecurrence(1)
+  :AssertEqual 8, line('.')
+  :10call todo#CreateNewRecurrence(1)
+  :10call todo#CreateNewRecurrence(1)
+  :10call todo#CreateNewRecurrence(1)
+  :AssertEqual 10, line('.')
+Expect todo (New task and recurrence due date extended):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task should be 2020-01-07 after
+  L02 due:2020-01-07 strict recurring task rec:+5d should be 2020-01-07 after
+  L03 dUE:2020-01-03 cAsE should be 2020-06-03 after
+  L03 dUE:2020-06-03 cAsE rEc:+5M should be 2020-06-03 after
+  L04 task starting with a recur keyword due:2020-01-04 should be 2021-01-04 after
+  rec:+1y L04 task starting with a recur keyword due:2021-01-04 should be 2021-01-04 after
+  L05 due:2020-01-05 recur at end of line, should be 2020-01-19 after
+  L05 due:2020-01-19 recur at end of line, should be 2020-01-19 after rec:+2w
+  L06 due:2020-01-06 select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2021-01-06 REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2020-01-13 REC:+1W REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2020-01-07 REC:+1D REC:+1W REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L07 unrelated task 2
+Execute (todo#CreateNewRecurrence 0):
+" Calling with 0 or 1 for strict recurrence should yield the same results
+  :01call todo#CreateNewRecurrence(0)
+  :AssertEqual 1, line('.')
+  :02call todo#CreateNewRecurrence(0)
+  :AssertEqual 2, line('.')
+  :04call todo#CreateNewRecurrence(0)
+  :AssertEqual 4, line('.')
+  :06call todo#CreateNewRecurrence(0)
+  :AssertEqual 6, line('.')
+  :08call todo#CreateNewRecurrence(0)
+  :AssertEqual 8, line('.')
+  :10call todo#CreateNewRecurrence(0)
+  :10call todo#CreateNewRecurrence(0)
+  :10call todo#CreateNewRecurrence(0)
+  :AssertEqual 10, line('.')
+Expect todo (New task and recurrence due date extended):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task should be 2020-01-07 after
+  L02 due:2020-01-07 strict recurring task rec:+5d should be 2020-01-07 after
+  L03 dUE:2020-01-03 cAsE should be 2020-06-03 after
+  L03 dUE:2020-06-03 cAsE rEc:+5M should be 2020-06-03 after
+  L04 task starting with a recur keyword due:2020-01-04 should be 2021-01-04 after
+  rec:+1y L04 task starting with a recur keyword due:2021-01-04 should be 2021-01-04 after
+  L05 due:2020-01-05 recur at end of line, should be 2020-01-19 after
+  L05 due:2020-01-19 recur at end of line, should be 2020-01-19 after rec:+2w
+  L06 due:2020-01-06 select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2021-01-06 REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2020-01-13 REC:+1W REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L06 due:2020-01-07 REC:+1D REC:+1W REC:+1Y select first rec: and then chain should be 2020-01-07, 2020-01-13, 2021-01-06 after
+  L07 unrelated task 2
+
+Given todo (Recurring tasks - non-strict):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task rec:2d
+  L03 dUE:2020-01-03 cAsE rEc:2M
+  rec:2y L04 task starting with a recur keyword due:2020-01-04
+  L05 due:2020-01-05 recur at end of line rec:2w
+  L06 due:2020-01-06 REC:2D REC:2W REC:2Y select first rec: and then chain
+  L07 unrelated task 2
+Execute (todo#CreateNewRecurrence 1):
+" Calling with 1 on non-strict should trigger recurrence
+  :01call todo#CreateNewRecurrence(1)
+  :AssertEqual 1, line('.')
+  :02call todo#CreateNewRecurrence(1)
+  :AssertEqual 2, line('.')
+  :04call todo#CreateNewRecurrence(1)
+  :AssertEqual 4, line('.')
+  :06call todo#CreateNewRecurrence(1)
+  :AssertEqual 6, line('.')
+  :08call todo#CreateNewRecurrence(1)
+  :AssertEqual 8, line('.')
+  :10call todo#CreateNewRecurrence(1)
+  :10call todo#CreateNewRecurrence(1)
+  :10call todo#CreateNewRecurrence(1)
+  :AssertEqual 10, line('.')
+  :call ReplaceCurrentDates('')
+Expect todo (New task and recurrence due date extended):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task
+  L02 due:**TODAY+2D** strict recurring task rec:2d
+  L03 dUE:2020-01-03 cAsE
+  L03 dUE:**TODAY+2M** cAsE rEc:2M
+  L04 task starting with a recur keyword due:2020-01-04
+  rec:2y L04 task starting with a recur keyword due:**TODAY+2Y**
+  L05 due:2020-01-05 recur at end of line
+  L05 due:**TODAY+2W** recur at end of line rec:2w
+  L06 due:2020-01-06 select first rec: and then chain
+  L06 due:**TODAY+2Y** REC:2Y select first rec: and then chain
+  L06 due:**TODAY+2W** REC:2W REC:2Y select first rec: and then chain
+  L06 due:**TODAY+2D** REC:2D REC:2W REC:2Y select first rec: and then chain
+  L07 unrelated task 2
+Execute (todo#CreateNewRecurrence 0):
+" Calling with 0 on non-strict should not make any changes
+  :1call todo#CreateNewRecurrence(0)
+  :AssertEqual 1, line('.')
+  :2call todo#CreateNewRecurrence(0)
+  :AssertEqual 2, line('.')
+  :3call todo#CreateNewRecurrence(0)
+  :AssertEqual 3, line('.')
+  :4call todo#CreateNewRecurrence(0)
+  :AssertEqual 4, line('.')
+  :5call todo#CreateNewRecurrence(0)
+  :AssertEqual 5, line('.')
+  :6call todo#CreateNewRecurrence(0)
+  :AssertEqual 6, line('.')
+Expect todo (Recurring tasks - non-strict, not modified):
+  L01 unrelated task 1
+  L02 due:2020-01-02 strict recurring task rec:2d
+  L03 dUE:2020-01-03 cAsE rEc:2M
+  rec:2y L04 task starting with a recur keyword due:2020-01-04
+  L05 due:2020-01-05 recur at end of line rec:2w
+  L06 due:2020-01-06 REC:2D REC:2W REC:2Y select first rec: and then chain
+  L07 unrelated task 2
+
 " file: ftplugin/todo.vim {{{1
 
 " Mappings {{{2
 
+" Mappings: <LocalLeader>x {{{3
+Before:
+After:
+Given todo (Tasks):
+  Active task
+  x 2015-01-01 Complete task
+  Strict recurring task due:2016-01-01 rec:+1m
+  Non-strict recurring task due:2017-01-01 rec:2d
+Do:
+  \xj\xj\xjj\x
+Then:
+  call ReplaceCurrentDates('')
+Expect todo (Tasks toggled complete):
+  x **TODAY** Active task
+  Complete task
+  x **TODAY** Strict recurring task due:2016-01-01
+  Strict recurring task due:2016-02-01 rec:+1m
+  x **TODAY** Non-strict recurring task due:2017-01-01
+  Non-strict recurring task due:**TODAY+2D** rec:2d
+
+
+" Mappings: <LocalLeader>p / <LocalLeader>P {{{3
 Before:
 After:
 Given todo (Tasks):
@@ -1117,14 +1291,26 @@ Given todo (Tasks):
   Third task, postpone -1 day, should result in 2017-02-19 due:2017-02-20
   Forth task, postpone -5 day, should result in 2017-02-15 due:2017-02-20
   Fifth task, should not be changed from 2017-03-01 due:2017-03-01
+  Strict recurring task due:2017-01-01 rec:+2d should result in 2017-01-02 and 2017-01-03
+  Non-strict recurring task due:2017-02-01 rec:1d should result in 2017-02-02
 Do (Postpone tasks - normal mode):
-  \pj5\pj\Pj5\P
+  \p j
+  5\p j
+  \P j
+  5\P j
+  j
+  \p j
+  j
+  \p
 Expect todo (Postponed tasks):
   First task, postpone 1 day, should result in 2017-01-02 due:2017-01-02
   Second task, postpone 5 days, should result in 2017-01-06 due:2017-01-06
   Third task, postpone -1 day, should result in 2017-02-19 due:2017-02-19
   Forth task, postpone -5 day, should result in 2017-02-15 due:2017-02-15
   Fifth task, should not be changed from 2017-03-01 due:2017-03-01
+  Strict recurring task due:2017-01-02 should result in 2017-01-02 and 2017-01-03
+  Strict recurring task due:2017-01-03 rec:+2d should result in 2017-01-02 and 2017-01-03
+  Non-strict recurring task due:2017-02-02 rec:1d should result in 2017-02-02
 
 Given todo (Tasks):
   Task visual block 1, should result in 2017-01-02 due:2017-01-01           L01
@@ -1149,6 +1335,7 @@ Expect todo (Postponed tasks):
   Task visual block 4, should result in 2017-02-15 due:2017-02-15           L08
   Fifth task, should not be changed from 2017-03-01 due:2017-03-01          L09
 
+" Mappings: o, O, <Enter> {{{3
 Before:
   let g:Todo_txt_prefix_creation_date=0
 After:
@@ -1173,7 +1360,7 @@ Execute (Open some new lines):
   :normal oNew task o
   :normal ONew task O
   :normal ANew task CR
-  execute "silent %substitute/" . strftime("%Y-%m-%d") . "/**TODAY**/"
+  :call ReplaceCurrentDates('')
 Expect todo (New task with no creation date):
   
   **TODAY** New task O
@@ -1216,5 +1403,7 @@ Execute (Check folding text):
   AssertEqual foldtextresult(4),  '+- 1 Completed tasks '
 
 "}}}
+
+Include: include/teardown.vader
 
 " vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab foldmethod=marker

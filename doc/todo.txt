@@ -22,12 +22,13 @@ Table of Contents                                          *TodoTxt-Contents* ~
     3. TodoTxt Files.................................|TodoTxt-Files|
     4. Completion....................................|TodoTxt-Completion|
     5. Hierarchical Sort.............................|TodoTxt-HierarchicalSort|
-    6. Mappings......................................|TodoTxt-Mappings|
-        6.1 Sort.....................................|TodoTxt-Sort|
-        6.2 Priorities...............................|TodoTxt-Priorities|
-        6.3 Dates....................................|TodoTxt-Dates|
-        6.4 Done.txt.................................|TodoTxt-Done|
-        6.5 Format...................................|TodoTxt-Format|
+    6. Recurrence....................................|TodoTxt-Recurrence|
+    7. Mappings......................................|TodoTxt-Mappings|
+        7.1 Sort.....................................|TodoTxt-Sort|
+        7.2 Priorities...............................|TodoTxt-Priorities|
+        7.3 Dates....................................|TodoTxt-Dates|
+        7.4 Done.txt.................................|TodoTxt-Done|
+        7.5 Format...................................|TodoTxt-Format|
 
 ===============================================================================
 1. Release notes                                       *TodoTxt-ReleaseNotes* ~
@@ -219,9 +220,28 @@ Defaults values are:
 <
 
 For more information on the available flags see |:sort|
-
 ===============================================================================
-6. Mappings                                                *TodoTxt-Mappings* ~
+6. Recurrence                                            *TodoTxt-Recurrence* ~
+
+By adding a "rec:" tag to your task, when you complete (`<LocalLeader>x`) or
+postpone (`<LocalLeader>p`) the task, a new recurrence will be created due after
+the specified amount of time.
+
+The format is:
+    `rec:[+][count][d|w|m|y]`
+
+Where:
+    d = days, w = weeks, m = months, y = years
+    The optional `+` specifies strict recurrence (see below)
+
+Examples:
+    *   `rec:2w` - Recurs two weeks after the task is completed.
+    *   `rec:3d` - Recurs three days after the task is completed.
+    *   `rec:+1w` - Recurs one week from the due date (strict)
+
+This is a non-standard but widely adopted keyword.
+===============================================================================
+7. Mappings                                                *TodoTxt-Mappings* ~
 
 By default todo-txt.vim set all the mappings described in this section. To
 prevent this behavior, add the following line to your vimrc
@@ -229,7 +249,7 @@ prevent this behavior, add the following line to your vimrc
    let g:Todo_txt_do_not_map=1
 <
 
-6.1 Sort                                                         *TodoTxt-Sort*
+7.1 Sort                                                         *TodoTxt-Sort*
 
     `<LocalLeader>s` : Sort the file by priority
 
@@ -262,7 +282,7 @@ Possible values are :
 + `notoverdue`: The first task that is not overdue (requires #13)
 + `bottom`: The last line of the buffer
 
-6.2 Priorities                                             *TodoTxt-Priorities*
+7.2 Priorities                                             *TodoTxt-Priorities*
 
     `<LocalLeader>j` : Lower the priority of the current line
 
@@ -274,7 +294,7 @@ Possible values are :
 
     `<LocalLeader>c` : Add the priority (C) to the current line
 
-6.3 Dates                                                       *TodoTxt-Dates*
+7.3 Dates                                                       *TodoTxt-Dates*
 
     `<LocalLeader>d` : Insert the current date
 
@@ -294,7 +314,7 @@ following to your vimrc:
     let g:Todo_txt_prefix_creation_date=1
 <
 
-6.4 Done                                                         *TodoTxt-Done*
+7.4 Done                                                         *TodoTxt-Done*
 
 
     `<LocalLeader>x` : Toggle mark task as done (inserts or remove current
@@ -308,6 +328,6 @@ following to your vimrc:
 
 `<LocalLeader>` is \ by default, so ̀`<LocaLeader>-s` means you type \s
 
-6.5 Format                                                     *TodoTxt-format*
+7.5 Format                                                     *TodoTxt-format*
 
     `<LocalLeader>ff` : Try to fix todo.txt format
