@@ -150,6 +150,7 @@ endfunction
 function! todo#Sort()
     " vim :sort is usually stable
     " we sort first on contexts, then on projects and then on priority
+    let g:Todo_fold_char='x'
     if expand('%')=~'[Dd]one.*.txt'
         " FIXME: Put some unit tests around this, and fix case sensitivity if ignorecase is set.
         silent! %s/\(x\s*\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
@@ -268,6 +269,7 @@ function! todo#HierarchicalSort(symbol, symbolsub, dolastsort)
         "Empty buffer do nothing
         return
     endif
+    let g:Todo_fold_char=a:symbol
     "if the sort modes doesn't start by '!' it must start with a space
     let l:sortmode=Todo_txt_InsertSpaceIfNeeded(g:Todo_txt_first_level_sort_mode)
     let l:sortmodesub=Todo_txt_InsertSpaceIfNeeded(g:Todo_txt_second_level_sort_mode)
