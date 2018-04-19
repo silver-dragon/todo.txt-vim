@@ -29,10 +29,6 @@ function! todo#GetCurpos()
         return getpos('.')
 endfunction
 
-" Increment and Decrement The Priority.
-" TODO: Make nrformats local to buffers of type todo
-:set nf=octal,hex,alpha
-
 function! todo#PrioritizeIncrease()
     normal! 0f)h
 endfunction
