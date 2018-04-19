@@ -16,10 +16,13 @@ set cpo&vim
 
 " General options {{{1
 " Some options lose their values when window changes. They will be set every
-" time this script is invocated, which is whenever a file of this type is
+" time this script is invoked, which is whenever a file of this type is
 " created or edited.
 setlocal textwidth=0
 setlocal wrapmargin=0
+
+" Increment and decrement the priority use <C-A> and <C-X> on alpha
+setlocal nrformats+=alpha
 
 " Mappings {{{1
 
