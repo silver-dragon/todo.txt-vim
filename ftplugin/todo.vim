@@ -108,18 +108,17 @@ setlocal foldtext=TodoFoldText()
 
 " Go to first completed task
 let oldpos=getcurpos()
-let g:Todo_fold_char='@'
-let base_pos=search('^x\s', 'ce')
-" Get next completed task
-let first_incomplete = search('^\s*[^<x\s>]')
-if (first_incomplete < base_pos)
-    " Check if all tasks from
-    let g:Todo_fold_char='x'
-else
-    " TODO detect if sorted on prjects
+if(!exists("g:Todo_fold_char"))
     let g:Todo_fold_char='@'
+    let base_pos=search('^x\s', 'ce')
+    " Get next completed task
+    let first_incomplete = search('^\s*[^<x\s>]')
+    if (first_incomplete < base_pos)
+        " Check if all tasks from
+        let g:Todo_fold_char='x'
+    endif
+    call setpos('.', oldpos)
 endif
-call setpos('.', oldpos)
 
 function! s:get_contextproject(line) abort "{{{2
     return matchstr(getline(a:line), g:Todo_fold_char.'[^ ]\+')
@@ -156,7 +155,7 @@ function! TodoFoldText()
     " where N is the number of lines folded.
     return '+' . v:folddashes . ' '
                 \ . (v:foldend - v:foldstart + 1)
-                \ .' '. this_context
+                \ .' '. this_context.' '
 endfunction
 
 " Restore context {{{1

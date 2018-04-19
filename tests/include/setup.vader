@@ -15,6 +15,7 @@ Execute (Clean up test environment):
        execute "silent! %substitute/" . s:duedate . "/**TODAY+2" . b:unit . "**/"
     endfor
   endfunction
+  let g:Todo_fold_char='x'
 
 Before:
 After:
