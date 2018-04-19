@@ -26,74 +26,81 @@ setlocal nrformats+=alpha
 
 " Mappings {{{1
 
-nnoremap <silent> <buffer> <Plug>TodotxtIncrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateNormal")<CR>
-vnoremap <silent> <buffer> <Plug>TodotxtIncrementDueDateVisual :call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateVisual")<CR>
-nnoremap <silent> <buffer> <Plug>TodotxtDecrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateNormal")<CR>
-vnoremap <silent> <buffer> <Plug>TodotxtDecrementDueDateVisual :call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateVisual")<CR>
+" <Plug> mappings that users can map alternate keys to {{{2
+" if they choose not to map default keys (or otherwise)
+nnoremap <script> <silent> <buffer> <Plug>TodotxtIncrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateNormal")<CR>
+vnoremap <script> <silent> <buffer> <Plug>TodotxtIncrementDueDateVisual :call <SID>ChangeDueDateWrapper(1, "\<Plug>TodotxtIncrementDueDateVisual")<CR>
+nnoremap <script> <silent> <buffer> <Plug>TodotxtDecrementDueDateNormal :<C-u>call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateNormal")<CR>
+vnoremap <script> <silent> <buffer> <Plug>TodotxtDecrementDueDateVisual :call <SID>ChangeDueDateWrapper(-1, "\<Plug>TodotxtDecrementDueDateVisual")<CR>
 
+noremap  <script> <silent> <buffer> <Plug>DoToggleMarkAsDone :call todo#ToggleMarkAsDone('')<CR>
+                \:silent! call repeat#set("\<Plug>DoToggleMarkAsDone")<CR>
+noremap  <script> <silent> <buffer> <Plug>DoCancel :call todo#ToggleMarkAsDone('Cancelled')<CR>
+                \:silent! call repeat#set("\<Plug>DoCancel")<CR>
+
+" Default key mappings {{{2
 if !exists("g:Todo_txt_do_not_map") || ! g:Todo_txt_do_not_map
-" Sort todo by (first) context
-    noremap <silent><localleader>sc :call todo#HierarchicalSort('@', '', 1)<CR>
+" Sort todo by (first) context {{{3
+    noremap  <script> <silent> <buffer> <localleader>sc :call todo#HierarchicalSort('@', '', 1)<CR>
+    noremap  <script> <silent> <buffer> <localleader>scp :call todo#HierarchicalSort('@', '+', 1)<CR>
 
-    noremap <silent><localleader>scp :call todo#HierarchicalSort('@', '+', 1)<CR>
-" Sort todo by (first) project
-    noremap <silent><localleader>sp :call todo#HierarchicalSort('+', '',1)<CR>
-    noremap <silent><localleader>spc :call todo#HierarchicalSort('+', '@',1)<CR>
+" Sort todo by (first) project {{{3
+    noremap  <script> <silent> <buffer> <localleader>sp :call todo#HierarchicalSort('+', '',1)<CR>
+    noremap  <script> <silent> <buffer> <localleader>spc :call todo#HierarchicalSort('+', '@',1)<CR>
 
-" Sort tasks {{{2
-    nnoremap <script> <silent> <buffer> <LocalLeader>s :call todo#Sort()<CR>
-    nnoremap <script> <silent> <buffer> <LocalLeader>s@ :sort /.\{-}\ze@/ <CR>
-    nnoremap <script> <silent> <buffer> <LocalLeader>s+ :sort /.\{-}\ze+/ <CR>
-" Priorities {{{2
-    noremap <script> <silent> <buffer> <LocalLeader>j :call todo#PrioritizeIncrease()<CR>
-    noremap <script> <silent> <buffer> <LocalLeader>k :call todo#PrioritizeDecrease()<CR>
+" Sort tasks {{{3
+    nnoremap <script> <silent> <buffer> <localleader>s :call todo#Sort()<CR>
+    nnoremap <script> <silent> <buffer> <localleader>s@ :sort /.\{-}\ze@/ <CR>
+    nnoremap <script> <silent> <buffer> <localleader>s+ :sort /.\{-}\ze+/ <CR>
 
-    noremap <script> <silent> <buffer> <LocalLeader>a :call todo#PrioritizeAdd('A')<CR>
-    noremap <script> <silent> <buffer> <LocalLeader>b :call todo#PrioritizeAdd('B')<CR>
-    noremap <script> <silent> <buffer> <LocalLeader>c :call todo#PrioritizeAdd('C')<CR>
+" Priorities {{{3
+    " TODO: Make vim-repeat work on inc/dec priority
+    noremap  <script> <silent> <buffer> <localleader>j :call todo#PrioritizeIncrease()<CR>
+    noremap  <script> <silent> <buffer> <localleader>k :call todo#PrioritizeDecrease()<CR>
 
-" Insert date {{{2
+    noremap  <script> <silent> <buffer> <localleader>a :call todo#PrioritizeAdd('A')<CR>
+    noremap  <script> <silent> <buffer> <localleader>b :call todo#PrioritizeAdd('B')<CR>
+    noremap  <script> <silent> <buffer> <localleader>c :call todo#PrioritizeAdd('C')<CR>
+
+" Insert date {{{3
     inoremap <script> <silent> <buffer> date<Tab> <C-R>=strftime("%Y-%m-%d")<CR>
 
     inoremap <script> <silent> <buffer> due: due:<C-R>=strftime("%Y-%m-%d")<CR>
     inoremap <script> <silent> <buffer> DUE: DUE:<C-R>=strftime("%Y-%m-%d")<CR>
 
-    noremap <script> <silent> <buffer> <localleader>d :call todo#PrependDate()<CR>
+    noremap  <script> <silent> <buffer> <localleader>d :call todo#PrependDate()<CR>
 
-" Mark done {{{2
-    noremap <script> <silent> <buffer> <Plug>DoToggleMarkAsDone :call todo#ToggleMarkAsDone('')<CR>
-                \:silent! call repeat#set("\<Plug>DoToggleMarkAsDone")<CR>
-    nmap <localleader>x <Plug>DoToggleMarkAsDone
-    " noremap <script> <silent> <buffer> <localleader>x :call todo#ToggleMarkAsDone('')<CR>
+" Mark done {{{3
+    nmap              <silent> <buffer> <localleader>x <Plug>DoToggleMarkAsDone
 
-" Mark done {{{2
-    noremap <script> <silent> <buffer> <Plug>DoCancel :call todo#ToggleMarkAsDone('Cancelled')<CR>
-                \:silent! call repeat#set("\<Plug>DoCancel")<CR>
-    nmap <localleader>C <Plug>DoCancel
+" Mark cancelled {{{3
+    nmap              <silent> <buffer> <localleader>C <Plug>DoCancel
 
-" Mark all done {{{2
-    noremap <script> <silent> <buffer> <localleader>X :call todo#MarkAllAsDone()<CR>
+" Mark all done {{{3
+    noremap  <script> <silent> <buffer> <localleader>X :call todo#MarkAllAsDone()<CR>
 
-" Remove completed {{{2
+" Remove completed {{{3
     nnoremap <script> <silent> <buffer> <localleader>D :call todo#RemoveCompleted()<CR>
 
-" Sort by due: date {{{2
+" Sort by due: date {{{3
     nnoremap <script> <silent> <buffer> <localleader>sd :call todo#SortDue()<CR>
-" try fix format {{{2
+" try fix format {{{3
     nnoremap <script> <silent> <buffer> <localleader>ff :call todo#FixFormat()<CR>
 
-" increment and decrement due:date {{{2
-    nmap <localleader>p <Plug>TodotxtIncrementDueDateNormal
-    vmap <localleader>p <Plug>TodotxtIncrementDueDateVisual
-    nmap <localleader>P <Plug>TodotxtDecrementDueDateNormal
-    vmap <localleader>P <Plug>TodotxtDecrementDueDateVisual
+" increment and decrement due:date {{{3
+    nmap              <silent> <buffer> <localleader>p <Plug>TodotxtIncrementDueDateNormal
+    vmap              <silent> <buffer> <localleader>p <Plug>TodotxtIncrementDueDateVisual
+    nmap              <silent> <buffer> <localleader>P <Plug>TodotxtDecrementDueDateNormal
+    vmap              <silent> <buffer> <localleader>P <Plug>TodotxtDecrementDueDateVisual
 
-" Prefix creation date when opening a new line {{{2
-    if exists("g:Todo_txt_prefix_creation_date")
-        nnoremap <script> <silent> <buffer> o o<C-R>=strftime("%Y-%m-%d")<CR> 
-        nnoremap <script> <silent> <buffer> O O<C-R>=strftime("%Y-%m-%d")<CR> 
-        inoremap <script> <silent> <buffer> <CR> <CR><C-R>=strftime("%Y-%m-%d")<CR> 
-    endif
+endif
+
+" Additional options {{{2
+" Prefix creation date when opening a new line {{{3
+if exists("g:Todo_txt_prefix_creation_date")
+    nnoremap <script> <silent> <buffer> o o<C-R>=strftime("%Y-%m-%d")<CR> 
+    nnoremap <script> <silent> <buffer> O O<C-R>=strftime("%Y-%m-%d")<CR> 
+    inoremap <script> <silent> <buffer> <CR> <CR><C-R>=strftime("%Y-%m-%d")<CR> 
 endif
 
 " Functions for maps {{{1
