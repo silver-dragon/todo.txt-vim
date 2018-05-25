@@ -167,7 +167,16 @@ function! todo#Sort()
         endif
         sort /@[a-zA-Z]*/ r
         sort /+[a-zA-Z]*/ r
-        sort /\v([A-Z])/ r
+        sort /\v\([A-Z]\)/ r
+        "Now tasks without priority are at beggining, move them to the end
+        silent normal gg
+        let l:firstP=search('^\s*([A-Z])', 'cn')
+        if  l:firstP != 1
+            let num=l:firstP-1
+            " Sort normal
+            execute ':1 d b'.num
+            silent normal G"bp
+        endif
         if l:first != 0
             silent normal G"ap
             execute ':'.l:first.','.l:last.'sort /@[a-zA-Z]*/ r'
