@@ -65,12 +65,22 @@ function! todo#PrependDate()
     endif
 endfunction
 
+function todo#SaveRegisters()
+    let s:last_search=@/
+endfunction
+
+function todo#RestoreRegisters()
+    let @/=s:last_search
+endfunction
+
 function! todo#ToggleMarkAsDone(status)
+    call todo#SaveRegisters()
     if (getline(".") =~ '\C^x\s*\d\{4\}')
         :call todo#UnMarkAsDone(a:status)
     else
         :call todo#MarkAsDone(a:status)
     endif
+    call todo#RestoreRegisters()
 endfunction
 
 function! todo#FixFormat()
