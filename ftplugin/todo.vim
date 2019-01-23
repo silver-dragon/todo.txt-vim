@@ -49,9 +49,9 @@ if !exists("g:Todo_txt_do_not_map") || ! g:Todo_txt_do_not_map
     noremap  <script> <silent> <buffer> <localleader>spc :call todo#HierarchicalSort('+', '@',1)<CR>
 
 " Sort tasks {{{3
-    nnoremap <script> <silent> <buffer> <localleader>s :call todo#Sort()<CR>
-    nnoremap <script> <silent> <buffer> <localleader>s@ :sort /.\{-}\ze@/ <CR>
-    nnoremap <script> <silent> <buffer> <localleader>s+ :sort /.\{-}\ze+/ <CR>
+    nnoremap <script> <silent> <buffer> <localleader>s :call todo#Sort("")<CR>
+    nnoremap <script> <silent> <buffer> <localleader>s@ :call todo#Sort("@")<CR>
+    nnoremap <script> <silent> <buffer> <localleader>s+ :call todo#Sort("+")<CR>
 
 " Priorities {{{3
     " TODO: Make vim-repeat work on inc/dec priority
