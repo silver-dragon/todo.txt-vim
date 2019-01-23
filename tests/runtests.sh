@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_TOP="$(dirname $0)/.."
+REPO_TOP=$(git rev-parse --show-toplevel)
 cd "${REPO_TOP}"
 
 echo "Basic environment"
