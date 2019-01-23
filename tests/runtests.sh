@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 REPO_TOP="$(dirname $0)/.."
 cd "${REPO_TOP}"
