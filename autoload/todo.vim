@@ -153,17 +153,19 @@ function! todo#RemoveCompleted()
     call s:AppendToFile(l:done_file, l:completed)
 endfunction
 
-function! todo#Sort()
+function! todo#Sort(type)
     " vim :sort is usually stable
     " we sort first on contexts, then on projects and then on priority
     let g:Todo_fold_char='x'
-    if expand('%')=~'[Dd]one.*.txt'
+    let oldcursor=todo#GetCurpos()
+    if(a:type != "")
+        exec ':sort /.\{-}\ze'.a:type.'/'
+    elseif expand('%')=~'[Dd]one.*.txt'
         " FIXME: Put some unit tests around this, and fix case sensitivity if ignorecase is set.
         silent! %s/\(x\s*\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
         sort n /^x\s*/
         silent! %s/\(x\s*\d\{4}\)\(\d\{2}\)/\1-\2-/g
     else
-        let oldcursor=getpos(".")
         silent normal gg
         let l:first=search('^\s*x')
         if  l:first != 0
@@ -193,8 +195,8 @@ function! todo#Sort()
             execute ':'.l:first.','.l:last.'sort /+[a-zA-Z]*/ r'
             execute ':'.l:first.','.l:last.'sort /\v([A-Z])/ r'
         endif
-        call cursor(oldcursor)
     endif
+    call setpos('.', oldcursor)
 endfunction
 
 function! todo#SortDue()
