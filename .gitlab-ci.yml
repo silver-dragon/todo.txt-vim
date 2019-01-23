@@ -1,6 +1,3 @@
-stages:
-    -test
-
 test-vim-latest:
     image: thinca/vim:v7.4
     script:
