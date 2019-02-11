@@ -7,7 +7,7 @@
 if exists("g:Todo_txt_loaded")
     finish
 else
-    let g:Todo_txt_loaded=0.8.1
+    let g:Todo_txt_loaded=0.8.2
 endif
 
 " Save context {{{1

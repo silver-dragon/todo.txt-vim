@@ -187,7 +187,7 @@ function! todo#Sort(type)
         "Now tasks without priority are at beggining, move them to the end
         silent normal gg
         let l:firstP=search('^\s*([A-Z])', 'cn')
-        if  l:firstP != 1
+        if  l:firstP > 1
             let num=l:firstP-1
             " Sort normal
             silent execute ':1 d b'.num
