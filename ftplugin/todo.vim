@@ -4,9 +4,7 @@
 " License:     Vim license
 " Website:     http://github.com/dbeniamine/todo.txt-vim
 
-if exists("g:Todo_txt_loaded")
-    finish
-else
+if ! exists("g:Todo_txt_loaded")
     let g:Todo_txt_loaded=0.8.2
 endif
 
