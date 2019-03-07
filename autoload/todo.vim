@@ -51,6 +51,7 @@ endfunction
 
 function! todo#PrioritizeAddAction (priority)
     execute "normal! mq0i(".a:priority.") \<esc>`q"
+    execute "delmarks q"
 endfunction
 
 function! todo#RemovePriority()
