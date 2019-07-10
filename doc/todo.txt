@@ -29,6 +29,7 @@ Table of Contents                                          *TodoTxt-Contents* ~
         7.3 Dates....................................|TodoTxt-Dates|
         7.4 Done.txt.................................|TodoTxt-Done|
         7.5 Format...................................|TodoTxt-Format|
+    8. Fold..........................................|TodoTxt-Fold|
 
 ===============================================================================
 1. Release notes                                       *TodoTxt-ReleaseNotes* ~
@@ -339,3 +340,12 @@ disable this behavior by setting the following global variable:
 7.5 Format                                                     *TodoTxt-format*
 
     `<LocalLeader>ff` : Try to fix todo.txt format
+
+===============================================================================
+8. Fold                                                         *TodoTxt-fold* ~
+
+Todo.txt files can be folded by projects or context (see |fold|), by default
+they are foldable by context, to use project fold :
+>
+
+    let g:Todo_fold_char='+'
