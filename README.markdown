@@ -20,7 +20,8 @@
 3. [TodoTxt Files](#todotxt-files)
 4. [Completion](#completion)
 5. [Hierarchical Sort](#hierarchical-sort)
-6. [Mappings](#mappings)
+6. [Recurrence](#recurrence)
+7. [Mappings](#mappings)
     1. [Sort](#sort)
     2. [Priorities](#priorities)
     3. [Dates](#dates)
@@ -229,6 +230,26 @@ Examples:
 
 This is a non-standard but widely adopted keyword.
 
+## Recurrence
+
+By adding a `rec:` tag to your task, when you complete (`<LocalLeader>x`) or
+postpone (`<LocalLeader>p`) the task, a new recurrence will be created due after
+the specified amount of time.
+
+The format is:
+    `rec:[+][count][d|w|m|y]`
+
+Where:
+    d = days, w = weeks, m = months, y = years
+    The optional `+` specifies strict recurrence (see below)
+
+Examples:
+    *   `rec:2w` - Recurs two weeks after the task is completed.
+    *   `rec:3d` - Recurs three days after the task is completed.
+    *   `rec:+1w` - Recurs one week from the due date (strict)
+
+This is a non-standard but widely adopted keyword.
+
 ## Mappings
 
 By default todo-txt.vim sets all the mappings described in this section. To
@@ -309,3 +330,10 @@ disable this behavior by setting the following global variable:
 ### Format
 
 + `<LocalLeader>ff` : Try to fix todo.txt format
+
+## Fold
+
+Todo.txt files can be folded by projects or context (see `:help fold`), by
+default they are foldable by context, to use project fold :
+
+    let g:Todo_fold_char='+'
