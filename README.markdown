@@ -94,6 +94,13 @@ functionalities including:
 
 ### Installation
 
+Todo.txt-vim is a filetype plugin, make sure that your vimrc contains :
+
+```vim
+syntax on
+filetype plugin on
+```
+
 #### Vizardry
 
 If you have [Vizardry](https://github.com/dbeniamine/vizardry) installed,

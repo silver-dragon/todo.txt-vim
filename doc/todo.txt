@@ -102,6 +102,11 @@ by David Beniamine.
 
 2.3 Installation                                         *TodoTxt-Installation*
 
+Todo.txt-vim is a filetype plugin, make sure that your vimrc contains :
+>
+    syntax on
+    filetype plugin on
+<
 + Vizardry
 
     If you have Vizardry(https://github.com/dbeniamine/vizardry) installed,
