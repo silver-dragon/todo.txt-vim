@@ -148,7 +148,7 @@ And obviously the same are recognize as done:
 
 Moreover, `<LocalLeader>D` moves the task under the cursor to the done.txt
 file corresponding to the current todo.txt, aka if you are editing
-2015-07-07-todo.txt, the done file while be 2015-07-07-done.txt. If you don't
+2015-07-07-todo.txt, the done file will be 2015-07-07-done.txt. If you don't
 like this behavior, you can set the default done.txt name:
 
     let g:TodoTxtForceDoneName='done.txt'
