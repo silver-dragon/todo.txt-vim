@@ -296,6 +296,21 @@ following to your vimrc:
 
     let g:Todo_txt_prefix_creation_date=1
 
+With insert mode maps on, typing `date<Tab>` or `due:` can feel like glitches
+This is because vim wait for mappings before inserting the words to the buffer.
+To prevent the glitches, abbreviations can be used instead of mappings.
+To turn it on, add the following to your vimrc:
+
+    let g:TodoTxtUseAbbrevInsertMode=1
+
+Abbreviations uses word separator to expand the abbreviations, thus `<Tab>`
+is unavailable on abbreviations. Turning abbreviations mode will change
+`date<Tab>` mapping into `date:`. The resulting abbreviations would be: 
+
++    `date:`  : (Insert mode) Insert the current date
++    `due:`  : (Insert mode) Insert `due:` followed by the current date
++    `DUE:`  : (Insert mode) Insert `DUE:` followed by the current date
+
 
 ### Done
 
