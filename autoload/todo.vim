@@ -144,7 +144,13 @@ function! todo#RemoveCompleted()
     if exists("g:TodoTxtForceDoneName")
         let l:done=g:TodoTxtForceDoneName
     else
-        let l:done=substitute(substitute(expand('%:t'),'todo','done',''),'Todo','Done','')
+        let l:currentfile=expand('%:t')
+
+        if l:currentfile =~ '[Tt]oday.txt'
+            let l:done=substitute(substitute(l:currentfile,'today','done-today',''),'Today','Done-Today','')
+        else
+            let l:done=substitute(substitute(l:currentfile,'todo','done',''),'Todo','Done','')
+        endif
     endif
     let l:done_file = l:target_dir.'/'.l:done
     echo "Writing to ".l:done_file
