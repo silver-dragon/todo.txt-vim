@@ -40,11 +40,11 @@ endfunction
 function! todo#PrioritizeAdd (priority)
     let oldpos=todo#GetCurpos()
     let line=getline('.')
-    if line !~ '^([A-F])'
+    if line !~ '^([A-W])'
         :call todo#PrioritizeAddAction(a:priority)
         let oldpos[2]+=4
     else
-        exec ':s/^([A-F])/('.a:priority.')/'
+        exec ':s/^([A-W])/('.a:priority.')/'
     endif
     call setpos('.',oldpos)
 endfunction
