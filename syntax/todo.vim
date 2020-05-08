@@ -50,6 +50,8 @@ highlight  default  link  TodoDone       Comment
 highlight  default  link  TodoPriorityA  Identifier
 highlight  default  link  TodoPriorityB  statement
 highlight  default  link  TodoPriorityC  type
+highlight  default  link  TodoPriorityN  Todo
+highlight  default  link  TodoPriorityW  CursorLineNr
 highlight  default  link  TodoDate       PreProc
 highlight  default  link  TodoProject    Special
 highlight  default  link  TodoContext    Special
