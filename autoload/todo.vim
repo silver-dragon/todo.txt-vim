@@ -371,7 +371,7 @@ function! GetGroups(symbol,begin, end)
     let l:curline=a:begin
     let l:groups=[]
     while l:curline <= a:end
-        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\S*'),1)
+        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\S*'),len(a:symbol))
         if l:curproj != "" && index(l:groups,l:curproj) == -1
             let l:groups=add(l:groups , l:curproj)
         endif
