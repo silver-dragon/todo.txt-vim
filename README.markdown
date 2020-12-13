@@ -83,7 +83,7 @@ This plugin is a fork of [freitass
 todo.txt-vim](https://github.com/freitass/todo.txt-vim). It add several cool
 functionalities including:
 
-+ [Hierarchical sort](##hierarchical-sort)
++ [Hierarchical sort](#hierarchical-sort)
 + [A completion function](#completion)
 + [A proper handling of due dates](#dates)
 + [A Flexible file naming](#todotxt-files).
@@ -95,6 +95,13 @@ functionalities including:
 + ...
 
 ### Installation
+
+Todo.txt-vim is a filetype plugin, make sure that your vimrc contains :
+
+```vim
+syntax on
+filetype plugin on
+```
 
 #### Vizardry
 
@@ -143,7 +150,7 @@ And obviously the same are recognize as done:
 
 Moreover, `<LocalLeader>D` moves the task under the cursor to the done.txt
 file corresponding to the current todo.txt, aka if you are editing
-2015-07-07-todo.txt, the done file while be 2015-07-07-done.txt. If you don't
+2015-07-07-todo.txt, the done file will be 2015-07-07-done.txt. If you don't
 like this behavior, you can set the default done.txt name:
 
     let g:TodoTxtForceDoneName='done.txt'
@@ -232,26 +239,6 @@ Examples:
 
 This is a non-standard but widely adopted keyword.
 
-## Recurrence
-
-By adding a `rec:` tag to your task, when you complete (`<LocalLeader>x`) or
-postpone (`<LocalLeader>p`) the task, a new recurrence will be created due after
-the specified amount of time.
-
-The format is:
-    `rec:[+][count][d|w|m|y]`
-
-Where:
-    d = days, w = weeks, m = months, y = years
-    The optional `+` specifies strict recurrence (see below)
-
-Examples:
-    *   `rec:2w` - Recurs two weeks after the task is completed.
-    *   `rec:3d` - Recurs three days after the task is completed.
-    *   `rec:+1w` - Recurs one week from the due date (strict)
-
-This is a non-standard but widely adopted keyword.
-
 ## Mappings
 
 By default todo-txt.vim sets all the mappings described in this section. To
@@ -310,6 +297,21 @@ If you would like the creation date (today) prefixed on new lines, add the
 following to your vimrc:
 
     let g:Todo_txt_prefix_creation_date=1
+
+With insert mode maps on, typing `date<Tab>` or `due:` can feel like glitches
+This is because vim wait for mappings before inserting the words to the buffer.
+To prevent the glitches, abbreviations can be used instead of mappings.
+To turn it on, add the following to your vimrc:
+
+    let g:TodoTxtUseAbbrevInsertMode=1
+
+Abbreviations uses word separator to expand the abbreviations, thus `<Tab>`
+is unavailable on abbreviations. Turning abbreviations mode will change
+`date<Tab>` mapping into `date:`. The resulting abbreviations would be: 
+
++    `date:`  : (Insert mode) Insert the current date
++    `due:`  : (Insert mode) Insert `due:` followed by the current date
++    `DUE:`  : (Insert mode) Insert `DUE:` followed by the current date
 
 
 ### Done
