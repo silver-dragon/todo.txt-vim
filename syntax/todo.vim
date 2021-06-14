@@ -8,33 +8,33 @@ if exists("b:current_syntax")
     finish
 endif
 
-syntax  match  TodoDone       '^[x]\s.\+$'               contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoTag
-syntax  match  TodoPriorityA  '^(A) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityB  '^(B) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityC  '^(C) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityD  '^(D) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityE  '^(E) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityF  '^(F) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityG  '^(G) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityH  '^(H) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityI  '^(I) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityJ  '^(J) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityK  '^(K) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityL  '^(L) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityM  '^(M) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityN  '^(N) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityO  '^(O) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityP  '^(P) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityQ  '^(Q) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityR  '^(R) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityS  '^(S) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityT  '^(T) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityU  '^(U) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityV  '^(V) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityW  '^(W) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityX  '^(X) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityY  '^(Y) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
-syntax  match  TodoPriorityZ  '^(Z) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoTag
+syntax  match  TodoDone       '^[x]\s.\+$'               contains=TodoKey,TodoDate,TodoProject,TodoContext
+syntax  match  TodoPriorityA  '^(A) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityB  '^(B) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityC  '^(C) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityD  '^(D) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityE  '^(E) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityF  '^(F) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityG  '^(G) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityH  '^(H) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityI  '^(I) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityJ  '^(J) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityK  '^(K) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityL  '^(L) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityM  '^(M) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityN  '^(N) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityO  '^(O) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityP  '^(P) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityQ  '^(Q) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityR  '^(R) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityS  '^(S) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityT  '^(T) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityU  '^(U) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityV  '^(V) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityW  '^(W) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityX  '^(X) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityY  '^(Y) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
+syntax  match  TodoPriorityZ  '^(Z) .\+$'             contains=TodoKey,TodoDate,TodoProject,TodoContext,TodoDueToday,TodoOverDueDate,TodoThresholdDate,TodoTag
 syntax  match  TodoDate       '\d\{2,4\}-\d\{2\}-\d\{2\}' contains=NONE
 syntax  match  TodoKey        '\S*\S:\S\S*'               contains=TodoDate
 syntax  match  TodoProject    '\(^\|\W\)+[^[:blank:]]\+'  contains=NONE
@@ -184,8 +184,65 @@ function! todo#GetDateRegexForPastDates(...)
     return l:overdueRex
 endfunction
 
+function! todo#GetDateRegexForFutureDates(...)
+    " Get the reference date
+    let l:day=strftime("%d")
+    let l:month=strftime("%m")
+    let l:year=strftime("%Y")
+
+    if a:0 >= 1
+        let l:year=a:1
+    endif
+    if a:0 >= 2
+        let l:month=a:2
+    endif
+    if a:0 >= 3
+        let l:day=a:3
+    endif
+
+    " Use very magic mode, and start an alternation
+    let l:futureRex = '\v('
+
+    " Cover for all future years in the century
+    let l:decade = strpart(l:year, 2, 1)
+    let l:unit = strpart(l:year, 3, 1)
+
+    let l:futureRex = l:futureRex . '(20[' . l:decade . '-9][' . (l:unit + 1) . '-9])\-\d{2}\-\d{2}'
+
+    "Cover for future months in the current year
+    if l:month < 9
+        let l:fmonth = '(0['. (l:month + 1) . '-9]|1[0-2])'
+    else
+        let l:fmonth = '(' . (l:month + 1) . ')'
+    endif
+    let l:futureRex = l:futureRex . '|(' . l:year . '\-' . l:fmonth . '\-\d{2})'
+
+    "Cover for future days in the current month
+    if l:day < 9
+        let l:fday = '(0[' . (l:day + 1) . '-9]|[123][0-9])'
+    else
+        if l:day < 19
+            let l:fday = '(1[' . (l:day - 9) . '-9]|[23][0-9])'
+        else
+            if l:day < 29
+                let l:fday = '(2[' . (l:day -19) . '-9]|3[01])'
+            else
+                let l:fday = '(' . (l:day + 1) . ')'
+            endif
+        endif
+    endif
+
+    let l:futureRex = l:futureRex . '|(' . l:year . '\-' . l:month . '\-' . l:fday . '))'
+
+    return l:futureRex
+
+endfunction
+
 execute 'syntax match TodoOverDueDate /\v\c<due:' . todo#GetDateRegexForPastDates() . '>/'
 highlight default link TodoOverDueDate Error
+
+execute 'syntax match TodoThresholdDate /\v\c.*<t:' . todo#GetDateRegexForFutureDates() . '>/ contains=NONE'
+highlight default link TodoThresholdDate Comment
 
 let b:current_syntax = "todo"
 

@@ -144,7 +144,13 @@ function! todo#RemoveCompleted()
     if exists("g:TodoTxtForceDoneName")
         let l:done=g:TodoTxtForceDoneName
     else
-        let l:done=substitute(substitute(expand('%:t'),'todo','done',''),'Todo','Done','')
+        let l:currentfile=expand('%:t')
+
+        if l:currentfile =~ '[Tt]oday.txt'
+            let l:done=substitute(substitute(l:currentfile,'today','done-today',''),'Today','Done-Today','')
+        else
+            let l:done=substitute(substitute(l:currentfile,'todo','done',''),'Todo','Done','')
+        endif
     endif
     let l:done_file = l:target_dir.'/'.l:done
     echo "Writing to ".l:done_file
@@ -365,7 +371,7 @@ function! GetGroups(symbol,begin, end)
     let l:curline=a:begin
     let l:groups=[]
     while l:curline <= a:end
-        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\S*'),1)
+        let l:curproj=strpart(matchstr(getline(l:curline),a:symbol.'\S*'),len(a:symbol))
         if l:curproj != "" && index(l:groups,l:curproj) == -1
             let l:groups=add(l:groups , l:curproj)
         endif

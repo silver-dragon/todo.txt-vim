@@ -29,6 +29,7 @@ Table of Contents                                          *TodoTxt-Contents* ~
         7.3 Dates....................................|TodoTxt-Dates|
         7.4 Done.txt.................................|TodoTxt-Done|
         7.5 Format...................................|TodoTxt-Format|
+    8. Fold..........................................|TodoTxt-Fold|
 
 ===============================================================================
 1. Release notes                                       *TodoTxt-ReleaseNotes* ~
@@ -101,6 +102,11 @@ by David Beniamine.
 
 2.3 Installation                                         *TodoTxt-Installation*
 
+Todo.txt-vim is a filetype plugin, make sure that your vimrc contains :
+>
+    syntax on
+    filetype plugin on
+<
 + Vizardry
 
     If you have Vizardry(https://github.com/dbeniamine/vizardry) installed,
@@ -160,8 +166,8 @@ like this behavior, you can set the default done.txt name:
 This plugin provides a nice complete function for project and context, to use
 it add the following lines to your vimrc:
 >
-    " Use todo#complete as the omni complete function for todo files
-    au filetype todo setlocal omnifunc=todo#complete
+    " Use todo#Complete as the omni complete function for todo files
+    au filetype todo setlocal omnifunc=todo#Complete
 <
 You can also start automatically the completion when entering '+' or '@' by
 adding the next lines to your vimrc:
@@ -173,7 +179,7 @@ adding the next lines to your vimrc:
     au filetype todo imap <buffer> @ @<C-X><C-O>
 <
 
-The `todo#complete` function is designed to complete projects (starting by `+`)
+The `todo#Complete` function is designed to complete projects (starting by `+`)
 and context (starting by `@`). If you use it on a regular word, it will do a
 normal keyword completion (on all buffers).
 
@@ -314,6 +320,26 @@ following to your vimrc:
     let g:Todo_txt_prefix_creation_date=1
 <
 
+With insert mode maps on, typing `date<Tab>` or `due:` can feel like glitches
+This is because vim wait for mappings before inserting the words to the buffer.
+To prevent the glitches, abbreviations can be used instead of mappings.
+To turn it on, add the following to your vimrc:
+>
+    let g:TodoTxtUseAbbrevInsertMode=1
+<
+
+Abbreviations use word separator to expand the abbreviations, thus `<Tab>`
+is unavailable on abbreviations. Turning abbreviations mode will change
+`date<Tab>` mapping into `date:`. The resulting abbreviations would be: 
+
+    `date:`  : (Insert mode) Insert the current date
+
+    `due:`  : (Insert mode) Insert `due:` followed by the current date
+
+    `DUE:`  : (Insert mode) Insert `DUE:` followed by the current date
+
+For more information regarding abbreviations, see |abbreviations|
+
 7.4 Done                                                         *TodoTxt-Done*
 
 
@@ -339,3 +365,12 @@ disable this behavior by setting the following global variable:
 7.5 Format                                                     *TodoTxt-format*
 
     `<LocalLeader>ff` : Try to fix todo.txt format
+
+===============================================================================
+8. Fold                                                         *TodoTxt-fold* ~
+
+Todo.txt files can be folded by projects or context (see |fold|), by default
+they are foldable by context, to use project fold :
+>
+
+    let g:Todo_fold_char='+'
